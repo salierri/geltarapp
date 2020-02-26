@@ -3,13 +3,6 @@ import './App.css';
 import Communication from './Communication';
 import Video from './Video';
 
-let music = {
-  role: "music"
-}
-let ambience = {
-  role: "ambience"
-}
-
 function App() {
   return (
     <div className="App uk-container">
@@ -18,10 +11,10 @@ function App() {
         <hr />
         <div className="uk-grid">
           <div className="uk-width-1-2">
-            <Video {...music} />
+            <Video role="music" />
           </div>
           <div className="uk-width-1-2">
-            <Video {...ambience} />
+            <Video role="ambience" />
           </div>
         </div>
       </header>

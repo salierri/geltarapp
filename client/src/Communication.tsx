@@ -4,17 +4,14 @@ import { w3cwebsocket as WebSocket } from "websocket";
 const client = new WebSocket('wss://echo.websocket.org');
 
 interface Players {
-    music: any
-    ambience: any
+    music?: YT.Player
+    ambience?: YT.Player
 }
 
-let players: Players = {
-    music: null,
-    ambience: null
-};
+let players: Players = { };
 
 export function VideosReady() {
-    players.music = new (YT as any).Player('musicPlayer', {
+    players.music = new YT.Player('musicPlayer', {
         height: '243',
         width: '400',
         videoId: 'm_8QMAChwtg',
@@ -22,7 +19,7 @@ export function VideosReady() {
           'onReady': onPlayerReady
         }
     });
-    players.ambience = new (YT as any).Player('ambiencePlayer', {
+    players.ambience = new YT.Player('ambiencePlayer', {
         height: '243',
         width: '400',
         videoId: 'sGkh1W5cbH4',
@@ -32,8 +29,8 @@ export function VideosReady() {
     });
 }
 
-function onPlayerReady(event: Event) {
-    //(event as any).target.playVideo();
+function onPlayerReady(event: YT.PlayerEvent) {
+    //event.target.playVideo();
 }
 
 class Communication extends Component {
