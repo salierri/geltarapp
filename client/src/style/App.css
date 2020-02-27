@@ -21,5 +21,10 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 .feedback-button {
-    background-color: #753300;
+    width: 300px;
+    background-color: #0B4F6C;
+}
+
+.feedback-container {
+    margin-top: 100px;
 }

@@ -30,7 +30,7 @@ class Video extends React.Component<VideoProps, Object> {
     render() {
         let feedbackButtons;
         if(this.role === "music") {
-            feedbackButtons = <div>
+            feedbackButtons = <div className="feedback-container">
                 <button className="feedback-button uk-button uk-align-center">
                     <span role="img" aria-label="thumbs-up">👍</span> Jó kis zene
                     </button>
