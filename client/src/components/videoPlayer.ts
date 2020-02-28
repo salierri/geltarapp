@@ -4,6 +4,7 @@ interface Players {
 }
 
 let players: Players = { };
+let autoplay: number = 0;
 
 export function APIReady() {
     players.music = new YT.Player('musicPlayer', {
@@ -12,7 +13,7 @@ export function APIReady() {
         videoId: 'm_8QMAChwtg',
         playerVars: {
             controls: 0,
-            autoplay: 1
+            autoplay: autoplay
         },
         events: {
           'onReady': onPlayerReady
@@ -24,7 +25,7 @@ export function APIReady() {
         videoId: 'sGkh1W5cbH4',
         playerVars: {
             controls: 0,
-            autoplay: 1
+            autoplay: autoplay
         },
         events: {
           'onReady': onPlayerReady

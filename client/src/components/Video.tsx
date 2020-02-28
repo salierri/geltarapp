@@ -61,9 +61,7 @@ class Video extends React.Component<VideoProps, Object> {
 
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
-        if(firstScriptTag.parentNode) {
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        }
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
         APIloaded = true;
     }
 }
