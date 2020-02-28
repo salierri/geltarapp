@@ -1,5 +1,7 @@
 import React from 'react';
-import { VideosReady } from './Communication';
+import { APIReady } from './videoPlayer';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Admin from './Admin';
 
 export interface VideoProps {
     role: string
@@ -11,12 +13,6 @@ declare global {
 
 let APIloaded :boolean = false;
 
-function youTubeIframeAPIReady() {
-    console.log("api ready");
-    VideosReady();
-}
-
-
 class Video extends React.Component<VideoProps, Object> {
 
     role: string;
@@ -24,7 +20,7 @@ class Video extends React.Component<VideoProps, Object> {
     constructor(props: VideoProps) {
         super(props);
         this.role = props.role;
-        window.onYouTubeIframeAPIReady = youTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = APIReady;
     }
 
     render() {
@@ -40,11 +36,20 @@ class Video extends React.Component<VideoProps, Object> {
             </div>
         }
         return (
-            <div id="video uk-align-center">
-                <div className="uk-align-center" id={this.role + "Player"}></div>
-                <input type="range" className="uk-range volume-slider uk-align-center" min="0" max="100" value="100" />
-                {feedbackButtons}
-            </div>
+            <Router>
+               <div id="video uk-align-center">
+                    <div className="uk-align-center" id={this.role + "Player"}></div>
+                    <input type="range" className="uk-range volume-slider uk-align-center" min="0" max="100" defaultValue="100" />
+                    <Switch>
+                        <Route path="/geltaradmin">
+                            <Admin />
+                        </Route>
+                        <Route path="/">
+                            {feedbackButtons}
+                        </Route>
+                    </Switch>
+                </div>
+            </Router>
         );
     }
 

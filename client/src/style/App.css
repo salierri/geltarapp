@@ -1,5 +1,8 @@
 .volume-slider {
     width: 150px;
+}
+
+input[type=range] {
     height: 2px;
     border: none;
     border-radius: 3px;
@@ -25,6 +28,22 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     background-color: #0B4F6C;
 }
 
+.master-button {
+    width: 150px;
+    display: inline-block;
+    margin: 15px;
+    background-color: #0B4F6C;
+}
+
+.feedback-button:active {
+    background-color: rgb(9, 68, 94);
+}
+
 .feedback-container {
     margin-top: 100px;
+}
+
+.master-slider {
+    width: 300px;
+    display: inline-block;
 }

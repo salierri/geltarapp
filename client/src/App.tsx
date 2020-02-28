@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App uk-container">
       <header className="App-header">
-        <h1 className="uk-padding-small">Geltara zenedoboza</h1>
+        <h1 className="uk-padding-small">Geltara zenesarka</h1>
         <hr />
         <div className="uk-grid">
           <div className="uk-width-1-2">
