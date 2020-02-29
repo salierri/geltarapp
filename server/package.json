@@ -6,7 +6,7 @@
   "scripts": {
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "webpack --mode=development",
-    "build": "rm -rf dist && npm run build:types && npm run build:js",
+    "build": "rm -rf dist && npm run build:types && npm run build:js && cp lib/index.d.ts ../client/src/server.ts",
     "start": "node ./dist/server.js"
   },
   "author": "",

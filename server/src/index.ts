@@ -4,10 +4,19 @@ const WSServer = new WebSocket.Server({
     port: 4000
 });
 
+export type VideoType = 'music' | 'ambience';
+enum CommandType {
+    LoadVideo = 'loadVideo',
+    Volume = 'volume',
+    SeekTo = 'seekTo',
+    Pause = 'pause',
+    Resume = 'resume'
+} 
+
 export interface Command {
     type: 'command',
-    command: string,
-    video: 'music' | 'ambience',
+    command: CommandType,
+    video: VideoType,
     param: string
 }
 
@@ -20,7 +29,12 @@ export interface StateRequest {
     type: 'stateRequest'
 }
 
-export type Message = Command | Feedback | StateRequest
+export interface StateMessage {
+    type: 'state',
+    state: State
+}
+
+export type Message = Command | Feedback | StateRequest | StateMessage
 
 export interface State {
     videos: {
@@ -37,13 +51,13 @@ let state : State = {
     }
 };
 
-WSServer.on('connection', function connection(ws, req) {
+WSServer.on('connection', (ws, req) => {
 
     if(req.url === '/geltaradmin') {
         master = ws;
     }
 
-    ws.on('message', function incoming(message) {
+    ws.on('message', (message) => {
         let parsedMessage: Message = JSON.parse(message.toString());
         console.log(parsedMessage);
         if(parsedMessage.type === 'command') {
@@ -52,31 +66,34 @@ WSServer.on('connection', function connection(ws, req) {
         } else if(parsedMessage.type === 'feedback') {
             feedbackToMaster(parsedMessage.message, req.connection.remoteAddress);
         } else if(parsedMessage.type === 'stateRequest') {
-            stateRequest(ws);
+            sendState(ws);
         }
     });
 
-    ws.send("connection OK");
+    sendState(ws);
 });
 
 function updateState(message: Command) {
-    if(message.command === 'loadVideo') {
+    if(message.command === CommandType.LoadVideo) {
         state.videos[message.video] = message.param;
     }
 }
 
 function broadcastCommand(message: Command) {
+    let countSent = 0;
     WSServer.clients.forEach(function each(client) {
         if(client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'command', message: message}));
+            countSent++;
+            client.send(JSON.stringify(message));
         }
     });
+    console.log(countSent);
 }
 
 function feedbackToMaster(message: string, sender?: string) {
     master?.send(JSON.stringify({ type: 'feedback', message: message, sender: sender }));
 }
 
-function stateRequest(sender: WebSocket) {
-    sender.send(JSON.stringify(state));
+function sendState(sender: WebSocket) {
+    sender.send(JSON.stringify({type: 'state', state: state}));
 }
