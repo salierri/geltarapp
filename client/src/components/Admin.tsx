@@ -1,24 +1,62 @@
 import React from 'react';
+import Communication, { CommandType } from './Communication';
+import { VideoProps } from './Video';
+import { VideoType } from '../server';
 
-class Admin extends React.Component {
+class Admin extends React.Component<VideoProps, Object> {
+
+    role: VideoType;
+    videoUrl: string = "";
+
+    constructor(props: VideoProps) {
+        super(props);
+        this.role = props.role;
+        this.pauseCommand = this.pauseCommand.bind(this);
+        this.resumeCommand = this.resumeCommand.bind(this);
+        this.loadCommand = this.loadCommand.bind(this);
+    }
+
+    pauseCommand() {
+        Communication.sendCommand(CommandType.Pause, this.role, "");
+    }
+
+    resumeCommand() {
+        Communication.sendCommand(CommandType.Resume, this.role, "");
+    }
+
+    loadCommand() {
+        Communication.sendCommand(CommandType.LoadVideo, this.role, this.videoUrl.slice(-11));
+    }
+
+    volumeCommand(volume: number) {
+        Communication.sendCommand(CommandType.Volume, this.role, volume.toString());
+    }
+
+    seekCommand(percent: number) {
+        Communication.sendCommand(CommandType.SeekTo, this.role, percent.toString());
+    }
+
     render() {
         return (
             <div>
                 <div>
                     <span className="uk-padding">Master volume</span>
-                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="300" defaultValue="100" />
+                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="300" defaultValue="100"
+                     onInput={e => this.volumeCommand((e.target as any).value) } />
                 </div>
                 <div>
                     <span className="uk-padding">Seek ahead</span>
-                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100" defaultValue="0" />
+                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100" defaultValue="0"
+                     onMouseUp={e => this.seekCommand((e.target as any).value) } />
                 </div>
                 <div>
-                    <input type="text" className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo" />
+                    <input type="text" id={this.role + "videoUrl"} className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"
+                    onInput={ e => this.videoUrl = (e.target as any).value } />
                 </div>
                 <div className="uk-inline">
-                    <button className="master-button uk-button">Load</button>
-                    <button className="master-button uk-button">Play</button>
-                    <button className="master-button uk-button">Pause</button>
+                    <button className="master-button uk-button" onClick={this.loadCommand}>Load</button>
+                    <button className="master-button uk-button" onClick={this.resumeCommand}>Play</button>
+                    <button className="master-button uk-button" onClick={this.pauseCommand}>Pause</button>
                 </div>
             </div>
         );

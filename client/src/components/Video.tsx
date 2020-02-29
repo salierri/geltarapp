@@ -1,10 +1,11 @@
 import React from 'react';
-import { APIReady } from './videoPlayer';
+import { APIReady, localVolume } from './videoPlayer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Admin from './Admin';
+import { VideoType } from '../server';
 
 export interface VideoProps {
-    role: string
+    role: VideoType
 }
 
 declare global {
@@ -15,7 +16,7 @@ let APIloaded :boolean = false;
 
 class Video extends React.Component<VideoProps, Object> {
 
-    role: string;
+    role: VideoType;
 
     constructor(props: VideoProps) {
         super(props);
@@ -39,10 +40,12 @@ class Video extends React.Component<VideoProps, Object> {
             <Router>
                <div id="video uk-align-center">
                     <div className="uk-align-center" id={this.role + "Player"}></div>
-                    <input type="range" className="uk-range volume-slider uk-align-center" min="0" max="100" defaultValue="100" />
+                    <input type="range" className="uk-range volume-slider uk-align-center" min="0" max="100"
+                     defaultValue={+(localStorage.getItem("localvolume_" + this.role.toString()) ?? 100)}
+                     onInput={e => localVolume(this.role, (e.target as any).value) } />
                     <Switch>
                         <Route path="/geltaradmin">
-                            <Admin />
+                            <Admin role={this.role} />
                         </Route>
                         <Route path="/">
                             {feedbackButtons}
