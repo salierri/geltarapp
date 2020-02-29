@@ -39,16 +39,16 @@ class Admin extends React.Component<VideoProps, Object> {
                 <div>
                     <span className="uk-padding">Master volume</span>
                     <input type="range" className="uk-range master-slider uk-align-center" min="0" max="300" defaultValue="100"
-                     onInput={e => this.volumeCommand((e.target as any).value) } />
+                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value) } />
                 </div>
                 <div>
                     <span className="uk-padding">Seek ahead</span>
                     <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100" defaultValue="0"
-                     onMouseUp={e => this.seekCommand((e.target as any).value) } />
+                     onMouseUp={(e: React.ChangeEvent<HTMLInputElement>) => this.seekCommand(+e.target.value) } />
                 </div>
                 <div>
                     <input type="text" id={this.role + "videoUrl"} className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"
-                    onInput={ e => this.videoUrl = (e.target as any).value } />
+                    onInput={ (e: React.ChangeEvent<HTMLInputElement>) => this.videoUrl = e.target.value } />
                 </div>
                 <div className="uk-inline">
                     <button className="master-button uk-button" onClick={() => this.loadCommand()}>Load</button>

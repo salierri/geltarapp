@@ -30,11 +30,11 @@ function createPlayer(role: VideoType, video: string) {
         videoId: video,
         playerVars: {
             controls: 0,
-            autoplay: autoplay,
-            loop: 1
+            autoplay: autoplay
         },
         events: {
-          'onReady': (event) => onPlayerReady(role, event)
+          'onReady': (event) => onPlayerReady(role, event),
+          'onStateChange': onPlayerStateChange
         }
     });
 }
@@ -94,3 +94,10 @@ function onPlayerReady(role: VideoType, event: YT.PlayerEvent) {
     updateVolume(role);
     event.target.setLoop(true);
 }
+
+function onPlayerStateChange(event: YT.OnStateChangeEvent) {
+    if (event.data == (YT as any).PlayerState.ENDED) {
+        event.target.seekTo(0, true);
+        event.target.playVideo();
+    }
+  }
