@@ -35,6 +35,11 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     background-color: #0B4F6C;
 }
 
+.start-button {
+    background-color: #0B4F6C;
+    width: 150px;
+}
+
 .feedback-button:active {
     background-color: rgb(9, 68, 94);
 }
@@ -63,3 +68,15 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     margin: 0px;
     padding: 0px;
 }
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 2s linear;
+  }

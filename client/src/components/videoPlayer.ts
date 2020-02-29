@@ -1,4 +1,3 @@
-import { read, stat } from 'fs';
 import { State, VideoType } from '../server';
 
 interface Players {
@@ -96,7 +95,7 @@ function onPlayerReady(role: VideoType, event: YT.PlayerEvent) {
 }
 
 function onPlayerStateChange(event: YT.OnStateChangeEvent) {
-    if (event.data == (YT as any).PlayerState.ENDED) {
+    if (event.data === (YT as any).PlayerState.ENDED) {
         event.target.seekTo(0, true);
         event.target.playVideo();
     }

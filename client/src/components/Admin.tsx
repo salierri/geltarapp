@@ -44,7 +44,7 @@ class Admin extends React.Component<VideoProps, Object> {
                 <div>
                     <span className="uk-padding">Seek ahead</span>
                     <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100" defaultValue="0"
-                     onMouseUp={(e: React.ChangeEvent<HTMLInputElement>) => this.seekCommand(+e.target.value) } />
+                     onMouseUp={(e) => this.seekCommand(+(e as any).target.value) } />
                 </div>
                 <div>
                     <input type="text" id={this.role + "videoUrl"} className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"

@@ -43,7 +43,7 @@ class Video extends React.Component<VideoProps, Object> {
                     <div className="uk-align-center" id={this.role + "Player"}></div>
                     <input type="range" className="uk-range volume-slider uk-align-center" min="0" max="100"
                      defaultValue={+(localStorage.getItem("localvolume_" + this.role.toString()) ?? 100)}
-                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => localVolume(this.role, +e.target.value) } />
+                     onChange={(e: React.ChangeEvent<EventTarget & HTMLInputElement>) => localVolume(this.role, +e.target.value) } />
                     <Switch>
                         <Route path="/geltaradmin">
                             <Admin role={ this.role } />

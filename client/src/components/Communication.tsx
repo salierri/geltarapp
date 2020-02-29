@@ -38,13 +38,13 @@ class Communication extends Component<{}, MessageState> {
         client.onmessage = (message) => {
             console.log(message);
             let parsedMessage: Message = JSON.parse(message.data.toString());
-            if(parsedMessage.type == 'command') {
+            if(parsedMessage.type === 'command') {
                 executeCommand(parsedMessage);
             }
-            else if(parsedMessage.type == 'state') {
+            else if(parsedMessage.type === 'state') {
                 VideoPlayer.receivedState(parsedMessage.state);
             }
-            else if(parsedMessage.type == 'feedback') {
+            else if(parsedMessage.type === 'feedback') {
                 this.log(parsedMessage.sender + " - " + parsedMessage.message);
             }
         }
