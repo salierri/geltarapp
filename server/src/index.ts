@@ -71,7 +71,12 @@ WSServer.on('connection', (ws, req) => {
         }
     });
 
+    ws.on('close', (code, reason) => {
+        feedbackToMaster("closed", req.connection.remoteAddress);
+    });
+
     sendState(ws);
+    feedbackToMaster("connected", req.connection.remoteAddress);
 });
 
 function updateState(message: Command) {
