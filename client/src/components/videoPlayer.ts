@@ -12,7 +12,7 @@ interface Ready {
 }
 
 let players: Players = { };
-let autoplay: number = 0;
+let autoplay = 1;
 let ready = {
     API: false,
     state: false
@@ -34,7 +34,7 @@ function createPlayer(role: VideoType, video: string) {
             loop: 1
         },
         events: {
-          'onReady': () => onPlayerReady(role)
+          'onReady': (event) => onPlayerReady(role, event)
         }
     });
 }
@@ -90,6 +90,7 @@ function checkStart() {
     }
 }
 
-function onPlayerReady(role: VideoType) {
+function onPlayerReady(role: VideoType, event: YT.PlayerEvent) {
     updateVolume(role);
+    event.target.setLoop(true);
 }

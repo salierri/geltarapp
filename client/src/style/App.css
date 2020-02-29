@@ -47,3 +47,19 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     width: 300px;
     display: inline-block;
 }
+
+#log-area {
+    background-color: black;
+    border-radius: 0.5em;
+    width: 600px;
+    height: 200px;
+    padding-top: 5px;
+    padding-left: 15px;
+    overflow-x: hidden;
+    overflow-x: auto;
+}
+
+.log-message {
+    margin: 0px;
+    padding: 0px;
+}

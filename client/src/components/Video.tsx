@@ -3,6 +3,7 @@ import { APIReady, localVolume } from './videoPlayer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Admin from './Admin';
 import { VideoType } from '../server';
+import Communication from './Communication';
 
 export interface VideoProps {
     role: VideoType
@@ -28,10 +29,10 @@ class Video extends React.Component<VideoProps, Object> {
         let feedbackButtons;
         if(this.role === "music") {
             feedbackButtons = <div className="feedback-container">
-                <button className="feedback-button uk-button uk-align-center">
+                <button className="feedback-button uk-button uk-align-center" onClick={() => Communication.sendFeedback("like")}>
                     <span role="img" aria-label="thumbs-up">👍</span> Jó kis zene
                     </button>
-                <button className="feedback-button uk-button uk-align-center">
+                <button className="feedback-button uk-button uk-align-center" onClick={() => Communication.sendFeedback("boring")}>
                     <span role="img" aria-label="sleeping">😴</span> Már unalmas viszonylag
                     </button>
             </div>
@@ -45,10 +46,10 @@ class Video extends React.Component<VideoProps, Object> {
                      onInput={e => localVolume(this.role, (e.target as any).value) } />
                     <Switch>
                         <Route path="/geltaradmin">
-                            <Admin role={this.role} />
+                            <Admin role={ this.role } />
                         </Route>
                         <Route path="/">
-                            {feedbackButtons}
+                            { feedbackButtons }
                         </Route>
                     </Switch>
                 </div>

@@ -15,6 +15,7 @@ export interface Command {
 export interface Feedback {
     type: 'feedback';
     message: string;
+    sender?: string;
 }
 export interface StateRequest {
     type: 'stateRequest';

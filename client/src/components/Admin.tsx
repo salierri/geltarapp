@@ -11,9 +11,6 @@ class Admin extends React.Component<VideoProps, Object> {
     constructor(props: VideoProps) {
         super(props);
         this.role = props.role;
-        this.pauseCommand = this.pauseCommand.bind(this);
-        this.resumeCommand = this.resumeCommand.bind(this);
-        this.loadCommand = this.loadCommand.bind(this);
     }
 
     pauseCommand() {
@@ -54,9 +51,9 @@ class Admin extends React.Component<VideoProps, Object> {
                     onInput={ e => this.videoUrl = (e.target as any).value } />
                 </div>
                 <div className="uk-inline">
-                    <button className="master-button uk-button" onClick={this.loadCommand}>Load</button>
-                    <button className="master-button uk-button" onClick={this.resumeCommand}>Play</button>
-                    <button className="master-button uk-button" onClick={this.pauseCommand}>Pause</button>
+                    <button className="master-button uk-button" onClick={() => this.loadCommand()}>Load</button>
+                    <button className="master-button uk-button" onClick={() => this.resumeCommand()}>Play</button>
+                    <button className="master-button uk-button" onClick={() => this.pauseCommand()}>Pause</button>
                 </div>
             </div>
         );

@@ -2,8 +2,10 @@ import { Component } from 'react';
 import { w3cwebsocket as WebSocket } from "websocket";
 import * as VideoPlayer from './videoPlayer';
 import { Command, Message, VideoType } from '../server';
+import React from 'react';
 
-const client = new WebSocket('ws://localhost:4000/');
+let address = isAdmin() ? process.env.REACT_APP_URL + '/geltaradmin' : process.env.REACT_APP_URL ?? "";
+const client = new WebSocket(address);
 
 export enum CommandType {
     LoadVideo = 'loadVideo',
@@ -11,14 +13,27 @@ export enum CommandType {
     SeekTo = 'seekTo',
     Pause = 'pause',
     Resume = 'resume'
-} 
+}
 
-class Communication extends Component {
+interface MessageState {
+    messages: Array<string>
+}
+
+class Communication extends Component<{}, MessageState> {
+
+    lastLogEvent? : HTMLDivElement | null;
+
+    constructor(props: {}) {
+        super(props);
+
+        this.state = {
+            messages: []
+        }
+    }
+
     componentDidMount() {
         client.onopen = () => {
-            console.log("client connected");
-            let poause: CommandType = CommandType.Pause;
-            console.log(JSON.stringify({pause: poause}));
+            this.log("Connected to Socket");
         }
         client.onmessage = (message) => {
             console.log(message);
@@ -28,6 +43,9 @@ class Communication extends Component {
             }
             else if(parsedMessage.type == 'state') {
                 VideoPlayer.receivedState(parsedMessage.state);
+            }
+            else if(parsedMessage.type == 'feedback') {
+                this.log(parsedMessage.sender + " - " + parsedMessage.message);
             }
         }
         client.onerror = (error) => {
@@ -39,8 +57,30 @@ class Communication extends Component {
         client.send(JSON.stringify({type: "command", command: command, video: video, param: param}));
     }
 
+    static sendFeedback(message: string) {
+        client.send(JSON.stringify({type: "feedback", message: message}));
+    }
+
+    componentDidUpdate() {
+        this.lastLogEvent?.scrollIntoView({behavior: 'smooth'});
+    }
+
+    log(message: string) {
+        this.state.messages.push((new Date()).toLocaleTimeString() + " - " + message);
+        this.setState({messages: this.state.messages});
+    }
+
     render() {
-        return null
+        if(!isAdmin())
+            return null;
+        return (
+            <div id="log-area">
+                {this.state.messages.map(message => {
+                    return <p className="log-message">{message}</p>
+                })}
+                <div ref={(el) => this.lastLogEvent = el}></div>
+            </div>
+        );
     }
 }
 
@@ -56,6 +96,10 @@ function executeCommand(command: Command) {
     } else if(command.command === CommandType.Resume) {
         VideoPlayer.resume(command.video);
     }
+}
+
+function isAdmin() {
+    return window.location.href.includes('geltaradmin');
 }
 
 export default Communication;
