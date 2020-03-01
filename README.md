@@ -62,3 +62,7 @@ serve -s build
 ```
 
 The serve process is listening on :5000 by default
+
+###### Proxying
+
+If you are running the app behind a proxy (Nginx for example), you need to set the `x-real-ip` header in order to see client IP addresses.

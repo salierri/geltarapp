@@ -1,4 +1,5 @@
 import WebSocket from 'ws';
+import { IncomingMessage } from 'http';
 
 const WSServer = new WebSocket.Server({
     port: 4000
@@ -63,13 +64,13 @@ WSServer.on('connection', (ws, req) => {
     }
 
     ws.on('message', (message) => {
-        console.log(req.connection.remoteAddress + ": " + message);
+        console.log(clientIp(req) + ": " + message);
         let parsedMessage: Message = JSON.parse(message.toString());
         if(parsedMessage.type === 'command') {
             updateState(parsedMessage);
             broadcastCommand(parsedMessage);
         } else if(parsedMessage.type === 'feedback') {
-            feedbackToMaster(parsedMessage.message, req.connection.remoteAddress);
+            feedbackToMaster(parsedMessage.message, clientIp(req));
         } else if(parsedMessage.type === 'stateRequest') {
             sendState(ws);
         } else if(parsedMessage.type === 'heartbeat') {
@@ -78,11 +79,11 @@ WSServer.on('connection', (ws, req) => {
     });
 
     ws.on('close', (code, reason) => {
-        feedbackToMaster("Disconnected", req.connection.remoteAddress);
+        feedbackToMaster("Disconnected", clientIp(req));
     });
 
     sendState(ws);
-    feedbackToMaster("Connected", req.connection.remoteAddress);
+    feedbackToMaster("Connected", clientIp(req));
 });
 
 function updateState(message: Command) {
@@ -112,4 +113,8 @@ function sendState(sender: WebSocket) {
 
 function sendHeartbeat(sender: WebSocket) {
     sender.send(JSON.stringify({type: 'heartbeat'}));
+}
+
+function clientIp(req: IncomingMessage) {
+    return (req.headers['x-real-ip'] as string) || req.connection.remoteAddress;
 }
