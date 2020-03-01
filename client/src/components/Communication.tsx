@@ -5,7 +5,7 @@ import { Command, Message, VideoType } from '../server';
 import React from 'react';
 
 let address = isAdmin() ? process.env.REACT_APP_URL + '/geltaradmin' : process.env.REACT_APP_URL ?? "";
-const client = new WebSocket(address);
+let client: WebSocket;
 
 export enum CommandType {
     LoadVideo = 'loadVideo',
@@ -32,6 +32,12 @@ class Communication extends Component<{}, MessageState> {
     }
 
     componentDidMount() {
+        this.connect();
+        setInterval(heartbeat, 3000);
+    }
+
+    connect() {
+        client = new WebSocket(address);
         client.onopen = () => {
             this.log("Connected to Socket");
         }
@@ -50,6 +56,12 @@ class Communication extends Component<{}, MessageState> {
         }
         client.onerror = (error) => {
             console.log("error: " + error);
+            client.close();
+        }
+        client.onclose = (e) => {
+            setTimeout(() => {
+                this.connect();
+            }, 1000);
         }
     }
 
@@ -100,6 +112,12 @@ function executeCommand(command: Command) {
 
 function isAdmin() {
     return window.location.href.includes('geltaradmin');
+}
+
+function heartbeat() {
+    if(client.readyState == 1) {
+        client.send(JSON.stringify({type:"heartbeat"}))
+    }
 }
 
 export default Communication;

@@ -24,7 +24,10 @@ export interface StateMessage {
     type: 'state';
     state: State;
 }
-export declare type Message = Command | Feedback | StateRequest | StateMessage;
+export interface Heartbeat {
+    type: 'heartbeat';
+}
+export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat;
 export interface State {
     videos: {
         music: string;

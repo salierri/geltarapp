@@ -36,7 +36,7 @@ class App extends React.Component<{}, AppState> {
             </div>;
     } else {
       return <div className="uk-container" id="start-button-container">
-        <button className="uk-button start-button uk-align-center" onClick={() => this.receivedUserGesture()}>Start!</button>
+        <button className="uk-button start-button uk-align-center" onClick={() => this.receivedUserGesture()}>Csatlakozás</button>
       </div>;
     }
   }

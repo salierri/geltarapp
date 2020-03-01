@@ -35,7 +35,11 @@ export interface StateMessage {
     state: State
 }
 
-export type Message = Command | Feedback | StateRequest | StateMessage
+export interface Heartbeat {
+    type: 'heartbeat'
+}
+
+export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
 
 export interface State {
     videos: {
@@ -54,13 +58,13 @@ let state : State = {
 
 WSServer.on('connection', (ws, req) => {
 
-    if(req.url === '/geltaradmin') {
+    if(req.url?.includes('geltaradmin')) {
         master = ws;
     }
 
     ws.on('message', (message) => {
+        console.log(req.connection.remoteAddress + ": " + message);
         let parsedMessage: Message = JSON.parse(message.toString());
-        console.log(parsedMessage);
         if(parsedMessage.type === 'command') {
             updateState(parsedMessage);
             broadcastCommand(parsedMessage);
@@ -68,15 +72,17 @@ WSServer.on('connection', (ws, req) => {
             feedbackToMaster(parsedMessage.message, req.connection.remoteAddress);
         } else if(parsedMessage.type === 'stateRequest') {
             sendState(ws);
+        } else if(parsedMessage.type === 'heartbeat') {
+            sendHeartbeat(ws);
         }
     });
 
     ws.on('close', (code, reason) => {
-        feedbackToMaster("closed", req.connection.remoteAddress);
+        feedbackToMaster("Disconnected", req.connection.remoteAddress);
     });
 
     sendState(ws);
-    feedbackToMaster("connected", req.connection.remoteAddress);
+    feedbackToMaster("Connected", req.connection.remoteAddress);
 });
 
 function updateState(message: Command) {
@@ -93,7 +99,7 @@ function broadcastCommand(message: Command) {
             client.send(JSON.stringify(message));
         }
     });
-    console.log(countSent);
+    console.log("Broadcast count: " + countSent);
 }
 
 function feedbackToMaster(message: string, sender?: string) {
@@ -102,4 +108,8 @@ function feedbackToMaster(message: string, sender?: string) {
 
 function sendState(sender: WebSocket) {
     sender.send(JSON.stringify({type: 'state', state: state}));
+}
+
+function sendHeartbeat(sender: WebSocket) {
+    sender.send(JSON.stringify({type: 'heartbeat'}));
 }
