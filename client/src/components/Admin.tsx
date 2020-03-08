@@ -22,7 +22,7 @@ class Admin extends React.Component<VideoProps, Object> {
     }
 
     loadCommand() {
-        Communication.sendCommand(CommandType.LoadVideo, this.role, this.videoUrl.slice(-11));
+        Communication.sendCommand(CommandType.LoadVideo, this.role, urlToVideoId(this.videoUrl));
     }
 
     volumeCommand(volume: number) {
@@ -58,6 +58,10 @@ class Admin extends React.Component<VideoProps, Object> {
             </div>
         );
     }
+}
+
+function urlToVideoId(url: string) {
+    return url.slice(-11);
 }
 
 export default Admin;

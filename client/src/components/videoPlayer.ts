@@ -5,11 +5,6 @@ interface Players {
     ambience?: YT.Player
 }
 
-interface Ready {
-    API: boolean,
-    state: boolean
-}
-
 let players: Players = { };
 let autoplay = 1;
 let ready = {
@@ -99,4 +94,4 @@ function onPlayerStateChange(event: YT.OnStateChangeEvent) {
         event.target.seekTo(0, true);
         event.target.playVideo();
     }
-  }
+}

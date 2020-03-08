@@ -66,3 +66,9 @@ The serve process is listening on :5000 by default
 ###### Proxying
 
 If you are running the app behind a proxy (Nginx for example), you need to set the `x-real-ip` header in order to see client IP addresses.
+
+###### Development
+
+You sould __not__ edit the server definitions client side, instead, edit the definitions in the server code, then run `npm run build` to automatically copy those definitions to the client.
+
+The react frontend supports `npm run` which serves as a development react server, and autocompiles on every edit.

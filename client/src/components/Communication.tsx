@@ -33,7 +33,7 @@ class Communication extends Component<{}, MessageState> {
 
     componentDidMount() {
         this.connect();
-        setInterval(heartbeat, 3000);
+        setInterval(this.heartbeat, 3000);
     }
 
     connect() {
@@ -66,11 +66,21 @@ class Communication extends Component<{}, MessageState> {
     }
 
     static sendCommand(command: CommandType, video: VideoType, param: string) {
-        client.send(JSON.stringify({type: "command", command: command, video: video, param: param}));
+        Communication._send({type: "command", command: command, video: video, param: param});
     }
 
     static sendFeedback(message: string) {
-        client.send(JSON.stringify({type: "feedback", message: message}));
+        Communication._send({type: "feedback", message: message});
+    }
+
+    heartbeat() {
+        if(client.readyState === 1) {
+            Communication._send({type:"heartbeat"});
+        }
+    }
+
+    static _send(message: Message) {
+        client.send(JSON.stringify(message));
     }
 
     componentDidUpdate() {
@@ -79,12 +89,13 @@ class Communication extends Component<{}, MessageState> {
 
     log(message: string) {
         this.state.messages.push((new Date()).toLocaleTimeString() + " - " + message);
-        this.setState({messages: this.state.messages});
+        this.forceUpdate();
     }
 
     render() {
-        if(!isAdmin())
+        if(!isAdmin()) {
             return null;
+        }
         return (
             <div id="log-area">
                 {this.state.messages.map(message => {
@@ -112,12 +123,6 @@ function executeCommand(command: Command) {
 
 function isAdmin() {
     return window.location.href.includes('geltaradmin');
-}
-
-function heartbeat() {
-    if(client.readyState == 1) {
-        client.send(JSON.stringify({type:"heartbeat"}))
-    }
 }
 
 export default Communication;

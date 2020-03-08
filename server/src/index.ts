@@ -6,13 +6,14 @@ const WSServer = new WebSocket.Server({
 });
 
 export type VideoType = 'music' | 'ambience';
+
 enum CommandType {
     LoadVideo = 'loadVideo',
     Volume = 'volume',
     SeekTo = 'seekTo',
     Pause = 'pause',
     Resume = 'resume'
-} 
+}
 
 export interface Command {
     type: 'command',
@@ -50,7 +51,7 @@ export interface State {
 }
 
 let master: WebSocket;
-let state : State = {
+let state: State = {
     videos: {
         music: 'm_8QMAChwtg',
         ambience: 'sGkh1W5cbH4'
@@ -60,6 +61,7 @@ let state : State = {
 WSServer.on('connection', (ws, req) => {
 
     if(req.url?.includes('geltaradmin')) {
+        feedbackToMaster("NEW MASTER CLIENT", clientIp(req));
         master = ws;
     }
 
