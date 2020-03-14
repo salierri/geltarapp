@@ -8,6 +8,7 @@
 - One DJ and unlimited players
 - Master volume and player volumes working multiplicatively
 - Pauses / Resume / Seek ahead
+- Automatic video looping
 - Basic feedback options from the players to the DJ
 
 ## Tech stack
@@ -67,8 +68,10 @@ The serve process is listening on :5000 by default
 
 If you are running the app behind a proxy (Nginx for example), you need to set the `x-real-ip` header in order to see client IP addresses.
 
-###### Development
+## Development
 
-You sould __not__ edit the server definitions client side, instead, edit the definitions in the server code, then run `npm run build` to automatically copy those definitions to the client.
+Running the backend in development mode is no different from production: `npm run build && npm start` after editing.
 
 The react frontend supports `npm run` which serves as a development react server, and autocompiles on every edit.
+
+You sould __not__ edit the server definitions client side, instead, edit the definitions in the server code, then run `npm run build` to automatically rebuild and copy those definitions to the client.
