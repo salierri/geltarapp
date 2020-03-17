@@ -30,9 +30,18 @@ export interface Heartbeat {
 
 export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
 
-export interface State {
-    videos: {
-        music: string,
-        ambience: string
+export interface VideoState {
+    url: string,
+    playing: boolean,
+    masterVolume: number,
+    time: {
+        start: number,
+        setAt: Date,
+        elapsed?: number /* Calculated field to avoid timezone problems */
     }
+}
+
+export interface State {
+    music: VideoState,
+    ambience: VideoState
 }

@@ -6,29 +6,28 @@ interface Players {
 }
 
 let players: Players = { };
-let autoplay = 1;
 let ready = {
     API: false,
     state: false
 }
-let globalVolumes = {
-    music: 100,
-    ambience: 100
-}
 let state: State;
+let durations = {
+    'music': 1,
+    'ambience': 1
+}
 
-function createPlayer(role: VideoType, video: string) {
+function createPlayer(role: VideoType, video: string, autoplay: boolean) {
     return new YT.Player(role + "Player", {
         height: '243',
         width: '400',
         videoId: video,
         playerVars: {
             controls: 0,
-            autoplay: autoplay
+            autoplay: autoplay ? 1 : 0
         },
         events: {
           'onReady': (event) => onPlayerReady(role, event),
-          'onStateChange': onPlayerStateChange
+          'onStateChange': (event) => onPlayerStateChange(role, event)
         }
     });
 }
@@ -40,6 +39,7 @@ export function APIReady() {
 
 export function receivedState(newState: State) {
     state = newState;
+
     ready.state = true;
     checkStart();
 }
@@ -48,8 +48,8 @@ export function loadVideo(type: VideoType, video: string) {
     players[type]?.loadVideoById(video);
 }
 
-export function setVolume(type: VideoType, volume: string) {
-    globalVolumes[type] = +volume;
+export function setMasterVolume(type: VideoType, volume: string) {
+    state[type].masterVolume = +volume;
     updateVolume(type);
 }
 
@@ -61,9 +61,8 @@ export function resume(type: VideoType) {
     players[type]?.playVideo();
 }
 
-export function seekTo(type: VideoType, percent: string) {
-    let seconds: number = (players[type]?.getDuration() ?? 0) * (+percent / 100);
-    players[type]?.seekTo(seconds, true);
+export function seekTo(type: VideoType, seconds: string) {
+    players[type]?.seekTo(+seconds, true);
 }
 
 export function localVolume(type: VideoType, percent: number) {
@@ -71,27 +70,41 @@ export function localVolume(type: VideoType, percent: number) {
     updateVolume(type);
 }
 
+export function getDuration(type: VideoType) {
+    return durations[type];
+}
+
 function updateVolume(type: VideoType) {
     let localVolume: number = +(localStorage.getItem("localvolume_" + type.toString()) ?? 100);
-    let globalVolume: number = globalVolumes[type];
+    let globalVolume: number = state[type].masterVolume;
     players[type]?.setVolume(localVolume * (globalVolume / 100));
 }
 
+function setPosition(type: VideoType) {
+    let duration = players[type]?.getDuration() ?? 1;
+    let position = (state[type].time.elapsed ?? 0) % duration;
+    players[type]?.seekTo(position, true);
+}
+
 function checkStart() {
-    if(ready.API && ready.state) {
-        players.music = createPlayer('music', state.videos.music);
-        players.ambience = createPlayer('ambience', state.videos.ambience);
+    if (ready.API && ready.state) {
+        players.music = createPlayer('music', state.music.url, state.music.playing);
+        players.ambience = createPlayer('ambience', state.ambience.url, state.ambience.playing);
     }
 }
 
 function onPlayerReady(role: VideoType, event: YT.PlayerEvent) {
     updateVolume(role);
+    setPosition(role);
     event.target.setLoop(true);
 }
 
-function onPlayerStateChange(event: YT.OnStateChangeEvent) {
+function onPlayerStateChange(role: VideoType, event: YT.OnStateChangeEvent) {
     if (event.data === YT.PlayerState.ENDED) {
         event.target.seekTo(0, true);
         event.target.playVideo();
+    }
+    else if (event.data === YT.PlayerState.PLAYING) {
+        durations[role] = event.target.getDuration();
     }
 }

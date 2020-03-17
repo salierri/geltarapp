@@ -22,9 +22,17 @@ export interface Heartbeat {
     type: 'heartbeat';
 }
 export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat;
-export interface State {
-    videos: {
-        music: string;
-        ambience: string;
+export interface VideoState {
+    url: string;
+    playing: boolean;
+    masterVolume: number;
+    time: {
+        start: number;
+        setAt: Date;
+        elapsed?: number;
     };
+}
+export interface State {
+    music: VideoState;
+    ambience: VideoState;
 }

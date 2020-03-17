@@ -2,6 +2,7 @@ import React from 'react';
 import Communication from './Communication';
 import { VideoProps } from './Video';
 import { VideoType } from '../api';
+import { getDuration } from './videoPlayer';
 
 class Admin extends React.Component<VideoProps, Object> {
 
@@ -30,7 +31,8 @@ class Admin extends React.Component<VideoProps, Object> {
     }
 
     seekCommand(percent: number) {
-        Communication.sendCommand("SeekTo", this.role, percent.toString());
+        let time = (percent / 100) * getDuration(this.role);
+        Communication.sendCommand("SeekTo", this.role,  time.toString());
     }
 
     render() {

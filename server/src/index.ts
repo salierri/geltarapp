@@ -1,18 +1,13 @@
 import WebSocket from 'ws';
 import { IncomingMessage } from 'http';
-import { State, Message, Command } from './api';
+import { State, Message, Command, VideoState } from './api';
+import * as StateManager from './stateManager';
 
 const WSServer = new WebSocket.Server({
     port: 4000
 });
 
 let master: WebSocket;
-let state: State = {
-    videos: {
-        music: 'm_8QMAChwtg',
-        ambience: 'sGkh1W5cbH4'
-    }
-};
 
 WSServer.on('connection', (ws, req) => {
 
@@ -25,7 +20,7 @@ WSServer.on('connection', (ws, req) => {
         console.log(clientIp(req) + ": " + message);
         let parsedMessage: Message = JSON.parse(message.toString());
         if(parsedMessage.type === 'command') {
-            updateState(parsedMessage);
+            StateManager.updateState(parsedMessage);
             broadcastCommand(parsedMessage);
         } else if(parsedMessage.type === 'feedback') {
             feedbackToMaster(parsedMessage.message, clientIp(req));
@@ -44,12 +39,6 @@ WSServer.on('connection', (ws, req) => {
     feedbackToMaster("Connected", clientIp(req));
 });
 
-function updateState(message: Command) {
-    if(message.command === "LoadVideo") {
-        state.videos[message.video] = message.param;
-    }
-}
-
 function broadcastCommand(message: Command) {
     let countSent = 0;
     WSServer.clients.forEach(function each(client) {
@@ -66,7 +55,7 @@ function feedbackToMaster(message: string, sender?: string) {
 }
 
 function sendState(sender: WebSocket) {
-    sender.send(JSON.stringify({type: 'state', state: state}));
+    sender.send(JSON.stringify({type: 'state', state: StateManager.getState()}));
 }
 
 function sendHeartbeat(sender: WebSocket) {

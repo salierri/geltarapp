@@ -103,7 +103,7 @@ function executeCommand(command: Command) {
     if(command.command === "LoadVideo") {
         VideoPlayer.loadVideo(command.video, command.param);
     } else if(command.command === "Volume") {
-        VideoPlayer.setVolume(command.video, command.param);
+        VideoPlayer.setMasterVolume(command.video, command.param);
     } else if(command.command === "SeekTo") {
         VideoPlayer.seekTo(command.video, command.param);
     } else if(command.command === "Pause") {
