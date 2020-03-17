@@ -1,11 +1,5 @@
 export declare type VideoType = 'music' | 'ambience';
-declare enum CommandType {
-    LoadVideo = "loadVideo",
-    Volume = "volume",
-    SeekTo = "seekTo",
-    Pause = "pause",
-    Resume = "resume"
-}
+export declare type CommandType = 'LoadVideo' | 'Volume' | 'SeekTo' | 'Pause' | 'Resume';
 export interface Command {
     type: 'command';
     command: CommandType;
@@ -34,4 +28,3 @@ export interface State {
         ambience: string;
     };
 }
-export {};

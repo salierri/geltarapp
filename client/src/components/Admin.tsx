@@ -1,7 +1,7 @@
 import React from 'react';
-import Communication, { CommandType } from './Communication';
+import Communication from './Communication';
 import { VideoProps } from './Video';
-import { VideoType } from '../server';
+import { VideoType } from '../api';
 
 class Admin extends React.Component<VideoProps, Object> {
 
@@ -14,23 +14,23 @@ class Admin extends React.Component<VideoProps, Object> {
     }
 
     pauseCommand() {
-        Communication.sendCommand(CommandType.Pause, this.role, "");
+        Communication.sendCommand("Pause", this.role, "");
     }
 
     resumeCommand() {
-        Communication.sendCommand(CommandType.Resume, this.role, "");
+        Communication.sendCommand("Resume", this.role, "");
     }
 
     loadCommand() {
-        Communication.sendCommand(CommandType.LoadVideo, this.role, urlToVideoId(this.videoUrl));
+        Communication.sendCommand("LoadVideo", this.role, urlToVideoId(this.videoUrl));
     }
 
     volumeCommand(volume: number) {
-        Communication.sendCommand(CommandType.Volume, this.role, volume.toString());
+        Communication.sendCommand("Volume", this.role, volume.toString());
     }
 
     seekCommand(percent: number) {
-        Communication.sendCommand(CommandType.SeekTo, this.role, percent.toString());
+        Communication.sendCommand("SeekTo", this.role, percent.toString());
     }
 
     render() {
@@ -44,7 +44,7 @@ class Admin extends React.Component<VideoProps, Object> {
                 <div>
                     <span className="uk-padding">Seek ahead</span>
                     <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100" defaultValue="0"
-                     onMouseUp={(e) => this.seekCommand(+(e as any).target.value) } />
+                     onMouseUp={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value) } />
                 </div>
                 <div>
                     <input type="text" id={this.role + "videoUrl"} className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"

@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,6 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.8.3"
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
+    "patch-package": "^6.2.1"
   }
 }

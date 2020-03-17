@@ -2,7 +2,7 @@ import React from 'react';
 import { APIReady, localVolume } from './videoPlayer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Admin from './Admin';
-import { VideoType } from '../server';
+import { VideoType } from '../api';
 import Communication from './Communication';
 
 export interface VideoProps {
@@ -10,7 +10,7 @@ export interface VideoProps {
 }
 
 declare global {
-    interface Window { onYouTubeIframeAPIReady: any }
+    interface Window { onYouTubeIframeAPIReady: () => void }   //To prepare window object for the future callback
 }
 
 let APIloaded :boolean = false;

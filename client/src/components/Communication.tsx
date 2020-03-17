@@ -1,19 +1,11 @@
 import { Component } from 'react';
 import { w3cwebsocket as WebSocket } from "websocket";
 import * as VideoPlayer from './videoPlayer';
-import { Command, Message, VideoType } from '../server';
 import React from 'react';
+import { Message, Command, CommandType, VideoType } from '../api';
 
 let address = isAdmin() ? process.env.REACT_APP_URL + '/geltaradmin' : process.env.REACT_APP_URL ?? "";
 let client: WebSocket;
-
-export enum CommandType {
-    LoadVideo = 'loadVideo',
-    Volume = 'volume',
-    SeekTo = 'seekTo',
-    Pause = 'pause',
-    Resume = 'resume'
-}
 
 interface MessageState {
     messages: Array<string>
@@ -74,13 +66,13 @@ class Communication extends Component<{}, MessageState> {
     }
 
     heartbeat() {
-        if(client.readyState === 1) {
-            Communication._send({type:"heartbeat"});
-        }
+        Communication._send({type: "heartbeat"});
     }
 
     static _send(message: Message) {
-        client.send(JSON.stringify(message));
+        if(client.readyState === 1 /* Ready */) {
+            client.send(JSON.stringify(message));
+        }
     }
 
     componentDidUpdate() {
@@ -108,15 +100,15 @@ class Communication extends Component<{}, MessageState> {
 }
 
 function executeCommand(command: Command) {
-    if(command.command === CommandType.LoadVideo) {
+    if(command.command === "LoadVideo") {
         VideoPlayer.loadVideo(command.video, command.param);
-    } else if(command.command === CommandType.Volume) {
+    } else if(command.command === "Volume") {
         VideoPlayer.setVolume(command.video, command.param);
-    } else if(command.command === CommandType.SeekTo) {
+    } else if(command.command === "SeekTo") {
         VideoPlayer.seekTo(command.video, command.param);
-    } else if(command.command === CommandType.Pause) {
+    } else if(command.command === "Pause") {
         VideoPlayer.pause(command.video);
-    } else if(command.command === CommandType.Resume) {
+    } else if(command.command === "Resume") {
         VideoPlayer.resume(command.video);
     }
 }

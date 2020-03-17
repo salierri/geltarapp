@@ -1,0 +1,13 @@
+diff --git a/node_modules/@types/youtube/index.d.ts b/node_modules/@types/youtube/index.d.ts
+index c0f3cd2..3a76b21 100644
+--- a/node_modules/@types/youtube/index.d.ts
++++ b/node_modules/@types/youtube/index.d.ts
+@@ -18,7 +18,7 @@ declare namespace YT
+ 	/**
+ 	 * State of a video player.
+ 	 */
+-	export const enum PlayerState
++	export enum PlayerState
+ 	{
+ 		UNSTARTED = -1,
+ 		ENDED = 0,

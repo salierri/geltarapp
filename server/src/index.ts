@@ -1,54 +1,10 @@
 import WebSocket from 'ws';
 import { IncomingMessage } from 'http';
+import { State, Message, Command } from './api';
 
 const WSServer = new WebSocket.Server({
     port: 4000
 });
-
-export type VideoType = 'music' | 'ambience';
-
-enum CommandType {
-    LoadVideo = 'loadVideo',
-    Volume = 'volume',
-    SeekTo = 'seekTo',
-    Pause = 'pause',
-    Resume = 'resume'
-}
-
-export interface Command {
-    type: 'command',
-    command: CommandType,
-    video: VideoType,
-    param: string
-}
-
-export interface Feedback {
-    type: 'feedback',
-    message: string,
-    sender?: string
-}
-
-export interface StateRequest {
-    type: 'stateRequest'
-}
-
-export interface StateMessage {
-    type: 'state',
-    state: State
-}
-
-export interface Heartbeat {
-    type: 'heartbeat'
-}
-
-export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
-
-export interface State {
-    videos: {
-        music: string,
-        ambience: string
-    }
-}
 
 let master: WebSocket;
 let state: State = {
@@ -89,7 +45,7 @@ WSServer.on('connection', (ws, req) => {
 });
 
 function updateState(message: Command) {
-    if(message.command === CommandType.LoadVideo) {
+    if(message.command === "LoadVideo") {
         state.videos[message.video] = message.param;
     }
 }
