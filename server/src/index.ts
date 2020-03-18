@@ -7,13 +7,13 @@ const WSServer = new WebSocket.Server({
     port: 4000
 });
 
-let master: WebSocket;
+let masters: WebSocket[] = [];
 
 WSServer.on('connection', (ws, req) => {
 
     if(req.url?.includes('geltaradmin')) {
         feedbackToMaster("NEW MASTER CLIENT", clientIp(req));
-        master = ws;
+        masters.push(ws);
     }
 
     ws.on('message', (message) => {
@@ -51,7 +51,11 @@ function broadcastCommand(message: Command) {
 }
 
 function feedbackToMaster(message: string, sender?: string) {
-    master?.send(JSON.stringify({ type: 'feedback', message: message, sender: sender }));
+    masters.forEach((master) => {
+        if(master.readyState == WebSocket.OPEN) {
+            master.send(JSON.stringify({ type: 'feedback', message: message, sender: sender }));
+        }
+    });
 }
 
 function sendState(sender: WebSocket) {
