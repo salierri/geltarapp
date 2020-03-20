@@ -1,4 +1,5 @@
 import { State, VideoType } from '../api';
+import { updateSeekerSlider } from './adminSynchronizator';
 
 interface Players {
     music?: YT.Player
@@ -74,6 +75,14 @@ export function getDuration(type: VideoType) {
     return durations[type];
 }
 
+export const getMasterVolume = (type: VideoType) => {
+    return state?.[type].masterVolume ?? 100;
+}
+
+export const getVideoPosition = (type: VideoType) => {
+    return state?.[type].time.elapsed ?? 0;
+}
+
 function updateVolume(type: VideoType) {
     let localVolume: number = +(localStorage.getItem("localvolume_" + type.toString()) ?? 100);
     let globalVolume: number = state[type].masterVolume;
@@ -106,5 +115,6 @@ function onPlayerStateChange(role: VideoType, event: YT.OnStateChangeEvent) {
     }
     else if (event.data === YT.PlayerState.PLAYING) {
         durations[role] = event.target.getDuration();
+        updateSeekerSlider(role, event.target.getCurrentTime());
     }
 }

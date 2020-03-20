@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { w3cwebsocket as WebSocket } from "websocket";
 import * as VideoPlayer from './videoPlayer';
+import * as AdminSynchronizator from './adminSynchronizator';
 import React from 'react';
 import { Message, Command, CommandType, VideoType } from '../api';
 
@@ -38,9 +39,11 @@ class Communication extends Component<{}, MessageState> {
             let parsedMessage: Message = JSON.parse(message.data.toString());
             if(parsedMessage.type === 'command') {
                 executeCommand(parsedMessage);
+                AdminSynchronizator.gotCommand(parsedMessage);
             }
             else if(parsedMessage.type === 'state') {
                 VideoPlayer.receivedState(parsedMessage.state);
+                AdminSynchronizator.loadState(parsedMessage.state);
             }
             else if(parsedMessage.type === 'feedback') {
                 this.log(parsedMessage.sender + " - " + parsedMessage.message);

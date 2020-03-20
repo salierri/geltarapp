@@ -2,7 +2,8 @@ import React from 'react';
 import Communication from './Communication';
 import { VideoProps } from './Video';
 import { VideoType } from '../api';
-import { getDuration } from './videoPlayer';
+import { getDuration, getMasterVolume, getVideoPosition } from './videoPlayer';
+import { setupVolumeSlider, setupSeekerSlider } from './adminSynchronizator';
 
 class Admin extends React.Component<VideoProps, Object> {
 
@@ -40,22 +41,25 @@ class Admin extends React.Component<VideoProps, Object> {
             <div>
                 <div>
                     <span className="uk-padding">Master volume</span>
-                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="300" defaultValue="100"
-                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value) } />
+                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="300"
+                     defaultValue={getMasterVolume(this.role)}
+                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value) }
+                     ref={(el) => setupVolumeSlider(this.role, el)} />
                 </div>
                 <div>
                     <span className="uk-padding">Seek ahead</span>
-                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100" defaultValue="0"
-                     onMouseUp={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value) } />
+                    <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100"
+                     onMouseUp={ (e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value) }
+                     ref={ (el) => setupSeekerSlider(this.role, el) } />
                 </div>
                 <div>
                     <input type="text" id={this.role + "videoUrl"} className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"
                     onInput={ (e: React.ChangeEvent<HTMLInputElement>) => this.videoUrl = e.target.value } />
                 </div>
                 <div className="uk-inline">
-                    <button className="master-button uk-button" onClick={() => this.loadCommand()}>Load</button>
-                    <button className="master-button uk-button" onClick={() => this.resumeCommand()}>Play</button>
-                    <button className="master-button uk-button" onClick={() => this.pauseCommand()}>Pause</button>
+                    <button className="master-button uk-button" onClick={ () => this.loadCommand() }>Load</button>
+                    <button className="master-button uk-button" onClick={ () => this.resumeCommand() }>Play</button>
+                    <button className="master-button uk-button" onClick={ () => this.pauseCommand() }>Pause</button>
                 </div>
             </div>
         );
