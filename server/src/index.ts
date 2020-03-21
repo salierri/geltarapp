@@ -21,9 +21,10 @@ WSServer.on('connection', (ws, req) => {
         let parsedMessage: Message = JSON.parse(message.toString());
         if(parsedMessage.type === 'command') {
             StateManager.updateState(parsedMessage);
-            broadcastCommand(parsedMessage);
+            broadcastMessage(parsedMessage);
         } else if(parsedMessage.type === 'feedback') {
-            feedbackToMaster(parsedMessage.message, clientIp(req));
+            parsedMessage.sender = clientIp(req);
+            broadcastMessage(parsedMessage);
         } else if(parsedMessage.type === 'stateRequest') {
             sendState(ws);
         } else if(parsedMessage.type === 'heartbeat') {
@@ -39,7 +40,7 @@ WSServer.on('connection', (ws, req) => {
     feedbackToMaster("Connected", clientIp(req));
 });
 
-function broadcastCommand(message: Command) {
+function broadcastMessage(message: Message) {
     let countSent = 0;
     WSServer.clients.forEach(function each(client) {
         if(client.readyState === WebSocket.OPEN) {

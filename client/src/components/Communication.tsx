@@ -12,6 +12,8 @@ interface MessageState {
     messages: Array<string>
 }
 
+let subscriptions: { [key in Message["type"]]?: ((message: Message) => void)[] };
+
 class Communication extends Component<{}, MessageState> {
 
     lastLogEvent? : HTMLDivElement | null;
@@ -22,6 +24,7 @@ class Communication extends Component<{}, MessageState> {
         this.state = {
             messages: []
         }
+        subscriptions = {};
     }
 
     componentDidMount() {
@@ -37,6 +40,11 @@ class Communication extends Component<{}, MessageState> {
         client.onmessage = (message) => {
             console.log(message);
             let parsedMessage: Message = JSON.parse(message.data.toString());
+            if(subscriptions[parsedMessage.type]) {
+                subscriptions[parsedMessage.type]?.forEach((callback) => {
+                    callback(parsedMessage);
+                });
+            }
             if(parsedMessage.type === 'command') {
                 executeCommand(parsedMessage);
                 AdminSynchronizator.gotCommand(parsedMessage);
@@ -76,6 +84,13 @@ class Communication extends Component<{}, MessageState> {
         if(client.readyState === 1 /* Ready */) {
             client.send(JSON.stringify(message));
         }
+    }
+
+    static subscribe(type: Message["type"], callback: (message: Message) => void) {
+        if(!subscriptions[type]) {
+            subscriptions[type] = [];
+        }
+        subscriptions[type]?.push(callback);
     }
 
     componentDidUpdate() {

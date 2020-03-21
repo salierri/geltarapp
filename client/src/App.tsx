@@ -2,6 +2,7 @@ import React from 'react';
 import './style/App.css';
 import Communication from './components/Communication';
 import Video from './components/Video';
+import EmojiContainer from './components/EmojiContainer';
 
 interface AppState {
   userGesture: boolean
@@ -50,6 +51,7 @@ class App extends React.Component<{}, AppState> {
           <this.Content />
         </header>
         <Communication />
+        <EmojiContainer />
       </div>
     );
   }

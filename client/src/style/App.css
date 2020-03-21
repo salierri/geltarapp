@@ -80,3 +80,10 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     opacity: 1;
     transition: opacity 2s linear;
 }
+
+.floating-emoji {
+    position: fixed;
+    font-size: 30px;
+    bottom: -50px;
+    pointer-events: none;
+}

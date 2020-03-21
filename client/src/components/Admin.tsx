@@ -2,7 +2,7 @@ import React from 'react';
 import Communication from './Communication';
 import { VideoProps } from './Video';
 import { VideoType } from '../api';
-import { getDuration, getMasterVolume, getVideoPosition } from './videoPlayer';
+import { getDuration, getMasterVolume } from './videoPlayer';
 import { setupVolumeSlider, setupSeekerSlider } from './adminSynchronizator';
 
 class Admin extends React.Component<VideoProps, Object> {

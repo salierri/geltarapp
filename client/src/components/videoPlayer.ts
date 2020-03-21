@@ -79,10 +79,6 @@ export const getMasterVolume = (type: VideoType) => {
     return state?.[type].masterVolume ?? 100;
 }
 
-export const getVideoPosition = (type: VideoType) => {
-    return state?.[type].time.elapsed ?? 0;
-}
-
 function updateVolume(type: VideoType) {
     let localVolume: number = +(localStorage.getItem("localvolume_" + type.toString()) ?? 100);
     let globalVolume: number = state[type].masterVolume;
