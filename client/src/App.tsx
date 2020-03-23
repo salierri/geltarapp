@@ -3,6 +3,7 @@ import './style/App.css';
 import Communication from './components/Communication';
 import Video from './components/Video';
 import EmojiContainer from './components/EmojiContainer';
+import Mp3Player from './components/Mp3Player';
 
 interface AppState {
   userGesture: boolean
@@ -33,6 +34,7 @@ class App extends React.Component<{}, AppState> {
               </div>
               <div className="uk-width-1-2">
                 <Video role="ambience" />
+                <Mp3Player />
               </div>
             </div>;
     } else {
@@ -46,7 +48,7 @@ class App extends React.Component<{}, AppState> {
     return (
       <div className="App uk-container">
         <header className="App-header">
-          <h1 className="uk-padding-small">Geltara zenesarka</h1>
+          <h1 className="uk-padding-small">Geltarapp</h1>
           <hr />
           <this.Content />
         </header>

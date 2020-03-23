@@ -26,6 +26,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 .feedback-button {
     width: 300px;
     background-color: #0B4F6C;
+    border-radius: 4px;
 }
 
 .master-button {
@@ -33,6 +34,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     display: inline-block;
     margin: 15px;
     background-color: #0B4F6C;
+    border-radius: 4px;
 }
 
 .start-button {

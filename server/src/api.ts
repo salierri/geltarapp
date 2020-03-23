@@ -1,6 +1,6 @@
 export type VideoType = 'music' | 'ambience';
 
-export type CommandType = 'LoadVideo' | 'Volume' | 'SeekTo' | 'Pause' | 'Resume';
+export type CommandType = 'LoadVideo' | 'Volume' | 'SeekTo' | 'Pause' | 'Resume' | 'LoadMp3';
 
 export interface Command {
     type: 'command',

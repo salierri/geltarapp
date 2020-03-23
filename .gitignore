@@ -13,6 +13,7 @@
 /client/build
 /server/dist
 /server/lib
+/server/uploads
 
 # misc
 .DS_Store

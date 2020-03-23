@@ -37,7 +37,7 @@ class FloatingEmoji extends React.Component<EmojiParams, {}> {
         posY = this.startingPosY + Math.sin(posX / 50) * 30;
         this.emoji.current!.style.left = posY.toString() + "px";
 
-        if(posX > 2160 /* 4K height */) {
+        if(posX > 2160 /* 4K height just to be sure */) {
             this.props.parent.removeEmoji();
         }
     }

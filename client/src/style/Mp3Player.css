@@ -1,0 +1,26 @@
+.upload-button-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.upload-button {
+    width: 250px;
+    display: inline-block;
+    background-color: #0B4F6C;
+
+    border: 0px;
+    border-radius: 4px;
+}
+
+.upload-button-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.upload-button-parent {
+    max-width: 250px;
+}
