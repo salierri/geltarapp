@@ -24,3 +24,7 @@
 .upload-button-parent {
     max-width: 250px;
 }
+
+.filter-70 {
+    filter: invert(70%);
+}

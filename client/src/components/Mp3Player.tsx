@@ -47,7 +47,7 @@ class Mp3Player extends React.Component<{}, Mp3State> {
         return (
             <div>
                 {this.state?.clip && <div>
-                        <audio controls className="uk-align-center" ref={this.audioTag}>
+                        <audio controls className="uk-align-center filter-70" ref={this.audioTag}>
                             <source src={`${process.env.REACT_APP_SERVER_URL}/${this.state.clip}`} type="audio/mpeg" />
                         </audio>
                      </div>}
