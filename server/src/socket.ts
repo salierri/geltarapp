@@ -4,7 +4,7 @@ import { Message } from './api';
 import * as StateManager from './stateManager';
 
 const WSServer = new WebSocket.Server({
-    port: 4000
+    port: +process.env.WS_PORT!
 });
 
 let masters: WebSocket[] = [];

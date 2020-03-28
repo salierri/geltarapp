@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Express from "express";
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
@@ -17,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(Express.static('./uploads'));
 app.use('/mp3', mp3upload);
 
-const port = process.env.PORT || 3001;
+const port = process.env.HTTP_PORT;
 
 app.listen(port, () => {
         console.log(`App is listening on port ${port}.`);

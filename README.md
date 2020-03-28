@@ -1,4 +1,4 @@
-# Geltara
+# Geltarapp
 
 **A [watch2gether](https://www.watch2gether.com/) alternative with a bit different featureset to fit DnD sessions**
 
@@ -41,7 +41,9 @@ npm run build
 npm start
 ```
 
-The server is listening on :4000 to incoming websockets by default
+The HTTP server is listening on :3001, and the websocket server on :4000 to incoming connections by default.
+
+This can be configured in the HTTP_PORT and WS_PORT env variable (or in `server/.env`) respectively.
 
 The server address must be set in a REACT_APP_URL env variable or in `client/.env`
 
