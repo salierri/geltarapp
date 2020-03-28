@@ -13,7 +13,7 @@ router.post('/upload', (req, res) => {
                 console.log('Mp3 upload, original filename: ' +
                 (req.files!.effect as UploadedFile).name +
                 ', new filename: ' + fileName);
-                broadcastMessage({type: 'command', command: 'LoadMp3', video: 'ambience', param: `${fileName}.mp3`});
+                broadcastMessage({type: 'command', command: 'LoadMp3', role: 'ambience', param: `${fileName}.mp3`});
                 res.sendStatus(200);
             })
             .catch((reason) => {

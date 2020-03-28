@@ -1,13 +1,13 @@
 import React from 'react';
 import Communication from './Communication';
 import { VideoProps } from './Video';
-import { VideoType } from '../api';
+import { VideoRole } from '../api';
 import { getDuration, getMasterVolume } from './videoPlayer';
 import { setupVolumeSlider, setupSeekerSlider } from './adminSynchronizator';
 
 class Admin extends React.Component<VideoProps, Object> {
 
-    role: VideoType;
+    role: VideoRole;
     videoUrl: string = "";
 
     constructor(props: VideoProps) {

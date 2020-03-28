@@ -3,7 +3,7 @@ import { w3cwebsocket as WebSocket } from "websocket";
 import * as VideoPlayer from './videoPlayer';
 import * as AdminSynchronizator from './adminSynchronizator';
 import React from 'react';
-import { Message, Command, CommandType, VideoType } from '../api';
+import { Message, Command, CommandType, VideoRole } from '../api';
 
 let address = isAdmin() ? process.env.REACT_APP_URL + '/geltaradmin' : process.env.REACT_APP_URL ?? "";
 let client: WebSocket;
@@ -68,8 +68,8 @@ class Communication extends Component<{}, MessageState> {
         }
     }
 
-    static sendCommand(command: CommandType, video: VideoType, param: string) {
-        Communication._send({type: "command", command: command, video: video, param: param});
+    static sendCommand(command: CommandType, role: VideoRole, param: string) {
+        Communication._send({type: "command", command: command, role: role, param: param});
     }
 
     static sendFeedback(message: string) {
@@ -119,15 +119,15 @@ class Communication extends Component<{}, MessageState> {
 
 function executeCommand(command: Command) {
     if(command.command === "LoadVideo") {
-        VideoPlayer.loadVideo(command.video, command.param);
+        VideoPlayer.loadVideo(command.role, command.param);
     } else if(command.command === "Volume") {
-        VideoPlayer.setMasterVolume(command.video, command.param);
+        VideoPlayer.setMasterVolume(command.role, command.param);
     } else if(command.command === "SeekTo") {
-        VideoPlayer.seekTo(command.video, command.param);
+        VideoPlayer.seekTo(command.role, command.param);
     } else if(command.command === "Pause") {
-        VideoPlayer.pause(command.video);
+        VideoPlayer.pause(command.role);
     } else if(command.command === "Resume") {
-        VideoPlayer.resume(command.video);
+        VideoPlayer.resume(command.role);
     }
 }
 

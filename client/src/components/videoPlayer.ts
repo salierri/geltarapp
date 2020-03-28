@@ -1,9 +1,8 @@
-import { State, VideoType } from '../api';
+import { State, VideoRole } from '../api';
 import { updateSeekerSlider } from './adminSynchronizator';
 
-interface Players {
-    music?: YT.Player
-    ambience?: YT.Player
+type Players = {
+    [key in VideoRole]?: YT.Player
 }
 
 let players: Players = { };
@@ -17,7 +16,7 @@ let durations = {
     'ambience': 1
 }
 
-function createPlayer(role: VideoType, video: string, autoplay: boolean) {
+function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
     return new YT.Player(role + "Player", {
         height: '243',
         width: '400',
@@ -45,50 +44,50 @@ export function receivedState(newState: State) {
     checkStart();
 }
 
-export function loadVideo(type: VideoType, video: string) {
-    players[type]?.loadVideoById(video);
+export function loadVideo(role: VideoRole, video: string) {
+    players[role]?.loadVideoById(video);
 }
 
-export function setMasterVolume(type: VideoType, volume: string) {
-    state[type].masterVolume = +volume;
-    updateVolume(type);
+export function setMasterVolume(role: VideoRole, volume: string) {
+    state[role].masterVolume = +volume;
+    updateVolume(role);
 }
 
-export function pause(type: VideoType) {
-    players[type]?.pauseVideo();
+export function pause(role: VideoRole) {
+    players[role]?.pauseVideo();
 }
 
-export function resume(type: VideoType) {
-    players[type]?.playVideo();
+export function resume(role: VideoRole) {
+    players[role]?.playVideo();
 }
 
-export function seekTo(type: VideoType, seconds: string) {
-    players[type]?.seekTo(+seconds, true);
+export function seekTo(role: VideoRole, seconds: string) {
+    players[role]?.seekTo(+seconds, true);
 }
 
-export function localVolume(type: VideoType, percent: number) {
-    localStorage.setItem("localvolume_" + type.toString(), percent.toString());
-    updateVolume(type);
+export function localVolume(role: VideoRole, percent: number) {
+    localStorage.setItem("localvolume_" + role.toString(), percent.toString());
+    updateVolume(role);
 }
 
-export function getDuration(type: VideoType) {
-    return durations[type];
+export function getDuration(role: VideoRole) {
+    return durations[role];
 }
 
-export const getMasterVolume = (type: VideoType) => {
-    return state?.[type].masterVolume ?? 100;
+export const getMasterVolume = (role: VideoRole) => {
+    return state?.[role].masterVolume ?? 100;
 }
 
-function updateVolume(type: VideoType) {
-    let localVolume: number = +(localStorage.getItem("localvolume_" + type.toString()) ?? 100);
-    let globalVolume: number = state[type].masterVolume;
-    players[type]?.setVolume(localVolume * (globalVolume / 100));
+function updateVolume(role: VideoRole) {
+    let localVolume: number = +(localStorage.getItem("localvolume_" + role.toString()) ?? 100);
+    let globalVolume: number = state[role].masterVolume;
+    players[role]?.setVolume(localVolume * (globalVolume / 100));
 }
 
-function setPosition(type: VideoType) {
-    let duration = players[type]?.getDuration() ?? 1;
-    let position = (state[type].time.elapsed ?? 0) % duration;
-    players[type]?.seekTo(position, true);
+function setPosition(role: VideoRole) {
+    let duration = players[role]?.getDuration() ?? 1;
+    let position = (state[role].time.elapsed ?? 0) % duration;
+    players[role]?.seekTo(position, true);
 }
 
 function checkStart() {
@@ -98,13 +97,13 @@ function checkStart() {
     }
 }
 
-function onPlayerReady(role: VideoType, event: YT.PlayerEvent) {
+function onPlayerReady(role: VideoRole, event: YT.PlayerEvent) {
     updateVolume(role);
     setPosition(role);
     event.target.setLoop(true);
 }
 
-function onPlayerStateChange(role: VideoType, event: YT.OnStateChangeEvent) {
+function onPlayerStateChange(role: VideoRole, event: YT.OnStateChangeEvent) {
     if (event.data === YT.PlayerState.ENDED) {
         event.target.seekTo(0, true);
         event.target.playVideo();

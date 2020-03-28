@@ -2,11 +2,11 @@ import React from 'react';
 import { APIReady, localVolume } from './videoPlayer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Admin from './Admin';
-import { VideoType } from '../api';
+import { VideoRole } from '../api';
 import Communication from './Communication';
 
 export interface VideoProps {
-    role: VideoType
+    role: VideoRole
 }
 
 declare global {
@@ -17,7 +17,7 @@ let APIloaded :boolean = false;
 
 class Video extends React.Component<VideoProps, Object> {
 
-    role: VideoType;
+    role: VideoRole;
 
     constructor(props: VideoProps) {
         super(props);

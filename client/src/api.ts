@@ -1,9 +1,9 @@
-export declare type VideoType = 'music' | 'ambience';
+export declare type VideoRole = 'music' | 'ambience';
 export declare type CommandType = 'LoadVideo' | 'Volume' | 'SeekTo' | 'Pause' | 'Resume' | 'LoadMp3';
 export interface Command {
     type: 'command';
     command: CommandType;
-    video: VideoType;
+    role: VideoRole;
     param: string;
 }
 export interface Feedback {

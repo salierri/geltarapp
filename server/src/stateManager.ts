@@ -1,4 +1,4 @@
-import { State, VideoState, Command, VideoType } from "./api";
+import { State, Command, VideoRole } from "./api";
 
 let state: State = {
     music: defaultVideoSetting('m_8QMAChwtg'),
@@ -7,16 +7,16 @@ let state: State = {
 
 export const updateState = (message: Command) => {
     if(message.command === "LoadVideo") {
-        state[message.video].url = message.param;
-        state[message.video].playing = true;
+        state[message.role].url = message.param;
+        state[message.role].playing = true;
     } else if(message.command === "Volume") {
-        state[message.video].masterVolume = +message.param;
+        state[message.role].masterVolume = +message.param;
     } else if(message.command === "Pause") {
-        state[message.video].playing = false;
+        state[message.role].playing = false;
     } else if(message.command === "Resume") {
-        state[message.video].playing = true;
+        state[message.role].playing = true;
     } else if(message.command === "SeekTo") {
-        state[message.video].time = {
+        state[message.role].time = {
             start: +message.param,
             setAt: new Date()
         }
@@ -29,8 +29,8 @@ export const getState = () => {
     return state;
 }
 
-function calculateElapsedTime(type: VideoType) {
-    state[type].time.elapsed = state[type].time.start + getElapsedSecondsFrom(state[type].time.setAt);
+function calculateElapsedTime(role: VideoRole) {
+    state[role].time.elapsed = state[role].time.start + getElapsedSecondsFrom(state[role].time.setAt);
 }
 
 function getElapsedSecondsFrom(time: Date) {
