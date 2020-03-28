@@ -34,8 +34,8 @@ Add [node](https://github.com/asdf-vm/asdf-nodejs) plugin to asdf, or install 12
 ###### The server
 
 ```bash
-git clone https://github.com/salierri/geltara.git
-cd geltara/server
+git clone https://github.com/salierri/geltarapp.git
+cd geltarapp/server
 npm install
 npm run build
 npm start
@@ -52,7 +52,7 @@ The server address must be set in a REACT_APP_URL env variable or in `client/.en
 In a new terminal:
 
 ```bash
-cd ../client
+cd geltarapp/client
 npm install
 npm run build
 ```
