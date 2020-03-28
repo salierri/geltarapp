@@ -14,12 +14,15 @@ router.post('/upload', (req, res) => {
                 (req.files!.effect as UploadedFile).name +
                 ', new filename: ' + fileName);
                 broadcastMessage({type: 'command', command: 'LoadMp3', video: 'ambience', param: `${fileName}.mp3`});
+                res.sendStatus(200);
             })
             .catch((reason) => {
                 console.error('Mp3 upload failed: ' + reason);
+                res.sendStatus(500);
             });
     } else {
         console.error('Mp3 upload without mp3 file!');
+        res.sendStatus(400);
     }
 });
 

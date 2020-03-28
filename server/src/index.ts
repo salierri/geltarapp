@@ -2,6 +2,7 @@ import Express from "express";
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import mp3upload from './routes/mp3upload';
+import cors from 'cors';
 import './socket';
 
 const app = Express();
@@ -10,6 +11,7 @@ app.use(fileUpload({
     createParentPath: true,
 }));
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(Express.static('./uploads'));

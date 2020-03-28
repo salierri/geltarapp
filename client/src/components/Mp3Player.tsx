@@ -12,27 +12,33 @@ interface Mp3State {
 class Mp3Player extends React.Component<{}, Mp3State> {
 
     audioTag: React.RefObject<HTMLAudioElement>;
+    fileInput: React.RefObject<HTMLInputElement>;
 
-    constructor({}) {
-        super({});
+    constructor(props: {}) {
+        super(props);
         this.audioTag = React.createRef();
+        this.fileInput = React.createRef();
     }
 
-    uploadMp3 = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if(!event.target.files) {
+    uploadMp3 = () => {
+        const file = this.fileInput.current?.files?.[0];
+        if (!file) {
             return;
         }
         let data = new FormData();
-        data.append('effect', event.target.files[0]);
+        data.append('effect', file);
 
         Axios.default.post(`${process.env.REACT_APP_SERVER_URL}/mp3/upload`, data)
          .then((response) => {
-            console.log(response);
+            console.log("Upload success: " + response);
+         })
+         .catch((reason) => {
+             console.log("Upload fail: " + reason);
          });
     }
 
     loadNewMp3(command: Command) {
-        if(command.command === 'LoadMp3') {
+        if (command.command === 'LoadMp3') {
             this.setState({clip: command.param});
             this.audioTag.current?.load();
             this.audioTag.current?.play();
@@ -56,9 +62,10 @@ class Mp3Player extends React.Component<{}, Mp3State> {
                 <Route path="/geltaradmin">
                     <div className="uk-align-center upload-button-parent">
                         <div className="upload-button-wrapper">
-                            <button className="uk-button upload-button">Upload Mp3 file</button>
-                            <input type="file" name="effect" accept=".mp3" onChange={ this.uploadMp3 } />
+                            <button className="uk-button upload-button">Select Mp3 file</button>
+                            <input type="file" name="effect" accept=".mp3" ref={ this.fileInput }/>
                         </div>
+                        <button className="uk-button upload-button" onClick={ this.uploadMp3 }>Play selected</button>
                     </div>
                 </Route>
                 </Switch>
