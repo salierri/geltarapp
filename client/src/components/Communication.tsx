@@ -42,7 +42,7 @@ class Communication extends Component<{}, MessageState> {
                     callback(parsedMessage);
                 });
             }
-            else if(parsedMessage.type === 'feedback') {
+            if(parsedMessage.type === 'feedback') {
                 this.log(parsedMessage.sender + " - " + parsedMessage.message);
             }
         }

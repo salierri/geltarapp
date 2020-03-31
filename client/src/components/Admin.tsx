@@ -1,52 +1,73 @@
 import React from 'react';
 import Communication from './Communication';
 import { VideoProps } from './Video';
-import { VideoRole } from '../api';
-import { getDuration, getMasterVolume } from './videoPlayer';
-import { setupVolumeSlider, setupSeekerCallback } from './adminSynchronizator';
+import { VideoRole, Command, State, StateMessage } from '../api';
+import * as VideoPlayer from './videoPlayer';
 
 class Admin extends React.Component<VideoProps, Object> {
 
     role: VideoRole;
     videoUrl: string = "";
     seekSlider: React.RefObject<HTMLInputElement>;
+    volumeSlider: React.RefObject<HTMLInputElement>;
 
     constructor(props: VideoProps) {
         super(props);
         this.role = props.role;
         this.seekSlider = React.createRef();
-        this.setSeekValue = this.setSeekValue.bind(this);
+        this.volumeSlider = React.createRef();
     }
 
-    pauseCommand() {
+    pauseCommand = () => {
         Communication.sendCommand("Pause", this.role, "");
     }
 
-    resumeCommand() {
+    resumeCommand = () => {
         Communication.sendCommand("Resume", this.role, "");
     }
 
-    loadCommand() {
+    loadCommand = () => {
         Communication.sendCommand("LoadVideo", this.role, urlToVideoId(this.videoUrl));
     }
 
-    volumeCommand(volume: number) {
+    volumeCommand = (volume: number) => {
         Communication.sendCommand("Volume", this.role, volume.toString());
     }
 
-    seekCommand(percent: number) {
-        let time = (percent / 100) * getDuration(this.role);
+    seekCommand = (percent: number) => {
+        let time = (percent / 100) * VideoPlayer.getDuration(this.role);
         Communication.sendCommand("SeekTo", this.role,  time.toString());
     }
 
-    setSeekValue(time: number) {
+    receivedCommand = (command: Command) => {
+        if (command.command === 'Volume' && command.role === this.role) {
+            this.setVolumeValue(command.param);
+        } else if (command.command === 'SeekTo'&& command.role === this.role) {
+            this.setSeekValue(+command.param);
+        }
+    }
+
+    receivedState = (state: State) => {
+        this.setVolumeValue(state[this.role].masterVolume.toString());
+        this.setSeekValue(state[this.role].time.elapsed ?? 0);
+    }
+
+    setVolumeValue = (percent: string) => {
+        if(this.volumeSlider.current) {
+            this.volumeSlider.current.value = percent;
+        }
+    }
+
+    setSeekValue = (time: number) => {
         if(this.seekSlider.current) {
-            this.seekSlider.current.value = (time / getDuration(this.role) * 100).toString();
+            this.seekSlider.current.value = (time / VideoPlayer.getDuration(this.role) * 100).toString();
         }
     }
 
     componentDidMount() {
-        setupSeekerCallback(this.role, this.setSeekValue);
+        Communication.subscribe('command', (message) => this.receivedCommand(message as Command));
+        Communication.subscribe('state', (message) => this.receivedState((message as StateMessage).state));
+        VideoPlayer.subscribeVideoLoaded(this.role, this.setSeekValue);
     }
 
     render() {
@@ -55,9 +76,9 @@ class Admin extends React.Component<VideoProps, Object> {
                 <div>
                     <span className="uk-padding">Master volume</span>
                     <input type="range" className="uk-range master-slider uk-align-center" min="0" max="300"
-                     defaultValue={getMasterVolume(this.role)}
-                     onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value) }
-                     ref={(el) => setupVolumeSlider(this.role, el)} />
+                     defaultValue={ VideoPlayer.getMasterVolume(this.role) }
+                     onInput={ (e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value) }
+                     ref={ this.volumeSlider } />
                 </div>
                 <div>
                     <span className="uk-padding">Seek ahead</span>
@@ -70,9 +91,9 @@ class Admin extends React.Component<VideoProps, Object> {
                     onInput={ (e: React.ChangeEvent<HTMLInputElement>) => this.videoUrl = e.target.value } />
                 </div>
                 <div className="uk-inline">
-                    <button className="master-button uk-button" onClick={ () => this.loadCommand() }>Load</button>
-                    <button className="master-button uk-button" onClick={ () => this.resumeCommand() }>Play</button>
-                    <button className="master-button uk-button" onClick={ () => this.pauseCommand() }>Pause</button>
+                    <button className="master-button uk-button" onClick={ this.loadCommand }>Load</button>
+                    <button className="master-button uk-button" onClick={ this.resumeCommand }>Play</button>
+                    <button className="master-button uk-button" onClick={ this.pauseCommand }>Pause</button>
                 </div>
             </div>
         );

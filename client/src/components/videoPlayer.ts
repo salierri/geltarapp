@@ -1,9 +1,11 @@
 import { State, VideoRole, Command, StateMessage } from '../api';
-import { updateSeekerSlider } from './adminSynchronizator';
 import Communication from './Communication';
 
 type Players = {
     [key in VideoRole]?: YT.Player
+}
+type LoadedCallbacks = {
+    [key in VideoRole]?: (time: number) => void;
 }
 
 let players: Players = { };
@@ -16,6 +18,7 @@ let durations = {
     'music': 1,
     'ambience': 1
 }
+let loadedCallbacks: LoadedCallbacks = {};
 
 function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
     return new YT.Player(role + "Player", {
@@ -111,20 +114,24 @@ function onPlayerStateChange(role: VideoRole, event: YT.OnStateChangeEvent) {
     }
     else if (event.data === YT.PlayerState.PLAYING) {
         durations[role] = event.target.getDuration();
-        updateSeekerSlider(role, event.target.getCurrentTime());
+        loadedCallbacks[role]?.(event.target.getCurrentTime());
     }
 }
 
+export const subscribeVideoLoaded = (role: VideoRole, callback: (time: number) => void) => {
+    loadedCallbacks[role] = callback;
+}
+
 export const executeCommand = (command: Command) => {
-    if(command.command === "LoadVideo") {
+    if (command.command === "LoadVideo") {
         loadVideo(command.role, command.param);
-    } else if(command.command === "Volume") {
+    } else if (command.command === "Volume") {
         setMasterVolume(command.role, command.param);
-    } else if(command.command === "SeekTo") {
+    } else if (command.command === "SeekTo") {
         seekTo(command.role, command.param);
-    } else if(command.command === "Pause") {
+    } else if (command.command === "Pause") {
         pause(command.role);
-    } else if(command.command === "Resume") {
+    } else if (command.command === "Resume") {
         resume(command.role);
     }
 }
