@@ -10,38 +10,40 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
-
   constructor(props: {}) {
     super(props);
     this.state = {
-      userGesture: false
-    }
+      userGesture: false,
+    };
     this.Content = this.Content.bind(this);
   }
 
   receivedUserGesture() {
-    document.getElementById("start-button-container")?.classList.add('hidden');
+    document.getElementById('start-button-container')?.classList.add('hidden');
     setTimeout(() => {
-      this.setState({userGesture: true});
+      this.setState({ userGesture: true });
     }, 500);
   }
 
   Content() {
     if (this.state.userGesture) {
-      return <div className="uk-grid">
-              <div className="uk-width-1-2">
-                <Video role="music" />
-              </div>
-              <div className="uk-width-1-2">
-                <Video role="ambience" />
-                <Mp3Player />
-              </div>
-            </div>;
-    } else {
-      return <div className="uk-container" id="start-button-container">
-        <button className="uk-button start-button uk-align-center" onClick={() => this.receivedUserGesture()}>Csatlakozás</button>
-      </div>;
+      return (
+        <div className="uk-grid">
+          <div className="uk-width-1-2">
+            <Video videoRole="music" />
+          </div>
+          <div className="uk-width-1-2">
+            <Video videoRole="ambience" />
+            <Mp3Player />
+          </div>
+        </div>
+      );
     }
+    return (
+      <div className="uk-container" id="start-button-container">
+        <button type="button" className="uk-button start-button uk-align-center" onClick={() => this.receivedUserGesture()}>Csatlakozás</button>
+      </div>
+    );
   }
 
   render() {
