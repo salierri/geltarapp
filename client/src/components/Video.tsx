@@ -64,7 +64,7 @@ class Video extends React.Component<VideoProps, Object> {
             min="0"
             max="100"
             defaultValue={+(localStorage.getItem(`localvolume_${this.role.toString()}`) ?? 100)}
-            onChange={(e: React.ChangeEvent<EventTarget & HTMLInputElement>) => setLocalVolume(this.role, +e.target.value)}
+            onChange={(e) => setLocalVolume(this.role, +e.target.value)}
           />
           <Switch>
             <Route path="/geltaradmin">

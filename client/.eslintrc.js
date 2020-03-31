@@ -11,13 +11,23 @@ module.exports = {
     rules: {
         "@typescript-eslint/explicit-function-return-type": "off",
         "react/destructuring-assignment": "off",
-        "max-len": "off", // We have big enough monitors in 2020
         "no-console": "off", // Still in development phase, we need useful bug reports
         "lines-between-class-members": "off",
         "object-curly-newline": ["error", {
           "ImportDeclaration": "never",
         }],
-        "jsx-a11y/media-has-caption": "off",  // We have specific media players
+        "max-len": ["error",
+          110,  // Up from 100
+          2,
+          {
+            "ignoreUrls": true,
+            "ignoreComments": false,
+            "ignoreRegExpLiterals": true,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true
+          }
+        ],
+        "jsx-a11y/media-has-caption": "off",  // We have special media players
     },
     parserOptions: {
         project: './tsconfig.json'
