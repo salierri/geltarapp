@@ -24,7 +24,7 @@ class FloatingEmoji extends React.Component<EmojiParams, {}> {
     }
 
     componentWillUnmount() {
-        if(this.interval) {
+        if (this.interval) {
             clearInterval(this.interval);
         }
     }
@@ -37,15 +37,15 @@ class FloatingEmoji extends React.Component<EmojiParams, {}> {
         posY = this.startingPosY + Math.sin(posX / 50) * 30;
         this.emoji.current!.style.left = posY.toString() + "px";
 
-        if(posX > 2160 /* 4K height just to be sure */) {
+        if (posX > 2160 /* 4K height just to be sure */) {
             this.props.parent.removeEmoji();
         }
     }
 
     render() {
         return (
-            <span role="img" aria-label={this.props.label}  className="floating-emoji"
-                ref={this.emoji}>{this.props.emoji}</span>
+            <span role="img" aria-label={ this.props.label }  className="floating-emoji"
+                ref={ this.emoji }>{ this.props.emoji }</span>
         );
     }
 }

@@ -27,7 +27,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   Content() {
-    if(this.state.userGesture) {
+    if (this.state.userGesture) {
       return <div className="uk-grid">
               <div className="uk-width-1-2">
                 <Video role="music" />

@@ -14,9 +14,9 @@ class EmojiContainer extends React.Component {
 
     newEmoji = (message: string) => {
         let key = Math.random();
-        if(message === "like") {
+        if (message === "like") {
             this.emojis.push(<FloatingEmoji parent={this} key={key} label="thumbs-up" emoji="👍" />);
-        } else if(message === "boring") {
+        } else if (message === "boring") {
             this.emojis.push(<FloatingEmoji parent={this} key={key} label="sleeping" emoji="😴" />);
         }
         this.forceUpdate();

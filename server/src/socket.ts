@@ -11,7 +11,7 @@ let masters: WebSocket[] = [];
 
 WSServer.on('connection', (ws, req) => {
 
-    if(req.url?.includes('geltaradmin')) {
+    if (req.url?.includes('geltaradmin')) {
         feedbackToMaster("NEW MASTER CLIENT", clientIp(req));
         masters.push(ws);
     }
@@ -19,15 +19,15 @@ WSServer.on('connection', (ws, req) => {
     ws.on('message', (message) => {
         console.log(clientIp(req) + ": " + message);
         let parsedMessage: Message = JSON.parse(message.toString());
-        if(parsedMessage.type === 'command') {
+        if (parsedMessage.type === 'command') {
             StateManager.updateState(parsedMessage);
             broadcastMessage(parsedMessage);
-        } else if(parsedMessage.type === 'feedback') {
+        } else if (parsedMessage.type === 'feedback') {
             parsedMessage.sender = clientIp(req);
             broadcastMessage(parsedMessage);
-        } else if(parsedMessage.type === 'stateRequest') {
+        } else if (parsedMessage.type === 'stateRequest') {
             sendState(ws);
-        } else if(parsedMessage.type === 'heartbeat') {
+        } else if (parsedMessage.type === 'heartbeat') {
             sendHeartbeat(ws);
         }
     });
@@ -43,7 +43,7 @@ WSServer.on('connection', (ws, req) => {
 export const broadcastMessage = (message: Message) => {
     let countSent = 0;
     WSServer.clients.forEach(function each(client) {
-        if(client.readyState === WebSocket.OPEN) {
+        if (client.readyState === WebSocket.OPEN) {
             countSent++;
             client.send(JSON.stringify(message));
         }
@@ -53,7 +53,7 @@ export const broadcastMessage = (message: Message) => {
 
 function feedbackToMaster(message: string, sender?: string) {
     masters.forEach((master) => {
-        if(master.readyState == WebSocket.OPEN) {
+        if (master.readyState == WebSocket.OPEN) {
             master.send(JSON.stringify({ type: 'feedback', message: message, sender: sender }));
         }
     });

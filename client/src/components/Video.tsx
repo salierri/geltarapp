@@ -27,7 +27,7 @@ class Video extends React.Component<VideoProps, Object> {
 
     render() {
         let feedbackButtons;
-        if(this.role === "music") {
+        if (this.role === "music") {
             feedbackButtons = <div className="feedback-container">
                 <button className="feedback-button uk-button uk-align-center" onClick={() => Communication.sendFeedback("like")}>
                     <span role="img" aria-label="thumbs-up">👍</span> Jó kis zene
@@ -58,7 +58,7 @@ class Video extends React.Component<VideoProps, Object> {
     }
 
     componentDidMount() {
-        if(APIloaded) {
+        if (APIloaded) {
             return;
         }
         var tag = document.createElement('script');

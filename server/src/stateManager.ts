@@ -6,16 +6,16 @@ let state: State = {
 };
 
 export const updateState = (message: Command) => {
-    if(message.command === "LoadVideo") {
+    if (message.command === "LoadVideo") {
         state[message.role].url = message.param;
         state[message.role].playing = true;
-    } else if(message.command === "Volume") {
+    } else if (message.command === "Volume") {
         state[message.role].masterVolume = +message.param;
-    } else if(message.command === "Pause") {
+    } else if (message.command === "Pause") {
         state[message.role].playing = false;
-    } else if(message.command === "Resume") {
+    } else if (message.command === "Resume") {
         state[message.role].playing = true;
-    } else if(message.command === "SeekTo") {
+    } else if (message.command === "SeekTo") {
         state[message.role].time = {
             start: +message.param,
             setAt: new Date()

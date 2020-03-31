@@ -53,13 +53,13 @@ class Admin extends React.Component<VideoProps, Object> {
     }
 
     setVolumeValue = (percent: string) => {
-        if(this.volumeSlider.current) {
+        if (this.volumeSlider.current) {
             this.volumeSlider.current.value = percent;
         }
     }
 
     setSeekValue = (time: number) => {
-        if(this.seekSlider.current) {
+        if (this.seekSlider.current) {
             this.seekSlider.current.value = (time / VideoPlayer.getDuration(this.role) * 100).toString();
         }
     }

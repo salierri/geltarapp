@@ -14,7 +14,7 @@ let subscriptions: { [key in Message["type"]]?: ((message: Message) => void)[] }
 
 class Communication extends Component<{}, MessageState> {
 
-    lastLogEvent? : HTMLDivElement | null;
+    lastLogEvent: React.RefObject<HTMLDivElement>;
 
     constructor(props: {}) {
         super(props);
@@ -22,6 +22,7 @@ class Communication extends Component<{}, MessageState> {
         this.state = {
             messages: []
         }
+        this.lastLogEvent = React.createRef();
     }
 
     componentDidMount() {
@@ -37,12 +38,12 @@ class Communication extends Component<{}, MessageState> {
         client.onmessage = (message) => {
             console.log(message);
             let parsedMessage: Message = JSON.parse(message.data.toString());
-            if(subscriptions[parsedMessage.type]) {
+            if (subscriptions[parsedMessage.type]) {
                 subscriptions[parsedMessage.type]?.forEach((callback) => {
                     callback(parsedMessage);
                 });
             }
-            if(parsedMessage.type === 'feedback') {
+            if (parsedMessage.type === 'feedback') {
                 this.log(parsedMessage.sender + " - " + parsedMessage.message);
             }
         }
@@ -70,23 +71,23 @@ class Communication extends Component<{}, MessageState> {
     }
 
     static _send(message: Message) {
-        if(client.readyState === 1 /* Ready */) {
+        if (client.readyState === 1 /* Ready */) {
             client.send(JSON.stringify(message));
         }
     }
 
     static subscribe(type: Message["type"], callback: (message: Message) => void) {
-        if(!subscriptions) {
+        if (!subscriptions) {
             subscriptions = {};
         }
-        if(!subscriptions[type]) {
+        if (!subscriptions[type]) {
             subscriptions[type] = [];
         }
         subscriptions[type]?.push(callback);
     }
 
     componentDidUpdate() {
-        this.lastLogEvent?.scrollIntoView({behavior: 'smooth'});
+        this.lastLogEvent.current?.scrollIntoView({behavior: 'smooth'});
     }
 
     log(message: string) {
@@ -95,15 +96,15 @@ class Communication extends Component<{}, MessageState> {
     }
 
     render() {
-        if(!isAdmin()) {
+        if (!isAdmin()) {
             return null;
         }
         return (
             <div id="log-area">
                 {this.state.messages.map(message => {
-                    return <p className="log-message">{message}</p>
+                    return <p className="log-message">{ message }</p>
                 })}
-                <div ref={(el) => this.lastLogEvent = el}></div>
+                <div ref={ this.lastLogEvent }></div>
             </div>
         );
     }

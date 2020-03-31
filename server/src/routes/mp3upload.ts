@@ -6,7 +6,7 @@ import { broadcastMessage } from '../socket';
 const router = Express.Router();
 
 router.post('/upload', (req, res) => {
-    if(req.files?.effect) {
+    if (req.files?.effect) {
         const fileName = crypto.randomBytes(20).toString('hex');
         (req.files.effect as UploadedFile).mv(`./uploads/${fileName}.mp3`)
             .then(() => {
