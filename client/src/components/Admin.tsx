@@ -5,12 +5,12 @@ import * as VideoPlayer from './videoPlayer';
 import * as Helpers from '../helpers/Helpers';
 
 interface AdminProps {
-  role: VideoRole
+  role: VideoRole;
 }
 
-class Admin extends React.Component<AdminProps, Object> {
+class Admin extends React.Component<AdminProps, {}> {
   role: VideoRole;
-  videoUrl: string = '';
+  videoUrl = '';
   seekSlider: React.RefObject<HTMLInputElement>;
   volumeSlider: React.RefObject<HTMLInputElement>;
 

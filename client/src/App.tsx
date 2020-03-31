@@ -6,7 +6,7 @@ import EmojiContainer from './components/EmojiContainer';
 import Mp3Player from './components/Mp3Player';
 
 interface AppState {
-  userGesture: boolean
+  userGesture: boolean;
 }
 
 class App extends React.Component<{}, AppState> {

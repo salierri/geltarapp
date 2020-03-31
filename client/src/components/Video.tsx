@@ -6,16 +6,16 @@ import { VideoRole } from '../api';
 import Communication from './Communication';
 
 interface VideoProps {
-  videoRole: VideoRole
+  videoRole: VideoRole;
 }
 
 declare global {
   interface Window { onYouTubeIframeAPIReady: () => void } // To prepare window object for the future callback
 }
 
-let APIloaded :boolean = false;
+let APIloaded = false;
 
-class Video extends React.Component<VideoProps, Object> {
+class Video extends React.Component<VideoProps, {}> {
   role: VideoRole;
 
   constructor(props: VideoProps) {

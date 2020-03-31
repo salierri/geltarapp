@@ -1,9 +1,9 @@
 import React from 'react';
 
 type EmojiParams = {
-  label: string,
-  emoji: string,
-  removeCallback: () => void,
+  label: string;
+  emoji: string;
+  removeCallback: () => void;
 };
 
 class FloatingEmoji extends React.Component<EmojiParams, {}> {
@@ -28,12 +28,15 @@ class FloatingEmoji extends React.Component<EmojiParams, {}> {
   }
 
   updatePosition = () => {
-    let posX = +this.emoji.current!.style.bottom.replace('px', '');
+    if (this.emoji.current === null) {
+      return;
+    }
+    let posX = +this.emoji.current.style.bottom.replace('px', '');
     posX += 1.9;
-    this.emoji.current!.style.bottom = `${posX.toString()}px`;
-    let posY = +this.emoji.current!.style.left.replace('px', '');
+    this.emoji.current.style.bottom = `${posX.toString()}px`;
+    let posY = +this.emoji.current.style.left.replace('px', '');
     posY = this.startingPosY + Math.sin(posX / 50) * 30;
-    this.emoji.current!.style.left = `${posY.toString()}px`;
+    this.emoji.current.style.left = `${posY.toString()}px`;
 
     if (posX > 2160 /* 4K height just to be sure */) {
       this.props.removeCallback();

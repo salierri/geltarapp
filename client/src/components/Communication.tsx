@@ -7,7 +7,7 @@ const address = Helpers.isAdmin() ? `${process.env.REACT_APP_URL}/geltaradmin` :
 let client: WebSocket;
 
 interface MessageState {
-  messages: Array<string>
+  messages: Array<string>;
 }
 
 let subscriptions: { [key in Message['type']]?: ((message: Message) => void)[] };

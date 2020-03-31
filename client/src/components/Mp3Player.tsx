@@ -6,7 +6,7 @@ import Communication from './Communication';
 import { Command } from '../api';
 
 interface Mp3State {
-  clip: string
+  clip: string;
 }
 
 class Mp3Player extends React.Component<{}, Mp3State> {
