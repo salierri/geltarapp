@@ -1,5 +1,6 @@
-import { State, VideoRole } from '../api';
+import { State, VideoRole, Command, StateMessage } from '../api';
 import { updateSeekerSlider } from './adminSynchronizator';
+import Communication from './Communication';
 
 type Players = {
     [key in VideoRole]?: YT.Player
@@ -37,31 +38,31 @@ export function APIReady() {
     checkStart();
 }
 
-export function receivedState(newState: State) {
+function receivedState(newState: State) {
     state = newState;
 
     ready.state = true;
     checkStart();
 }
 
-export function loadVideo(role: VideoRole, video: string) {
+function loadVideo(role: VideoRole, video: string) {
     players[role]?.loadVideoById(video);
 }
 
-export function setMasterVolume(role: VideoRole, volume: string) {
+function setMasterVolume(role: VideoRole, volume: string) {
     state[role].masterVolume = +volume;
     updateVolume(role);
 }
 
-export function pause(role: VideoRole) {
+function pause(role: VideoRole) {
     players[role]?.pauseVideo();
 }
 
-export function resume(role: VideoRole) {
+function resume(role: VideoRole) {
     players[role]?.playVideo();
 }
 
-export function seekTo(role: VideoRole, seconds: string) {
+function seekTo(role: VideoRole, seconds: string) {
     players[role]?.seekTo(+seconds, true);
 }
 
@@ -113,3 +114,20 @@ function onPlayerStateChange(role: VideoRole, event: YT.OnStateChangeEvent) {
         updateSeekerSlider(role, event.target.getCurrentTime());
     }
 }
+
+export const executeCommand = (command: Command) => {
+    if(command.command === "LoadVideo") {
+        loadVideo(command.role, command.param);
+    } else if(command.command === "Volume") {
+        setMasterVolume(command.role, command.param);
+    } else if(command.command === "SeekTo") {
+        seekTo(command.role, command.param);
+    } else if(command.command === "Pause") {
+        pause(command.role);
+    } else if(command.command === "Resume") {
+        resume(command.role);
+    }
+}
+
+Communication.subscribe('command', (command) => executeCommand(command as Command));
+Communication.subscribe('state', (state) => receivedState((state as StateMessage).state));

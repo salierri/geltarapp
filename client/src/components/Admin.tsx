@@ -3,16 +3,19 @@ import Communication from './Communication';
 import { VideoProps } from './Video';
 import { VideoRole } from '../api';
 import { getDuration, getMasterVolume } from './videoPlayer';
-import { setupVolumeSlider, setupSeekerSlider } from './adminSynchronizator';
+import { setupVolumeSlider, setupSeekerCallback } from './adminSynchronizator';
 
 class Admin extends React.Component<VideoProps, Object> {
 
     role: VideoRole;
     videoUrl: string = "";
+    seekSlider: React.RefObject<HTMLInputElement>;
 
     constructor(props: VideoProps) {
         super(props);
         this.role = props.role;
+        this.seekSlider = React.createRef();
+        this.setSeekValue = this.setSeekValue.bind(this);
     }
 
     pauseCommand() {
@@ -36,6 +39,16 @@ class Admin extends React.Component<VideoProps, Object> {
         Communication.sendCommand("SeekTo", this.role,  time.toString());
     }
 
+    setSeekValue(time: number) {
+        if(this.seekSlider.current) {
+            this.seekSlider.current.value = (time / getDuration(this.role) * 100).toString();
+        }
+    }
+
+    componentDidMount() {
+        setupSeekerCallback(this.role, this.setSeekValue);
+    }
+
     render() {
         return (
             <div>
@@ -50,7 +63,7 @@ class Admin extends React.Component<VideoProps, Object> {
                     <span className="uk-padding">Seek ahead</span>
                     <input type="range" className="uk-range master-slider uk-align-center" min="0" max="100"
                      onMouseUp={ (e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value) }
-                     ref={ (el) => setupSeekerSlider(this.role, el) } />
+                     ref={ this.seekSlider } />
                 </div>
                 <div>
                     <input type="text" id={this.role + "videoUrl"} className="uk-input" placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"
