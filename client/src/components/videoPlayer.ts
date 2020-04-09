@@ -97,7 +97,7 @@ function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
 }
 
 function checkStart() {
-  if (ready.API && ready.state) {
+  if (ready.API && ready.state && players.music === undefined) {
     players.music = createPlayer('music', state.music.url, state.music.playing);
     players.ambience = createPlayer('ambience', state.ambience.url, state.ambience.playing);
   }

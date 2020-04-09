@@ -18,7 +18,7 @@ class App extends React.Component<{}, AppState> {
     this.Content = this.Content.bind(this);
   }
 
-  receivedUserGesture() {
+  receivedUserGesture = () => {
     document.getElementById('start-button-container')?.classList.add('hidden');
     setTimeout(() => {
       this.setState({ userGesture: true });
@@ -41,7 +41,7 @@ class App extends React.Component<{}, AppState> {
     }
     return (
       <div className="uk-container" id="start-button-container">
-        <button type="button" className="uk-button start-button uk-align-center" onClick={() => this.receivedUserGesture()}>Csatlakozás</button>
+        <button type="button" className="uk-button start-button uk-align-center" onClick={this.receivedUserGesture}>Csatlakozás</button>
       </div>
     );
   }

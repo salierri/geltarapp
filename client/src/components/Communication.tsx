@@ -76,9 +76,9 @@ class Communication extends React.Component<{}, MessageState> {
       console.log(message);
       const parsedMessage: Message = JSON.parse(message.data.toString());
       if (subscriptions[parsedMessage.type]) {
-                subscriptions[parsedMessage.type]?.forEach((callback) => {
-                  callback(parsedMessage);
-                });
+        subscriptions[parsedMessage.type]?.forEach((callback) => {
+          callback(parsedMessage);
+        });
       }
       if (parsedMessage.type === 'feedback') {
         this.log(`${parsedMessage.sender} - ${parsedMessage.message}`);
