@@ -37,6 +37,11 @@ class Admin extends React.Component<AdminProps, {}> {
 
   loadCommand = () => {
     Communication.sendCommand('LoadVideo', this.role, Helpers.youtubeUrlToVideoId(this.videoUrl));
+    if(Helpers.youtubeUrlToTiming(this.videoUrl) !== 0) {
+      setTimeout(() => {
+        Communication.sendCommand('SeekTo', this.role, Helpers.youtubeUrlToTiming(this.videoUrl).toString());
+      }, 500);
+    }
   };
 
   volumeCommand = (volume: number) => {
