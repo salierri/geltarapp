@@ -23,7 +23,7 @@ class App extends React.Component<{}, AppState> {
     setTimeout(() => {
       this.setState({ userGesture: true });
     }, 500);
-  }
+  };
 
   Content() {
     if (this.state.userGesture) {

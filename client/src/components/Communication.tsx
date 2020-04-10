@@ -43,7 +43,7 @@ class Communication extends React.Component<{}, MessageState> {
     if (!subscriptions[type]) {
       subscriptions[type] = [];
     }
-        subscriptions[type]?.push(callback);
+    subscriptions[type]?.push(callback);
   }
 
 
@@ -64,7 +64,7 @@ class Communication extends React.Component<{}, MessageState> {
   }
 
   componentDidUpdate() {
-        this.lastLogEvent.current?.scrollIntoView({ behavior: 'smooth' });
+    this.lastLogEvent.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   connect() {

@@ -43,8 +43,8 @@ class Mp3Player extends React.Component<{}, Mp3State> {
   loadNewMp3(command: Command) {
     if (command.command === 'LoadMp3') {
       this.setState({ clip: command.param });
-            this.audioTag.current?.load();
-            this.audioTag.current?.play();
+      this.audioTag.current?.load();
+      this.audioTag.current?.play();
     }
   }
 
@@ -58,7 +58,7 @@ class Mp3Player extends React.Component<{}, Mp3State> {
             <source src={`${process.env.REACT_APP_SERVER_URL}/${this.state.clip}`} type="audio/mpeg" />
           </audio>
         </div>
-)}
+        )}
         <BrowserRouter>
           <Switch>
             <Route path="/geltaradmin">
