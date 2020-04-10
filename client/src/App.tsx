@@ -10,6 +10,8 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
+  protected currentMode = 'dark';
+
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -23,7 +25,7 @@ class App extends React.Component<{}, AppState> {
     setTimeout(() => {
       this.setState({ userGesture: true });
     }, 500);
-  }
+  };
 
   Content() {
     if (this.state.userGesture) {
@@ -46,11 +48,24 @@ class App extends React.Component<{}, AppState> {
     );
   }
 
+  switchMode() {
+    this.currentMode = this.currentMode === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', this.currentMode);
+    this.forceUpdate();
+  }
+
   render() {
+    document.documentElement.setAttribute('data-theme', this.currentMode);
     return (
       <div className="App uk-container">
         <header className="App-header">
           <h1 className="uk-padding-small">Geltarapp</h1>
+          <button type="button" onClick={() => this.switchMode()}>
+            Switch to
+            {this.currentMode}
+            {' '}
+            mode
+          </button>
           <hr />
           <this.Content />
         </header>

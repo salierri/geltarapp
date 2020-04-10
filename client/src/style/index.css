@@ -5,8 +5,24 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #282c34;
+  background-color: var(--bg-color);
   color: white;
   min-height: 100vh;
-  
+
+}
+
+[data-theme="dark"] {
+  --primary-color: #9A97F3;
+  --secondary-color: #818cab;
+  --font-color: #e1e1ff;
+  --bg-color: #282c34;
+  --heading-color: #818cab;
+}
+
+[data-theme="light"] {
+  --primary-color: #9A97F3;
+  --secondary-color: #818cab;
+  --font-color: #e1e1ff;
+  --bg-color: #e1e1ff;
+  --heading-color: #818cab;
 }
