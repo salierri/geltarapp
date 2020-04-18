@@ -19,6 +19,7 @@ module.exports = {
         "object-curly-newline": ["error", {
           "ImportDeclaration": "never",
         }],
+        "no-underscore-dangle": ["error", { allow: ['_id'] }],
         "max-len": ["error",
           110,  // Up from 100
           2,

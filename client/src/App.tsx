@@ -4,6 +4,7 @@ import Communication from './components/Communication';
 import Video from './components/Video';
 import EmojiContainer from './components/EmojiContainer';
 import Mp3Player from './components/Mp3Player';
+import PresetWindow from './components/PresetWindow';
 
 interface AppState {
   userGesture: boolean;
@@ -54,6 +55,7 @@ class App extends React.Component<{}, AppState> {
           <hr />
           <this.Content />
         </header>
+        <PresetWindow />
         <Communication />
         <EmojiContainer />
       </div>
