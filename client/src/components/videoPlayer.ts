@@ -79,7 +79,7 @@ function onPlayerStateChange(role: VideoRole, event: YT.OnStateChangeEvent) {
   } else if (event.data === YT.PlayerState.PLAYING) {
     durations[role] = event.target.getDuration();
     loadedCallbacks[role]?.(event.target.getCurrentTime());
-    if(!state[role].playing) {  // After seekAhead, the video autoplays, while it sometimes shouldn't
+    if (!state[role].playing) { // After seekAhead, the video autoplays, while it sometimes shouldn't
       players[role]?.pauseVideo();
     }
   }
