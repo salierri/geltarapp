@@ -45,7 +45,7 @@ The HTTP server is listening on :3001, and the websocket server on :4000 to inco
 
 This can be configured in the HTTP_PORT and WS_PORT env variable (or in `server/.env`) respectively.
 
-The server address must be set in a REACT_APP_URL env variable or in `client/.env`
+The server addresses must be set in the REACT_APP_WS_URL and REACT_APP_HTTP_URL env variables or in `client/.env`
 
 ###### The client
 
