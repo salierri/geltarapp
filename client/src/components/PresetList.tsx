@@ -1,11 +1,12 @@
 import React from 'react';
-import { List, ListItem, ListItemText, ListItemIcon, Collapse, Box, ListItemSecondaryAction } from '@material-ui/core';
+import { List, ListItem, ListItemText, ListItemIcon, Collapse, Box, ListItemSecondaryAction, IconButton, Typography } from '@material-ui/core';
 import AmbienceIcon from '@material-ui/icons/Fireplace';
 import MusicIcon from '@material-ui/icons/MusicVideo';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import { ExpandLess, ExpandMore, Delete, Edit } from '@material-ui/icons';
 import Communication from './Communication';
 import { Preset, Category } from '../api';
 import * as Helpers from '../helpers/Helpers';
+import Presets from '../models/Presets';
 
 export type CollapseOpenObject = { [key: string]: boolean };
 
@@ -18,6 +19,7 @@ interface PresetListState {
 }
 
 interface ListProps {
+  editMode: boolean;
   closeCallback: () => void;
   destroyedCallback: (open: CollapseOpenObject) => void;
   open?: CollapseOpenObject;
@@ -37,17 +39,12 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
       this.setState({ error: { name: 'No env vars', message: 'Environment variables not set!' } });
       return;
     }
-    Promise.all([
-      fetch(`${process.env.REACT_APP_HTTP_URL}/presets`),
-      fetch(`${process.env.REACT_APP_HTTP_URL}/categories`),
-    ])
-      .then(([presets, categories]) => Promise.all([presets.json(), categories.json()]))
+    Presets.getPresets()
       .then(([presets, categories]) => {
         this.setupOpenState(categories);
-        return [presets, categories];
+        return [presets, categories] as [Preset[], Category[]]; // Why do i need this
       })
-      .then(
-        ([presets, categories]) => {
+      .then(([presets, categories]) => {
           this.setState({
             loaded: true,
             presets,
@@ -108,6 +105,16 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
     if (!loaded) {
       return <div>Loading...</div>;
     }
+    const editButtons = this.props.editMode ? (
+      <>
+        <IconButton >
+          <Edit />
+        </IconButton>
+        <IconButton >
+          <Delete />
+        </IconButton>
+      </>
+    ) : null;
     return (
       <List>
         {categories?.map((category) => (
@@ -126,9 +133,12 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
                     : (
                       <Box pl={7}>
                         <ListItem button onClick={() => this.play(preset)} key={preset._id}>
-                          <ListItemText primary={preset.name} secondary={preset.title} />
+                            <ListItemText primary={preset.name} secondary={preset.title} />
                           <ListItemSecondaryAction>
-                            <ListItemText primary={Helpers.numberToTimeString(preset.length)} />
+                              <Typography variant="inherit">
+                                {Helpers.numberToTimeString(preset.length)}
+                              </Typography>
+                              {editButtons}
                           </ListItemSecondaryAction>
                         </ListItem>
                       </Box>
