@@ -106,8 +106,14 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
             </Button>
           </DialogActions>
         </Dialog>
-        <CreatePreset open={this.state.createPresetWindowOpen} closeCallback={this.closeCreatePresetWindow} />
-        <CreateCategory open={this.state.createCategoryWindowOpen} closeCallback={this.closeCreateCategoryWindow} />
+        <CreatePreset
+          open={this.state.createPresetWindowOpen}
+          closeCallback={this.closeCreatePresetWindow}
+        />
+        <CreateCategory
+          open={this.state.createCategoryWindowOpen}
+          closeCallback={this.closeCreateCategoryWindow}
+        />
       </ThemeProvider>
     );
   }

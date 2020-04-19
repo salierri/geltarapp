@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Select, MenuItem, FormGroup, InputLabel } from '@material-ui/core';
-import { Category } from '../api';
 import PresetManager from '../models/PresetManager';
 import * as Helpers from '../helpers/Helpers';
 import * as DummyVideoPlayer from '../helpers/DummyVideoPlayer';

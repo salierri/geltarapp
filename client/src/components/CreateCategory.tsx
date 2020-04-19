@@ -53,7 +53,7 @@ export default class CreateCategory extends React.Component<CreateCategoryProps,
               <Select
                 labelId="role-select-label"
                 name="role"
-                value="music"
+                defaultValue="music"
               >
                 <MenuItem value="music">Music</MenuItem>
                 <MenuItem value="ambience">Ambience</MenuItem>

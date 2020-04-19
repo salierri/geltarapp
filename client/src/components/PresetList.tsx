@@ -144,7 +144,7 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
               {open[category._id] ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open[category._id]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
+              <List component="div" disablePadding dense>
                 {presets?.map((preset) => (
                   preset.category._id !== category._id ? null
                     : (
