@@ -3,11 +3,13 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, Form
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PresetList, { CollapseOpenObject } from './PresetList';
 import CreatePreset from './CreatePreset';
+import CreateCategory from './CreateCategory';
 
 interface PresetWindowState {
   open: boolean;
   editMode: boolean;
-  createWindowOpen: boolean;
+  createPresetWindowOpen: boolean;
+  createCategoryWindowOpen: boolean;
 }
 
 export default class PresetWindow extends React.Component<{}, PresetWindowState> {
@@ -18,7 +20,8 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
     this.state = {
       open: false,
       editMode: false,
-      createWindowOpen: false,
+      createPresetWindowOpen: false,
+      createCategoryWindowOpen: false,
     };
   }
 
@@ -39,11 +42,19 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
   };
 
   createNewPreset = () => {
-    this.setState({ createWindowOpen: true, open: false });
+    this.setState({ createPresetWindowOpen: true, open: false });
   };
 
-  closeCreateWindow = () => {
-    this.setState({ createWindowOpen: false, open: true });
+  closeCreatePresetWindow = () => {
+    this.setState({ createPresetWindowOpen: false, open: true });
+  };
+
+  createNewCategory = () => {
+    this.setState({ createCategoryWindowOpen: true, open: false });
+  };
+
+  closeCreateCategoryWindow = () => {
+    this.setState({ createCategoryWindowOpen: false, open: true });
   };
 
   render() {
@@ -77,7 +88,7 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
             <Button onClick={this.createNewPreset} color="primary" variant="contained">
               Create new preset
             </Button>
-            <Button onClick={this.createNewPreset} color="primary" variant="contained">
+            <Button onClick={this.createNewCategory} color="primary" variant="contained">
               Create new category
             </Button>
             <FormControlLabel
@@ -95,7 +106,8 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
             </Button>
           </DialogActions>
         </Dialog>
-        <CreatePreset open={this.state.createWindowOpen} closeCallback={this.closeCreateWindow} />
+        <CreatePreset open={this.state.createPresetWindowOpen} closeCallback={this.closeCreatePresetWindow} />
+        <CreateCategory open={this.state.createCategoryWindowOpen} closeCallback={this.closeCreateCategoryWindow} />
       </ThemeProvider>
     );
   }

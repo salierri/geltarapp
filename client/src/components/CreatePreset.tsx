@@ -10,11 +10,7 @@ interface CreatePresetProps {
   closeCallback: () => void;
 }
 
-interface CreatePresetState {
-  selectedCategory: Category;
-}
-
-export default class CreatePreset extends React.Component<CreatePresetProps, CreatePresetState> {
+export default class CreatePreset extends React.Component<CreatePresetProps, {}> {
   form: React.RefObject<HTMLFormElement>;
   titleInput: React.RefObject<HTMLInputElement>;
   lengthInput: React.RefObject<HTMLInputElement>;
@@ -107,12 +103,10 @@ export default class CreatePreset extends React.Component<CreatePresetProps, Cre
                 inputRef={this.lengthInput}
               />
             </FormGroup>
-            <InputLabel id="demo-simple-select-label">Category</InputLabel>
+            <InputLabel id="category-select-label">Category</InputLabel>
             <FormGroup>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Category"
+                labelId="category-select-label"
                 name="category"
               >
                 {PresetManager.getCachedCategories().map((category) =>
