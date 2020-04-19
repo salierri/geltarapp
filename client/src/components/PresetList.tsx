@@ -35,39 +35,50 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
   }
 
   componentDidMount = () => {
-    if (process.env.REACT_APP_HTTP_URL === null) {
-      this.setState({ error: { name: 'No env vars', message: 'Environment variables not set!' } });
-      return;
-    }
-    Presets.getPresets()
-      .then(([presets, categories]) => {
-        this.setupOpenState(categories);
-        return [presets, categories] as [Preset[], Category[]]; // Why do i need this
-      })
-      .then(([presets, categories]) => {
-          this.setState({
-            loaded: true,
-            presets,
-            categories,
-          });
-        },
-        (error: Error) => {
-          this.setState({
-            loaded: true,
-            error,
-          });
-        },
-      );
+    this.handleIncomingData(Presets.getPresets());
   };
 
   componentWillUnmount() {
     this.props.destroyedCallback(this.state.open);
   }
 
+  forceDateRequest = () => {
+    this.handleIncomingData(Presets.forceUpdate());
+  }
+
+  handleIncomingData = (promise: Promise<[Preset[], Category[]]>) => {
+    promise.then(([presets, categories]) => {
+      this.setupOpenState(categories);
+      return [presets, categories] as [Preset[], Category[]]; // Why do i need this
+    })
+    .then(([presets, categories]) => {
+        this.setState({
+          loaded: true,
+          presets,
+          categories,
+        });
+      },
+      (error: Error) => {
+        this.setState({
+          loaded: true,
+          error,
+        });
+      },
+    );
+  }
+
   play = (preset: Preset) => {
     Communication.sendCommand('LoadVideo', preset.category.role, preset.url);
     this.props.closeCallback();
   };
+
+  deletePreset = async (preset: Preset) => {
+    const requestOptions = {
+      method: 'DELETE',
+    }
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/presets/${preset._id}`, requestOptions);
+    this.forceDateRequest();
+  }
 
   setupOpenState = (categories: Category[]) => {
     if (this.props.open) {
@@ -105,12 +116,12 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
     if (!loaded) {
       return <div>Loading...</div>;
     }
-    const editButtons = this.props.editMode ? (
+    const editButtons = (preset: Preset) => this.props.editMode ? (
       <>
         <IconButton >
           <Edit />
         </IconButton>
-        <IconButton >
+        <IconButton onClick={() => this.deletePreset(preset)} >
           <Delete />
         </IconButton>
       </>
@@ -138,7 +149,7 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
                               <Typography variant="inherit">
                                 {Helpers.numberToTimeString(preset.length)}
                               </Typography>
-                              {editButtons}
+                              {editButtons(preset)}
                           </ListItemSecondaryAction>
                         </ListItem>
                       </Box>
