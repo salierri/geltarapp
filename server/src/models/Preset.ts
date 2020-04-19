@@ -1,11 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 import { CategoryDocument } from './Category';
+import { Preset as PresetInterface } from '../api';
 
-export type PresetDocument = mongoose.Document & {
-  name: string;
-  url: string;
-  title: string;
-  length: number;
+export type PresetDocument = mongoose.Document & PresetInterface & {
   category: CategoryDocument['_id'];
 };
 

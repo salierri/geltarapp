@@ -89,3 +89,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     bottom: -50px;
     pointer-events: none;
 }
+
+.paddingLeft {
+    padding-left: 32px !important;
+}

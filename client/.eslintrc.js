@@ -19,7 +19,7 @@ module.exports = {
         "object-curly-newline": ["error", {
           "ImportDeclaration": "never",
         }],
-        "no-underscore-dangle": ["error", { allow: ['_id'] }],
+        "no-underscore-dangle": ["error", { allow: ['_id'] }],  // Mongodb uses _id, and it cannot be changed
         "max-len": ["error",
           110,  // Up from 100
           2,

@@ -1,13 +1,15 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import PresetList from './PresetList';
+import PresetList, { CollapseOpenObject } from './PresetList';
 
 interface PresetWindowState {
   open: boolean;
 }
 
 export default class PresetWindow extends React.Component<{}, PresetWindowState> {
+  listOpens?: CollapseOpenObject;
+
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -21,6 +23,10 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
 
   handleClose = () => {
     this.setState({ open: false });
+  };
+
+  presetListDestroyed = (open: CollapseOpenObject) => {
+    this.listOpens = open;
   };
 
   render() {
@@ -43,7 +49,11 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
         >
           <DialogTitle id="max-width-dialog-title">Preset Videos</DialogTitle>
           <DialogContent>
-            <PresetList closeCallback={this.handleClose} />
+            <PresetList
+              closeCallback={this.handleClose}
+              destroyedCallback={this.presetListDestroyed}
+              open={this.listOpens}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="default">

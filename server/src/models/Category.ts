@@ -1,10 +1,7 @@
 import mongoose from 'mongoose';
-import { VideoRole } from '../api';
+import { Category as CategoryInterface } from '../api';
 
-export type CategoryDocument = mongoose.Document & {
-  name: string;
-  role: VideoRole;
-};
+export type CategoryDocument = mongoose.Document & CategoryInterface;
 
 const categorySchema = new mongoose.Schema({
   name: { type: String, required: true },

@@ -11,3 +11,10 @@ export const youtubeUrlToTiming = (url: string): number => {
 
   return +(url.match(timingRegex)?.[1] ?? 0);
 };
+
+export const numberToTimeString = (time: number): string => {
+  const date = new Date(0);
+  date.setSeconds(time);
+  const substStart = time > 3600 ? 11 : 14;
+  return date.toISOString().substr(substStart, 19 - substStart);
+};
