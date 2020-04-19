@@ -2,11 +2,11 @@ import React from 'react';
 import { List, ListItem, ListItemText, ListItemIcon, Collapse, Box, ListItemSecondaryAction, IconButton, Typography } from '@material-ui/core';
 import AmbienceIcon from '@material-ui/icons/Fireplace';
 import MusicIcon from '@material-ui/icons/MusicVideo';
-import { ExpandLess, ExpandMore, Delete, Edit } from '@material-ui/icons';
+import { ExpandLess, ExpandMore, Delete } from '@material-ui/icons';
 import Communication from './Communication';
 import { Preset, Category } from '../api';
 import * as Helpers from '../helpers/Helpers';
-import Presets from '../models/Presets';
+import PresetManager from '../models/PresetManager';
 
 export type CollapseOpenObject = { [key: string]: boolean };
 
@@ -35,7 +35,7 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
   }
 
   componentDidMount = () => {
-    this.handleIncomingData(Presets.getPresets());
+    this.handleIncomingData(PresetManager.getPresets());
   };
 
   componentWillUnmount() {
@@ -43,15 +43,15 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
   }
 
   forceDateRequest = () => {
-    this.handleIncomingData(Presets.forceUpdate());
-  }
+    this.handleIncomingData(PresetManager.forceUpdate());
+  };
 
   handleIncomingData = (promise: Promise<[Preset[], Category[]]>) => {
     promise.then(([presets, categories]) => {
       this.setupOpenState(categories);
       return [presets, categories] as [Preset[], Category[]]; // Why do i need this
     })
-    .then(([presets, categories]) => {
+      .then(([presets, categories]) => {
         this.setState({
           loaded: true,
           presets,
@@ -63,9 +63,8 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
           loaded: true,
           error,
         });
-      },
-    );
-  }
+      });
+  };
 
   play = (preset: Preset) => {
     Communication.sendCommand('LoadVideo', preset.category.role, preset.url);
@@ -73,12 +72,14 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
   };
 
   deletePreset = async (preset: Preset) => {
-    const requestOptions = {
-      method: 'DELETE',
-    }
-    await fetch(`${process.env.REACT_APP_HTTP_URL}/presets/${preset._id}`, requestOptions);
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/presets/${preset._id}`, { method: 'DELETE' });
     this.forceDateRequest();
-  }
+  };
+
+  deleteCategory = async (category: Category) => {
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/categories/${category._id}`, { method: 'DELETE' });
+    this.forceDateRequest();
+  };
 
   setupOpenState = (categories: Category[]) => {
     if (this.props.open) {
@@ -116,16 +117,20 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
     if (!loaded) {
       return <div>Loading...</div>;
     }
-    const editButtons = (preset: Preset) => this.props.editMode ? (
+    const presetEditButtons = (preset: Preset) => (this.props.editMode ? (
       <>
-        <IconButton >
-          <Edit />
-        </IconButton>
-        <IconButton onClick={() => this.deletePreset(preset)} >
+        <IconButton onClick={() => this.deletePreset(preset)}>
           <Delete />
         </IconButton>
       </>
-    ) : null;
+    ) : null);
+    const categoryEditButtons = (preset: Category) => (this.props.editMode ? (
+      <>
+        <IconButton onClick={() => this.deleteCategory(preset)}>
+          <Delete />
+        </IconButton>
+      </>
+    ) : null);
     return (
       <List>
         {categories?.map((category) => (
@@ -135,6 +140,7 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
                 {category.role === 'music' ? <MusicIcon /> : <AmbienceIcon /> }
               </ListItemIcon>
               <ListItemText primary={category.name} />
+              {categoryEditButtons(category)}
               {open[category._id] ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open[category._id]} timeout="auto" unmountOnExit>
@@ -144,12 +150,12 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
                     : (
                       <Box pl={7}>
                         <ListItem button onClick={() => this.play(preset)} key={preset._id}>
-                            <ListItemText primary={preset.name} secondary={preset.title} />
+                          <ListItemText primary={preset.name} secondary={preset.title} />
                           <ListItemSecondaryAction>
-                              <Typography variant="inherit">
-                                {Helpers.numberToTimeString(preset.length)}
-                              </Typography>
-                              {editButtons(preset)}
+                            <Typography variant="inherit">
+                              {Helpers.numberToTimeString(preset.length)}
+                            </Typography>
+                            {presetEditButtons(preset)}
                           </ListItemSecondaryAction>
                         </ListItem>
                       </Box>

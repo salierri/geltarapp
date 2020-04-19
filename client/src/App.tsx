@@ -58,6 +58,7 @@ class App extends React.Component<{}, AppState> {
         <PresetWindow />
         <Communication />
         <EmojiContainer />
+        <div id="dummy-player" className="hidden" />
       </div>
     );
   }

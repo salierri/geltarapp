@@ -1,9 +1,9 @@
 export const isAdmin = () => window.location.href.includes('geltaradmin');
 
-export const youtubeUrlToVideoId = (url: string): string => {
+export const youtubeUrlToVideoId = (url: string): string | undefined => {
   const urlRegex = /^(?:(?:https?:)?\/\/)?(?:(?:www|m)\.)?(?:(?:youtube\.com|youtu\.be))(?:\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(?:\S+)?$/;
 
-  return url.match(urlRegex)?.[1] ?? '';
+  return url.match(urlRegex)?.[1];
 };
 
 export const youtubeUrlToTiming = (url: string): number => {

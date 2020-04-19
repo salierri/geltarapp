@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Select, MenuItem, FormGroup, InputLabel, Input } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Select, MenuItem, FormGroup, InputLabel } from '@material-ui/core';
 import { Category } from '../api';
-import Presets from '../models/Presets';
+import PresetManager from '../models/PresetManager';
+import * as Helpers from '../helpers/Helpers';
+import * as DummyVideoPlayer from '../helpers/DummyVideoPlayer';
 
 interface CreatePresetProps {
   open: boolean;
@@ -14,11 +16,31 @@ interface CreatePresetState {
 
 export default class CreatePreset extends React.Component<CreatePresetProps, CreatePresetState> {
   form: React.RefObject<HTMLFormElement>;
+  titleInput: React.RefObject<HTMLInputElement>;
+  lengthInput: React.RefObject<HTMLInputElement>;
 
   constructor(props: CreatePresetProps) {
     super(props);
     this.form = React.createRef();
+    this.titleInput = React.createRef();
+    this.lengthInput = React.createRef();
   }
+
+  urlFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const urlField = event.target;
+    const videoId = Helpers.youtubeUrlToVideoId(urlField.value);
+    if (!videoId) {
+      return;
+    }
+    urlField.value = videoId;
+    DummyVideoPlayer.getProperties(videoId)
+      .then((properties) => {
+        if (this.titleInput.current && this.lengthInput.current) {
+          this.titleInput.current.value = properties.title;
+          this.lengthInput.current.value = properties.length.toString();
+        }
+      });
+  };
 
   submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,11 +50,11 @@ export default class CreatePreset extends React.Component<CreatePresetProps, Cre
     const requestOptions = {
       method: 'POST',
       body: new FormData(this.form.current),
-    }
+    };
     fetch(`${process.env.REACT_APP_HTTP_URL}/presets`, requestOptions);
-    Presets.forceUpdate();
+    PresetManager.forceUpdate();
     this.props.closeCallback();
-  }
+  };
 
   render() {
     return (
@@ -45,10 +67,9 @@ export default class CreatePreset extends React.Component<CreatePresetProps, Cre
       >
         <DialogTitle id="max-width-dialog-title">Create new preset</DialogTitle>
         <DialogContent>
-          <form onSubmit={this.submit} className="create-new-form" ref={this.form} >
+          <form onSubmit={this.submit} className="create-new-form" ref={this.form}>
             <FormGroup>
               <TextField
-                id="outlined-helperText"
                 label="Video name"
                 variant="outlined"
                 name="name"
@@ -56,10 +77,34 @@ export default class CreatePreset extends React.Component<CreatePresetProps, Cre
             </FormGroup>
             <FormGroup>
               <TextField
-                id="outlined-helperText"
                 label="Youtube URL"
                 variant="outlined"
                 name="url"
+                onChange={this.urlFieldChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <TextField
+                InputProps={{
+                  readOnly: true,
+                }}
+                label="Video Title"
+                variant="outlined"
+                name="title"
+                value=" "
+                inputRef={this.titleInput}
+              />
+            </FormGroup>
+            <FormGroup>
+              <TextField
+                InputProps={{
+                  readOnly: true,
+                }}
+                label="Video length"
+                variant="outlined"
+                name="length"
+                value=" "
+                inputRef={this.lengthInput}
               />
             </FormGroup>
             <InputLabel id="demo-simple-select-label">Category</InputLabel>
@@ -70,18 +115,15 @@ export default class CreatePreset extends React.Component<CreatePresetProps, Cre
                 label="Category"
                 name="category"
               >
-                <MenuItem value={"5e945c876c143711a779b7d6"}>5e945c876c143711a779b7d6</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {PresetManager.getCachedCategories().map((category) =>
+                  <MenuItem value={category._id}>{`${category.name} (${category.role})`}</MenuItem>)}
               </Select>
             </FormGroup>
             <FormGroup>
-              <Button type="submit" color="primary" variant="contained" >
+              <Button type="submit" color="primary" variant="contained">
                 Create
               </Button>
             </FormGroup>
-            <Input type="hidden" name="length" value="1234"></Input>
-            <Input type="hidden" name="title" value="NIGHTWISH - Music (Official Lyric Video)"></Input>
           </form>
         </DialogContent>
         <DialogActions>

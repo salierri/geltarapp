@@ -35,16 +35,16 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
   };
 
   toggleEditMode = () => {
-    this.setState({ editMode: !this.state.editMode });
-  }
+    this.setState((state) => ({ editMode: !state.editMode }));
+  };
 
   createNewPreset = () => {
     this.setState({ createWindowOpen: true, open: false });
-  }
+  };
 
   closeCreateWindow = () => {
     this.setState({ createWindowOpen: false, open: true });
-  }
+  };
 
   render() {
     const darkTheme = createMuiTheme({
@@ -77,14 +77,17 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
             <Button onClick={this.createNewPreset} color="primary" variant="contained">
               Create new preset
             </Button>
+            <Button onClick={this.createNewPreset} color="primary" variant="contained">
+              Create new category
+            </Button>
             <FormControlLabel
-              control={
+              control={(
                 <Switch
                   edge="end"
                   onChange={this.toggleEditMode}
                   checked={this.state.editMode}
                 />
-              }
+              )}
               label="Edit mode"
             />
             <Button onClick={this.handleClose} color="default">
