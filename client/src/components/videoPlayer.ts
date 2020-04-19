@@ -21,6 +21,7 @@ const durations = {
 const loadedCallbacks: LoadedCallbacks = {};
 
 function loadVideo(role: VideoRole, video: string) {
+  state[role].playing = true;
   players[role]?.loadVideoById(video);
 }
 
