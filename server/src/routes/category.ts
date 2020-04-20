@@ -1,5 +1,6 @@
 import Express from 'express';
 import { Category } from '../models/Category';
+import { Preset } from '../models/Preset';
 
 const router = Express.Router();
 
@@ -30,7 +31,11 @@ router.put('/:categoryId', (req, res) => {
 });
 
 router.delete('/:categoryId', (req, res) => {
-  Category.deleteOne({ _id: req.params.categoryId })
+  const { categoryId } = req.params;
+  Promise.all([
+    Category.deleteOne({ _id: categoryId }),
+    Preset.deleteMany({ category: categoryId }),
+  ])
     .catch((err) => {
       res.status(400).send(err.message);
     })

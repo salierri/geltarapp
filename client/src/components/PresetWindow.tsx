@@ -4,6 +4,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PresetList, { CollapseOpenObject } from './PresetList';
 import CreatePreset from './CreatePreset';
 import CreateCategory from './CreateCategory';
+import PresetManager from '../models/PresetManager';
 
 interface PresetWindowState {
   open: boolean;
@@ -42,7 +43,11 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
   };
 
   createNewPreset = () => {
-    this.setState({ createPresetWindowOpen: true, open: false });
+    if(PresetManager.getCachedCategories().length == 0) {
+      alert("Create a category first!");
+    } else {
+      this.setState({ createPresetWindowOpen: true, open: false });
+    }
   };
 
   closeCreatePresetWindow = () => {
