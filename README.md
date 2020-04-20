@@ -21,15 +21,22 @@
 
 ### Server
 
+- MongoDB
 - Node.js
 - Typescript
 - Webpack
 
-## Deploy
+## Deploying / Getting started
 
 ###### Node 12.16.1
 
 Add [node](https://github.com/asdf-vm/asdf-nodejs) plugin to asdf, or install 12.16.1 with NVM. You can check current nodejs version with `node --version`. 
+
+###### MongoDB
+
+Install [MongoDb](https://docs.mongodb.com/manual/installation/), with a version of at least v2.6.10.
+
+Configure the MongoDB URL for the server in `server/.env`, or in a MONGODB_URL env variable when running the server.
 
 ###### The server
 

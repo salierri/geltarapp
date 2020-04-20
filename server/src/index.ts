@@ -11,7 +11,11 @@ import category from './routes/category';
 
 const app = Express();
 
-mongoose.connect('mongodb://localhost:27017/geltarapp', { useNewUrlParser: true, useUnifiedTopology: true });
+if (!process.env.MONGODB_URL) {
+  console.error('MongoDB URL not set!');
+} else {
+  mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+}
 
 app.use(fileUpload({
   createParentPath: true,
