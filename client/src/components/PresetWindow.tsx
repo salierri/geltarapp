@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, FormControlLabel } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PresetList, { CollapseOpenObject } from './PresetList';
 import CreatePreset from './CreatePreset';
@@ -11,6 +12,7 @@ interface PresetWindowState {
   editMode: boolean;
   createPresetWindowOpen: boolean;
   createCategoryWindowOpen: boolean;
+  error?: string;
 }
 
 export default class PresetWindow extends React.Component<{}, PresetWindowState> {
@@ -43,8 +45,8 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
   };
 
   createNewPreset = () => {
-    if(PresetManager.getCachedCategories().length == 0) {
-      alert("Create a category first!");
+    if (PresetManager.getCachedCategories().length === 0) {
+      this.setState({ error: 'Create a category first!' });
     } else {
       this.setState({ createPresetWindowOpen: true, open: false });
     }
@@ -62,12 +64,20 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
     this.setState({ createCategoryWindowOpen: false, open: true });
   };
 
+  closeError = () => {
+    this.setState({ error: undefined });
+  };
+
   render() {
     const darkTheme = createMuiTheme({
       palette: {
         type: 'light',
       },
     });
+    let error: JSX.Element | null = null;
+    if (this.state.error) {
+      error = <Alert severity="error" onClose={this.closeError}>{this.state.error}</Alert>;
+    }
     return (
       <ThemeProvider theme={darkTheme}>
         <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
@@ -88,6 +98,7 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
               destroyedCallback={this.presetListDestroyed}
               open={this.listOpens}
             />
+            {error}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.createNewPreset} color="primary" variant="contained">

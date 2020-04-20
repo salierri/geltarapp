@@ -134,7 +134,7 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
     return (
       <List>
         {categories?.map((category) => (
-          <>
+          <React.Fragment key={category._id}>
             <ListItem button key={category._id} onClick={() => this.toggleOpen(category)}>
               <ListItemIcon>
                 {category.role === 'music' ? <MusicIcon /> : <AmbienceIcon /> }
@@ -148,8 +148,8 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
                 {presets?.map((preset) => (
                   preset.category._id !== category._id ? null
                     : (
-                      <Box pl={7}>
-                        <ListItem button onClick={() => this.play(preset)} key={preset._id}>
+                      <Box pl={7} key={preset._id}>
+                        <ListItem button onClick={() => this.play(preset)}>
                           <ListItemText primary={preset.name} secondary={preset.title} />
                           <ListItemSecondaryAction>
                             <Typography variant="inherit">
@@ -162,7 +162,7 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
                     )))}
               </List>
             </Collapse>
-          </>
+          </React.Fragment>
         ))}
       </List>
     );

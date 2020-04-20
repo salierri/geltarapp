@@ -118,7 +118,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
                 defaultValue={PresetManager.getCachedCategories()[0]?._id}
               >
                 {PresetManager.getCachedCategories().map((category) =>
-                  <MenuItem value={category._id}>{`${category.name} (${category.role})`}</MenuItem>)}
+                  <MenuItem value={category._id} key={category._id}>{`${category.name} (${category.role})`}</MenuItem>)}
               </Select>
             </FormGroup>
             <FormGroup>
