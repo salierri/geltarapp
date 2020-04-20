@@ -43,6 +43,7 @@ export default class CreateCategory extends React.Component<CreateCategoryProps,
           <form onSubmit={this.submit} className="create-new-form" ref={this.form}>
             <FormGroup>
               <TextField
+                required
                 label="Category name"
                 variant="outlined"
                 name="name"

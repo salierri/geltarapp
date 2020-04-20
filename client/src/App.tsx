@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './style/App.css';
 import Communication from './components/Communication';
 import Video from './components/Video';
@@ -55,10 +56,16 @@ class App extends React.Component<{}, AppState> {
           <hr />
           <this.Content />
         </header>
-        <PresetWindow />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/geltaradmin">
+              <PresetWindow />
+              <div id="dummy-player" className="hidden" />
+            </Route>
+          </Switch>
+        </BrowserRouter>
         <Communication />
         <EmojiContainer />
-        <div id="dummy-player" className="hidden" />
       </div>
     );
   }

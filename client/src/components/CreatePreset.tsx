@@ -12,13 +12,17 @@ interface CreatePresetProps {
 export default class CreatePreset extends React.Component<CreatePresetProps, {}> {
   form: React.RefObject<HTMLFormElement>;
   titleInput: React.RefObject<HTMLInputElement>;
-  lengthInput: React.RefObject<HTMLInputElement>;
+  hiddenVideoIdInput: React.RefObject<HTMLInputElement>;
+  hiddenLengthInput: React.RefObject<HTMLInputElement>;
+  niceLengthInput: React.RefObject<HTMLInputElement>;
 
   constructor(props: CreatePresetProps) {
     super(props);
     this.form = React.createRef();
     this.titleInput = React.createRef();
-    this.lengthInput = React.createRef();
+    this.hiddenVideoIdInput = React.createRef();
+    this.hiddenLengthInput = React.createRef();
+    this.niceLengthInput = React.createRef();
   }
 
   urlFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,12 +31,16 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
     if (!videoId) {
       return;
     }
-    urlField.value = videoId;
     DummyVideoPlayer.getProperties(videoId)
       .then((properties) => {
-        if (this.titleInput.current && this.lengthInput.current) {
+        if (this.titleInput.current
+          && this.hiddenVideoIdInput.current
+          && this.hiddenLengthInput.current
+          && this.niceLengthInput.current) {
+          this.hiddenVideoIdInput.current.value = videoId;
           this.titleInput.current.value = properties.title;
-          this.lengthInput.current.value = properties.length.toString();
+          this.hiddenLengthInput.current.value = properties.length.toString();
+          this.niceLengthInput.current.value = Helpers.numberToTimeString(properties.length);
         }
       });
   };
@@ -65,6 +73,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
           <form onSubmit={this.submit} className="create-new-form" ref={this.form}>
             <FormGroup>
               <TextField
+                required
                 label="Video name"
                 variant="outlined"
                 name="name"
@@ -72,9 +81,9 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
             </FormGroup>
             <FormGroup>
               <TextField
+                required
                 label="Youtube URL"
                 variant="outlined"
-                name="url"
                 onChange={this.urlFieldChange}
               />
             </FormGroup>
@@ -86,7 +95,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
                 label="Video Title"
                 variant="outlined"
                 name="title"
-                value=" "
+                defaultValue=" "
                 inputRef={this.titleInput}
               />
             </FormGroup>
@@ -97,9 +106,8 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
                 }}
                 label="Video length"
                 variant="outlined"
-                name="length"
-                value=" "
-                inputRef={this.lengthInput}
+                defaultValue=" "
+                inputRef={this.niceLengthInput}
               />
             </FormGroup>
             <InputLabel id="category-select-label">Category</InputLabel>
@@ -107,6 +115,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
               <Select
                 labelId="category-select-label"
                 name="category"
+                defaultValue={PresetManager.getCachedCategories()[0]?._id}
               >
                 {PresetManager.getCachedCategories().map((category) =>
                   <MenuItem value={category._id}>{`${category.name} (${category.role})`}</MenuItem>)}
@@ -117,6 +126,8 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
                 Create
               </Button>
             </FormGroup>
+            <input type="hidden" name="length" ref={this.hiddenLengthInput} />
+            <input type="hidden" name="url" ref={this.hiddenVideoIdInput} />
           </form>
         </DialogContent>
         <DialogActions>
