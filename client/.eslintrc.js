@@ -16,9 +16,11 @@ module.exports = {
         "react/destructuring-assignment": "off",
         "no-console": "off", // Still in development phase, we need useful bug reports
         "lines-between-class-members": "off",
+        "implicit-arrow-linebreak": "off", // Conflicting with max-len
         "object-curly-newline": ["error", {
           "ImportDeclaration": "never",
         }],
+        "no-underscore-dangle": ["error", { allow: ['_id'] }],  // Mongodb uses _id, and it cannot be changed
         "max-len": ["error",
           110,  // Up from 100
           2,

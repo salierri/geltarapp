@@ -31,7 +31,7 @@ class Mp3Player extends React.Component<{}, Mp3State> {
     const data = new FormData();
     data.append('effect', file);
 
-    Axios.default.post(`${process.env.REACT_APP_SERVER_URL}/mp3/upload`, data)
+    Axios.default.post(`${process.env.REACT_APP_HTTP_URL}/mp3/upload`, data)
       .then((response) => {
         console.log(`Upload success: ${response}`);
       })
@@ -55,7 +55,7 @@ class Mp3Player extends React.Component<{}, Mp3State> {
         {this.state?.clip && (
         <div>
           <audio controls className="uk-align-center filter-70" ref={this.audioTag}>
-            <source src={`${process.env.REACT_APP_SERVER_URL}/${this.state.clip}`} type="audio/mpeg" />
+            <source src={`${process.env.REACT_APP_HTTP_URL}/${this.state.clip}`} type="audio/mpeg" />
           </audio>
         </div>
         )}

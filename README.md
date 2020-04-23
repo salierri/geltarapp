@@ -21,15 +21,22 @@
 
 ### Server
 
+- MongoDB
 - Node.js
 - Typescript
 - Webpack
 
-## Deploy
+## Deploying / Getting started
 
 ###### Node 12.16.1
 
 Add [node](https://github.com/asdf-vm/asdf-nodejs) plugin to asdf, or install 12.16.1 with NVM. You can check current nodejs version with `node --version`. 
+
+###### MongoDB
+
+Install [MongoDb](https://docs.mongodb.com/manual/installation/), with a version of at least v2.6.10.
+
+Configure the MongoDB URL for the server in `server/.env`, or in a MONGODB_URL env variable when running the server.
 
 ###### The server
 
@@ -45,7 +52,7 @@ The HTTP server is listening on :3001, and the websocket server on :4000 to inco
 
 This can be configured in the HTTP_PORT and WS_PORT env variable (or in `server/.env`) respectively.
 
-The server address must be set in a REACT_APP_URL env variable or in `client/.env`
+The server addresses must be set in the REACT_APP_WS_URL and REACT_APP_HTTP_URL env variables or in `client/.env`
 
 ###### The client
 

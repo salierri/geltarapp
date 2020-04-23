@@ -36,3 +36,16 @@ export interface State {
     music: VideoState;
     ambience: VideoState;
 }
+export interface Category {
+    _id: string;
+    name: string;
+    role: VideoRole;
+}
+export interface Preset {
+    _id: string;
+    name: string;
+    url: string;
+    title: string;
+    length: number;
+    category: Category;
+}

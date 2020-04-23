@@ -3,7 +3,7 @@ import React from 'react';
 import { Message, CommandType, VideoRole } from '../api';
 import * as Helpers from '../helpers/Helpers';
 
-const address = Helpers.isAdmin() ? `${process.env.REACT_APP_URL}/geltaradmin` : process.env.REACT_APP_URL ?? '';
+const address = Helpers.isAdmin() ? `${process.env.REACT_APP_WS_URL}/geltaradmin` : process.env.REACT_APP_WS_URL ?? '';
 let client: WebSocket;
 
 interface MessageState {
