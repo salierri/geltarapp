@@ -90,6 +90,7 @@ function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
   return new YT.Player(`${role}Player`, {
     height: '243',
     width: '400',
+    host: 'https://www.youtube-nocookie.com',
     videoId: video,
     playerVars: {
       controls: 0,
