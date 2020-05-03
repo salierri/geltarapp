@@ -2,6 +2,23 @@
     width: 150px;
 }
 
+.video-card {
+    background-color: #303a42 !important;
+}
+
+.volume-icon {
+    color: #818cab;
+}
+
+.volume-slider-grid {
+    width: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+
+
 input[type=range] {
     height: 2px;
     border: none;

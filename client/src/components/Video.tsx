@@ -1,9 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { APIReady, setLocalVolume } from './videoPlayer';
-import Admin from './Admin';
-import { VideoRole } from '../api';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Slider from '@material-ui/core/Slider';
+import VolumeDown from '@material-ui/icons/VolumeDown';
+import VolumeUp from '@material-ui/icons/VolumeUp';
+import Grid from '@material-ui/core/Grid';
+import clsx from 'clsx';
+import Button from '@material-ui/core/Button';
 import Communication from './Communication';
+import { VideoRole } from '../api';
+import Admin from './Admin';
+import { APIReady, setVolumeTest } from './videoPlayer';
 
 interface VideoProps {
   videoRole: VideoRole;
@@ -41,31 +49,50 @@ class Video extends React.Component<VideoProps, {}> {
     if (this.role === 'music') {
       feedbackButtons = (
         <div className="feedback-container">
-          <button type="button" className="feedback-button uk-button uk-align-center" onClick={() => Communication.sendFeedback('like')}>
-            <span role="img" aria-label="thumbs-up">👍</span>
-            {' '}
+          <Button
+            variant="contained"
+            color="primary"
+            className={clsx('feedback-button')}
+            onClick={() => Communication.sendFeedback('like')}
+            startIcon={<span role="img" aria-label="thumbs-up">👍</span>}
+          >
             Jó kis zene
-          </button>
-          <button type="button" className="feedback-button uk-button uk-align-center" onClick={() => Communication.sendFeedback('boring')}>
-            <span role="img" aria-label="sleeping">😴</span>
-            {' '}
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={clsx('feedback-button')}
+            onClick={() => Communication.sendFeedback('boring')}
+            startIcon={<span role="img" aria-label="sleeping">😴</span>}
+          >
             Már unalmas viszonylag
-          </button>
+          </Button>
         </div>
       );
     }
     return (
       <Router>
+        <Card className={clsx('video-card')}>
+          <CardContent>
+            <div className="uk-align-center" id={`${this.role}Player`} />
+            <Grid container spacing={2}>
+              <Grid item>
+                <VolumeDown className={clsx('volume-icon')} />
+              </Grid>
+              <Grid item xs>
+                <Slider
+                  className={clsx('volume-slider')}
+                  defaultValue={+(localStorage.getItem(`localvolume_${this.role.toString()}`) ?? 100)}
+                  onChange={(event, newValue) => setVolumeTest(event, newValue, this.role)}
+                />
+              </Grid>
+              <Grid item>
+                <VolumeUp className={clsx('volume-icon')} />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
         <div id="video uk-align-center">
-          <div className="uk-align-center" id={`${this.role}Player`} />
-          <input
-            type="range"
-            className="uk-range volume-slider uk-align-center"
-            min="0"
-            max="100"
-            defaultValue={+(localStorage.getItem(`localvolume_${this.role.toString()}`) ?? 100)}
-            onChange={(e) => setLocalVolume(this.role, +e.target.value)}
-          />
           <Switch>
             <Route path="/geltaradmin">
               <Admin role={this.role} />
