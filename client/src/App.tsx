@@ -1,9 +1,11 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './style/App.css';
 import Communication from './components/Communication';
 import Video from './components/Video';
 import EmojiContainer from './components/EmojiContainer';
 import Mp3Player from './components/Mp3Player';
+import PresetWindow from './components/PresetWindow';
 
 interface AppState {
   userGesture: boolean;
@@ -69,6 +71,14 @@ class App extends React.Component<{}, AppState> {
           <hr />
           <this.Content />
         </header>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/geltaradmin">
+              <PresetWindow />
+              <div id="dummy-player" className="hidden" />
+            </Route>
+          </Switch>
+        </BrowserRouter>
         <Communication />
         <EmojiContainer />
       </div>

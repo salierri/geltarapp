@@ -21,13 +21,14 @@ const durations = {
 const loadedCallbacks: LoadedCallbacks = {};
 
 function loadVideo(role: VideoRole, video: string) {
-    players[role]?.loadVideoById(video);
+  state[role].playing = true;
+  players[role]?.loadVideoById(video);
 }
 
 function updateVolume(role: VideoRole) {
   const localVolume: number = +(localStorage.getItem(`localvolume_${role.toString()}`) ?? 100);
   const globalVolume: number = state[role].masterVolume;
-    players[role]?.setVolume(localVolume * (globalVolume / 100));
+  players[role]?.setVolume(localVolume * (globalVolume / 100));
 }
 
 function setMasterVolume(role: VideoRole, volume: string) {
@@ -36,15 +37,17 @@ function setMasterVolume(role: VideoRole, volume: string) {
 }
 
 function pause(role: VideoRole) {
-    players[role]?.pauseVideo();
+  state[role].playing = false;
+  players[role]?.pauseVideo();
 }
 
 function resume(role: VideoRole) {
-    players[role]?.playVideo();
+  state[role].playing = true;
+  players[role]?.playVideo();
 }
 
 function seekTo(role: VideoRole, seconds: string) {
-    players[role]?.seekTo(+seconds, true);
+  players[role]?.seekTo(+seconds, true);
 }
 
 export function setLocalVolume(role: VideoRole, percent: number) {
@@ -61,7 +64,7 @@ export const getMasterVolume = (role: VideoRole) => state?.[role].masterVolume ?
 function setPosition(role: VideoRole) {
   const duration = players[role]?.getDuration() ?? 1;
   const position = (state[role].time.elapsed ?? 0) % duration;
-    players[role]?.seekTo(position, true);
+  players[role]?.seekTo(position, true);
 }
 
 function onPlayerReady(role: VideoRole, event: YT.PlayerEvent) {
@@ -76,7 +79,10 @@ function onPlayerStateChange(role: VideoRole, event: YT.OnStateChangeEvent) {
     event.target.playVideo();
   } else if (event.data === YT.PlayerState.PLAYING) {
     durations[role] = event.target.getDuration();
-        loadedCallbacks[role]?.(event.target.getCurrentTime());
+    loadedCallbacks[role]?.(event.target.getCurrentTime());
+    if (!state[role].playing) { // After seekAhead, the video autoplays, while it sometimes shouldn't
+      players[role]?.pauseVideo();
+    }
   }
 }
 
@@ -84,6 +90,7 @@ function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
   return new YT.Player(`${role}Player`, {
     height: '243',
     width: '400',
+    host: 'https://www.youtube-nocookie.com',
     videoId: video,
     playerVars: {
       controls: 0,

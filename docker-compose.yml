@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  client:
+    build: client/
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/client
+      - /client/node_modules
+    links:
+      - server
+    networks:
+      - geltarappnetwork
+  server:
+    build: server/
+    restart: always
+    ports:
+      - "3001:3001"
+      - "4000:4000"
+    volumes:
+      - ./server:/server
+      - /server/node_modules
+      - /server/dist
+    depends_on:
+      - mongodb
+    networks:
+      - geltarappnetwork
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/geltarapp
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth
+    networks:
+      - geltarappnetwork
+networks:
+  geltarappnetwork:
+    driver: bridge
+volumes:
+  mongodata:

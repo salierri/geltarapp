@@ -8,7 +8,6 @@ body {
   background-color: var(--bg-color);
   color: white;
   min-height: 100vh;
-
 }
 
 [data-theme="dark"] {

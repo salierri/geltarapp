@@ -3,7 +3,7 @@ import React from 'react';
 import { Message, CommandType, VideoRole } from '../api';
 import * as Helpers from '../helpers/Helpers';
 
-const address = Helpers.isAdmin() ? `${process.env.REACT_APP_URL}/geltaradmin` : process.env.REACT_APP_URL ?? '';
+const address = Helpers.isAdmin() ? `${process.env.REACT_APP_WS_URL}/geltaradmin` : process.env.REACT_APP_WS_URL ?? '';
 let client: WebSocket;
 
 interface MessageState {
@@ -43,7 +43,7 @@ class Communication extends React.Component<{}, MessageState> {
     if (!subscriptions[type]) {
       subscriptions[type] = [];
     }
-        subscriptions[type]?.push(callback);
+    subscriptions[type]?.push(callback);
   }
 
 
@@ -64,7 +64,7 @@ class Communication extends React.Component<{}, MessageState> {
   }
 
   componentDidUpdate() {
-        this.lastLogEvent.current?.scrollIntoView({ behavior: 'smooth' });
+    this.lastLogEvent.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   connect() {
