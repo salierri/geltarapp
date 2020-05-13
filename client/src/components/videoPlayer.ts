@@ -52,11 +52,6 @@ export function setLocalVolume(role: VideoRole, percent: number) {
   updateVolume(role);
 }
 
-export function setVolumeTest(event: any, percent: number | number[], role: VideoRole) {
-  localStorage.setItem(`localvolume_${role.toString()}`, percent.toString());
-  updateVolume(role);
-}
-
 export function getDuration(role: VideoRole) {
   return durations[role];
 }

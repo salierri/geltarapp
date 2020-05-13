@@ -1,17 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Slider from '@material-ui/core/Slider';
-import VolumeDown from '@material-ui/icons/VolumeDown';
-import VolumeUp from '@material-ui/icons/VolumeUp';
-import Grid from '@material-ui/core/Grid';
+import { Card, CardContent, Slider, Grid, Button } from '@material-ui/core';
+import { VolumeDown, VolumeUp } from '@material-ui/icons';
 import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
 import Communication from './Communication';
 import { VideoRole } from '../api';
 import Admin from './Admin';
-import { APIReady, setVolumeTest } from './videoPlayer';
+import { APIReady, setLocalVolume } from './videoPlayer';
 
 interface VideoProps {
   videoRole: VideoRole;
@@ -83,7 +78,7 @@ class Video extends React.Component<VideoProps, {}> {
                 <Slider
                   className={clsx('volume-slider')}
                   defaultValue={+(localStorage.getItem(`localvolume_${this.role.toString()}`) ?? 100)}
-                  onChange={(event, newValue) => setVolumeTest(event, newValue, this.role)}
+                  onChange={(_, newValue) => setLocalVolume(this.role, +newValue)}
                 />
               </Grid>
               <Grid item>

@@ -17,8 +17,6 @@
     box-sizing: border-box;
 }
 
-
-
 input[type=range] {
     height: 2px;
     border: none;
