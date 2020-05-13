@@ -1,18 +1,24 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import clsx from 'clsx';
+import { createMuiTheme, ThemeProvider, Container, IconButton, Typography, CssBaseline, Divider, Button, Grid, Box } from '@material-ui/core';
+import { BrightnessHigh, Brightness4 } from '@material-ui/icons';
 import './style/App.css';
 import Communication from './components/Communication';
 import Video from './components/Video';
 import EmojiContainer from './components/EmojiContainer';
 import Mp3Player from './components/Mp3Player';
 import PresetWindow from './components/PresetWindow';
+import 'typeface-roboto';
 
 interface AppState {
   userGesture: boolean;
 }
 
+declare type ColorMode = 'dark' | 'light';
+
 class App extends React.Component<{}, AppState> {
-  protected currentMode = 'dark';
+  protected currentMode: ColorMode = 'dark';
 
   constructor(props: {}) {
     super(props);
@@ -29,59 +35,82 @@ class App extends React.Component<{}, AppState> {
     }, 500);
   };
 
+  switchMode = () => {
+    this.currentMode = this.currentMode === 'light' ? 'dark' : 'light';
+    this.forceUpdate();
+  };
+
   Content() {
     if (this.state.userGesture) {
       return (
-        <div className="uk-grid">
-          <div className="uk-width-1-2">
+        <Grid container spacing={10} justify="center">
+          <Grid item xs={6}>
             <Video videoRole="music" />
-          </div>
-          <div className="uk-width-1-2">
+          </Grid>
+          <Grid item xs={6}>
             <Video videoRole="ambience" />
             <Mp3Player />
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       );
     }
     return (
-      <div className="uk-container" id="start-button-container">
-        <button type="button" className="uk-button start-button uk-align-center" onClick={this.receivedUserGesture}>Csatlakozás</button>
-      </div>
+      <Grid container justify="center">
+        <Button
+          variant="contained"
+          color="primary"
+          className={clsx('start-button')}
+          onClick={this.receivedUserGesture}
+        >
+          Csatlakozás
+        </Button>
+      </Grid>
     );
-  }
-
-  switchMode() {
-    this.currentMode = this.currentMode === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', this.currentMode);
-    this.forceUpdate();
   }
 
   render() {
     document.documentElement.setAttribute('data-theme', this.currentMode);
+    const darkTheme = createMuiTheme({
+      palette: {
+        type: this.currentMode,
+      },
+      overrides: {
+        MuiSlider: {
+          track: { backgroundColor: '#90caf9' },
+          thumb: { backgroundColor: '#90caf9' },
+        },
+      },
+    });
     return (
-      <div className="App uk-container">
-        <header className="App-header">
-          <h1 className="uk-padding-small">Geltarapp</h1>
-          <button type="button" onClick={() => this.switchMode()}>
-            Switch to
-            {this.currentMode}
-            {' '}
-            mode
-          </button>
-          <hr />
-          <this.Content />
-        </header>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/geltaradmin">
-              <PresetWindow />
-              <div id="dummy-player" className="hidden" />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-        <Communication />
-        <EmojiContainer />
-      </div>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <div className="temporary-top-right">
+          <IconButton onClick={this.switchMode}>
+            {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
+          </IconButton>
+        </div>
+        <Container>
+          <Box m={2}>
+            <Typography variant="h2" gutterBottom>
+              Geltarapp
+            </Typography>
+            <Divider variant="fullWidth" />
+            <Box m={2}>
+              <this.Content />
+            </Box>
+            <BrowserRouter>
+              <Switch>
+                <Route path="/geltaradmin">
+                  <PresetWindow />
+                  <div id="dummy-player" className="hidden" />
+                </Route>
+              </Switch>
+            </BrowserRouter>
+            <Communication />
+            <EmojiContainer />
+          </Box>
+        </Container>
+      </ThemeProvider>
     );
   }
 }

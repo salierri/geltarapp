@@ -88,7 +88,7 @@ function onPlayerStateChange(role: VideoRole, event: YT.OnStateChangeEvent) {
 
 function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
   return new YT.Player(`${role}Player`, {
-    height: '243',
+    height: '225',
     width: '400',
     host: 'https://www.youtube-nocookie.com',
     videoId: video,
