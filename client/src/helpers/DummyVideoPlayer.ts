@@ -21,6 +21,7 @@ const createDummyPlayer = (videoId: string,
   player = new YT.Player('dummy-player', {
     height: '1',
     width: '1',
+    host: 'https://www.youtube-nocookie.com',
     videoId,
     playerVars: {
       controls: 0,
