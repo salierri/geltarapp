@@ -21,7 +21,15 @@ export interface StateMessage {
 export interface Heartbeat {
     type: 'heartbeat';
 }
-export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat;
+export interface NameSetting {
+    type: 'setName';
+    name: string;
+}
+export interface UserBroadcast {
+    type: 'users';
+    names: string[];
+}
+export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat | NameSetting | UserBroadcast;
 export interface VideoState {
     url: string;
     playing: boolean;

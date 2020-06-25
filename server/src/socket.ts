@@ -57,6 +57,13 @@ function sendHeartbeat(sender: WebSocket) {
   sender.send(JSON.stringify({ type: 'heartbeat' }));
 }
 
+function removeFromSockets(socket: NamedWebSocket) {
+  const index = sockets.indexOf(socket);
+  if(index > -1) {
+    sockets.splice(index, 1);
+  }
+}
+
 function clientIp(req: IncomingMessage) {
   return (req.headers['x-real-ip'] as string) || req.connection.remoteAddress;
 }
@@ -89,6 +96,7 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
   });
 
   ws.on('close', () => {
+    removeFromSockets(ws);
     feedbackToMaster('Disconnected', clientIp(req));
   });
 
