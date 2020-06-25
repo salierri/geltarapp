@@ -28,7 +28,18 @@ export interface Heartbeat {
     type: 'heartbeat';
 }
 
+export interface NameSetting {
+    type: 'setName';
+    name: string;
+}
+
+export interface UserBroadcast {
+    type: 'users';
+    names: string[];
+}
+
 export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
+                    | NameSetting | UserBroadcast
 
 export interface VideoState {
     url: string;

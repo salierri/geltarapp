@@ -2,12 +2,19 @@ import WebSocket from 'ws';
 import { IncomingMessage } from 'http';
 import { Message } from './api';
 import * as StateManager from './stateManager';
+import { v4 as uuidv4 } from 'uuid';
+
+interface NamedWebSocket extends WebSocket {
+  id: string;
+  name: string;
+}
 
 const WSServer = new WebSocket.Server({
   port: +(process.env.WS_PORT ?? 4000),
 });
 
 const masters: WebSocket[] = [];
+const sockets: NamedWebSocket[] = [];
 
 export const broadcastMessage = (message: Message) => {
   let countSent = 0;
@@ -29,6 +36,19 @@ function feedbackToMaster(message: string, sender?: string) {
   });
 }
 
+function broadcastNames() {
+  let names: string[] = [];
+  for(let client of sockets) {
+    names.push(client.name);
+  }
+  broadcastMessage({ type: 'users', names });
+}
+
+function setName(name: string, sender: NamedWebSocket) {
+  sender.name = name;
+  broadcastNames();
+}
+
 function sendState(sender: WebSocket) {
   sender.send(JSON.stringify({ type: 'state', state: StateManager.getState() }));
 }
@@ -41,12 +61,14 @@ function clientIp(req: IncomingMessage) {
   return (req.headers['x-real-ip'] as string) || req.connection.remoteAddress;
 }
 
-
-WSServer.on('connection', (ws, req) => {
+WSServer.on('connection', (ws: NamedWebSocket, req) => {
   if (req.url?.includes('geltaradmin')) {
     feedbackToMaster('NEW MASTER CLIENT', clientIp(req));
     masters.push(ws);
   }
+
+  ws.id = uuidv4();
+  sockets.push(ws);
 
   ws.on('message', (message) => {
     console.log(`${clientIp(req)}: ${message}`);
@@ -61,6 +83,8 @@ WSServer.on('connection', (ws, req) => {
       sendState(ws);
     } else if (parsedMessage.type === 'heartbeat') {
       sendHeartbeat(ws);
+    } else if (parsedMessage.type === 'setName') {
+      setName(parsedMessage.name, ws);
     }
   });
 
