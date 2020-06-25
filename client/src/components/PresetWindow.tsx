@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, FormControlLabel } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import PresetList, { CollapseOpenObject } from './PresetList';
 import CreatePreset from './CreatePreset';
 import CreateCategory from './CreateCategory';
@@ -69,17 +68,12 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
   };
 
   render() {
-    const darkTheme = createMuiTheme({
-      palette: {
-        type: 'light',
-      },
-    });
     let error: JSX.Element | null = null;
     if (this.state.error) {
       error = <Alert severity="error" onClose={this.closeError}>{this.state.error}</Alert>;
     }
     return (
-      <ThemeProvider theme={darkTheme}>
+      <>
         <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
           Show Presets
         </Button>
@@ -130,7 +124,7 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
           open={this.state.createCategoryWindowOpen}
           closeCallback={this.closeCreateCategoryWindow}
         />
-      </ThemeProvider>
+      </>
     );
   }
 }
