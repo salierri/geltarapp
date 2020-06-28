@@ -1,27 +1,46 @@
-export declare type VideoRole = 'music' | 'ambience';
-export declare type CommandType = 'LoadVideo' | 'Volume' | 'SeekTo' | 'Pause' | 'Resume' | 'LoadMp3';
+export type VideoRole = 'music' | 'ambience';
+
+export type CommandType = 'LoadVideo' | 'Volume' | 'SeekTo' | 'Pause' | 'Resume' | 'LoadMp3';
+
 export interface Command {
     type: 'command';
     command: CommandType;
     role: VideoRole;
     param: string;
 }
+
 export interface Feedback {
     type: 'feedback';
     message: string;
     sender?: string;
 }
+
 export interface StateRequest {
     type: 'stateRequest';
 }
+
 export interface StateMessage {
     type: 'state';
     state: State;
 }
+
 export interface Heartbeat {
     type: 'heartbeat';
 }
-export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat;
+
+export interface NameSetting {
+    type: 'setName';
+    name: string;
+}
+
+export interface UserBroadcast {
+    type: 'users';
+    names: string[];
+}
+
+export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
+    | NameSetting | UserBroadcast
+
 export interface VideoState {
     url: string;
     playing: boolean;
@@ -29,18 +48,21 @@ export interface VideoState {
     time: {
         start: number;
         setAt: Date;
-        elapsed?: number;
+        elapsed?: number; /* Calculated field to avoid timezone problems */
     };
 }
+
 export interface State {
     music: VideoState;
     ambience: VideoState;
 }
+
 export interface Category {
     _id: string;
     name: string;
     role: VideoRole;
 }
+
 export interface Preset {
     _id: string;
     name: string;
