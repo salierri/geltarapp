@@ -10,7 +10,7 @@ import EmojiContainer from './components/EmojiContainer';
 import Mp3Player from './components/Mp3Player';
 import PresetWindow from './components/PresetWindow';
 import 'typeface-roboto';
-import Name from "./components/Name";
+import UserList from './components/UserList';
 
 interface AppState {
   userGesture: boolean;
@@ -90,7 +90,6 @@ class App extends React.Component<{}, AppState> {
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>
         </div>
-        <div><Name></Name></div>
         <Container>
           <Box m={2}>
             <Typography variant="h2" gutterBottom>
@@ -110,6 +109,7 @@ class App extends React.Component<{}, AppState> {
             </BrowserRouter>
             <Communication />
             <EmojiContainer />
+            <UserList />
           </Box>
         </Container>
       </ThemeProvider>
