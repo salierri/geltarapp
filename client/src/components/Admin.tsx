@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, ButtonGroup, Grid, Slider, FormLabel, TextField, FormControl } from '@material-ui/core';
 import Communication from './Communication';
 import { VideoRole, Command, State, StateMessage } from '../api';
 import * as VideoPlayer from './videoPlayer';
@@ -82,47 +83,61 @@ class Admin extends React.Component<AdminProps, {}> {
     }
   };
 
+  blueButton = (label: string, callback: () => void) =>
+    (
+      <Button
+        className="master-button"
+        onClick={callback}
+      >
+        {label}
+      </Button>
+    );
+
   render() {
+    const marks = [
+      {
+        value: 100,
+        label: '100%',
+      },
+    ];
     return (
-      <div>
-        <div>
-          <span className="uk-padding">Master volume</span>
-          <input
-            type="range"
-            className="uk-range master-slider uk-align-center"
-            min="0"
-            max="300"
+      <>
+        <div className="master-slider">
+          <FormLabel>Master volume</FormLabel>
+          <Slider
+            min={0}
+            max={300}
             defaultValue={VideoPlayer.getMasterVolume(this.role)}
-            onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value)}
+            valueLabelDisplay="auto"
+            marks={marks}
+            onChange={(e: React.ChangeEvent<{}>, value) => this.volumeCommand(value as number)}
             ref={this.volumeSlider}
           />
         </div>
-        <div>
-          <span className="uk-padding">Seek ahead</span>
-          <input
-            type="range"
-            className="uk-range master-slider uk-align-center"
-            min="0"
-            max="100"
-            onMouseUp={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value)}
+        <div className="master-slider">
+          <FormLabel>Seek ahead</FormLabel>
+          <Slider
+            min={0}
+            max={100}
+            onDragEnd={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value)}
             ref={this.seekSlider}
           />
         </div>
-        <div>
-          <input
-            type="text"
+        <FormControl fullWidth>
+          <TextField
             id={`${this.role}videoUrl`}
-            className="uk-input"
             placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => { this.videoUrl = e.target.value; }}
           />
-        </div>
-        <div className="uk-inline">
-          <button type="button" className="master-button uk-button" onClick={this.loadCommand}>Load</button>
-          <button type="button" className="master-button uk-button" onClick={this.resumeCommand}>Play</button>
-          <button type="button" className="master-button uk-button" onClick={this.pauseCommand}>Pause</button>
-        </div>
-      </div>
+        </FormControl>
+        <Grid container justify="center" spacing={0}>
+          <ButtonGroup variant="contained" color="primary">
+            {this.blueButton('Load', this.loadCommand)}
+            {this.blueButton('Play', this.resumeCommand)}
+            {this.blueButton('Pause', this.pauseCommand)}
+          </ButtonGroup>
+        </Grid>
+      </>
     );
   }
 }

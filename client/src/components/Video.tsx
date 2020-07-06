@@ -87,6 +87,7 @@ class Video extends React.Component<VideoProps, {}> {
                   <Box width={135}>
                     <Slider
                       color="primary"
+                      valueLabelDisplay="auto"
                       defaultValue={+(localStorage.getItem(`localvolume_${this.role.toString()}`) ?? 100)}
                       onChange={(_, newValue) => setLocalVolume(this.role, +newValue)}
                     />

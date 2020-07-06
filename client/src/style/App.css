@@ -21,10 +21,7 @@
 
 .master-button {
     width: 150px;
-    display: inline-block;
     margin: 15px;
-    background-color: #0B4F6C;
-    border-radius: 4px;
 }
 
 .start-button {
