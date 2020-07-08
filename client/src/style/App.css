@@ -94,3 +94,11 @@
 .inline {
     display: inline;
 }
+
+.bottom-left {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: row;
+}

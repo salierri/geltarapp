@@ -1,6 +1,7 @@
 import React from 'react';
 import Communication from './Communication';
 import { UserBroadcast } from '../api';
+import { Card, CardContent, Typography, Box } from '@material-ui/core';
 
 interface UserListState {
   names: string[];
@@ -21,9 +22,17 @@ export default class UserList extends React.Component<{}, UserListState> {
 
   render() {
     return (
-      <div>
+      <div className="bottom-left">
         { this.state.names.map((name) => (
-          <div>{name}</div>
+          <Box m={1}>
+            <Card variant="outlined">
+              <CardContent>
+                <Typography variant="button">
+                  {name}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
         )) }
       </div>
     );
