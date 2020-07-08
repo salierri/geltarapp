@@ -62,6 +62,7 @@ function removeFromSockets(socket: NamedWebSocket) {
   if(index > -1) {
     sockets.splice(index, 1);
   }
+  broadcastNames();
 }
 
 function clientIp(req: IncomingMessage) {
