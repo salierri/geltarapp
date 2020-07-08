@@ -11,6 +11,7 @@ import Mp3Player from './components/Mp3Player';
 import PresetWindow from './components/PresetWindow';
 import 'typeface-roboto';
 import UserList from './components/UserList';
+import Name from "./components/Name"; 
 
 interface AppState {
   userGesture: boolean;
@@ -90,6 +91,7 @@ class App extends React.Component<{}, AppState> {
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>
         </div>
+        <div><Name/></div>
         <Container>
           <Box m={2}>
             <Typography variant="h2" gutterBottom>
