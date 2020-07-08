@@ -87,11 +87,11 @@ class App extends React.Component<{}, AppState> {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <div className="temporary-top-right">
+          <Name/>
           <IconButton onClick={this.switchMode}>
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>
         </div>
-        <div><Name/></div>
         <Container>
           <Box m={2}>
             <Typography variant="h2" gutterBottom>

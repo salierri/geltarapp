@@ -1,16 +1,20 @@
 import React, {RefObject} from 'react';
 import Communication from "./Communication";
 import { triggerAsyncId } from 'async_hooks';
+import { TextField, Button } from '@material-ui/core';
 
 interface NameState {
   name: string,
   modifying: boolean,
-  myRef: RefObject<HTMLInputElement>
 }
 
 class Name extends React.Component<{}, NameState> {
+  nameInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: {}) {
     super(props);
+    this.nameInput = React.createRef();
+
     let name = localStorage.getItem('displayName');
     if(name == null) {
       name = this.generateRandomName();
@@ -18,7 +22,6 @@ class Name extends React.Component<{}, NameState> {
     this.state = {
       name,
       modifying: false,
-      myRef: React.createRef()
     }
     Communication.subscribe("state", this.sendName);
   }
@@ -46,25 +49,18 @@ class Name extends React.Component<{}, NameState> {
 
   startModifying = () => {
     this.setState({modifying: true});
-    if (this.state.myRef.current) {
-      this.state.myRef.current.focus()
-    }
   }
 
   render() {
-    let nameHTML;
     if (this.state.modifying) {
-      nameHTML = (
-        <>
-          <input value={this.state.name} onChange={this.updateInputValue} onBlur={this.setName} ref={this.state.myRef}/>
-          <button onClick={this.setName}>Set Name</button>
-        </>);
+      return (
+        <form onSubmit={this.setName} className="inline">
+          <TextField value={this.state.name} onChange={this.updateInputValue} onBlur={this.setName} inputRef={this.nameInput} autoFocus/>
+          <Button role="submit">Set Name</Button>
+        </form>);
     } else {
-      nameHTML = <span onClick={this.startModifying}>{this.state.name}</span>
+      return <span onClick={this.startModifying}>{this.state.name}</span>;
     }
-    return <div>
-      {nameHTML}
-    </div>
   }
 }
 
