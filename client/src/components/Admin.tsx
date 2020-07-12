@@ -99,6 +99,10 @@ class Admin extends React.Component<AdminProps, {}> {
         value: 100,
         label: '100%',
       },
+      {
+        value: 300,
+        label: '300%',
+      },
     ];
     return (
       <>
@@ -133,8 +137,8 @@ class Admin extends React.Component<AdminProps, {}> {
         <Grid container justify="center" spacing={0}>
           <ButtonGroup variant="contained" color="primary">
             {this.blueButton('Load', this.loadCommand)}
-            {this.blueButton('Play', this.resumeCommand)}
             {this.blueButton('Pause', this.pauseCommand)}
+            {this.blueButton('Unpause', this.resumeCommand)}
           </ButtonGroup>
         </Grid>
       </>
