@@ -123,7 +123,7 @@ class Admin extends React.Component<AdminProps, {}> {
           <Slider
             min={0}
             max={100}
-            onDragEnd={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value)}
+            onChangeCommitted={(e: React.ChangeEvent<{}>, value) => this.seekCommand(value as number)}
             ref={this.seekSlider}
           />
         </div>
