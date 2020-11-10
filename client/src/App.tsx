@@ -11,7 +11,7 @@ import Mp3Player from './components/Mp3Player';
 import PresetWindow from './components/PresetWindow';
 import 'typeface-roboto';
 import UserList from './components/UserList';
-import Name from "./components/Name"; 
+import Name from './components/Name';
 
 interface AppState {
   userGesture: boolean;
@@ -87,7 +87,7 @@ class App extends React.Component<{}, AppState> {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <div className="temporary-top-right">
-          <Name/>
+          <Name />
           <IconButton onClick={this.switchMode}>
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>

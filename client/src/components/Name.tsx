@@ -1,11 +1,10 @@
-import React, {RefObject} from 'react';
-import Communication from "./Communication";
-import { triggerAsyncId } from 'async_hooks';
+import React from 'react';
 import { TextField, Button } from '@material-ui/core';
+import Communication from './Communication';
 
 interface NameState {
-  name: string,
-  modifying: boolean,
+  name: string;
+  modifying: boolean;
 }
 
 class Name extends React.Component<{}, NameState> {
@@ -16,51 +15,57 @@ class Name extends React.Component<{}, NameState> {
     this.nameInput = React.createRef();
 
     let name = localStorage.getItem('displayName');
-    if(name == null) {
+    if (name == null) {
       name = this.generateRandomName();
     }
     this.state = {
       name,
       modifying: false,
-    }
-    Communication.subscribe("state", this.sendName);
+    };
+    Communication.subscribe('state', this.sendName);
   }
 
-  generateRandomName = () :string => {
-    let randomNum = Math.round(Math.random() * 3000);
+  generateRandomName = (): string => {
+    const randomNum = Math.round(Math.random() * 3000);
     return `user-${randomNum}`;
-  }
+  };
 
   sendName = () => {
     Communication.nameUpdate(this.state.name);
-  }
+  };
 
   updateInputValue = (evt: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      name: evt.target.value
+      name: evt.target.value,
     });
   };
 
   setName = () => {
     localStorage.setItem('displayName', this.state.name);
     this.sendName();
-    this.setState({modifying: false})
-  }
+    this.setState({ modifying: false });
+  };
 
   startModifying = () => {
-    this.setState({modifying: true});
-  }
+    this.setState({ modifying: true });
+  };
 
   render() {
     if (this.state.modifying) {
       return (
         <form onSubmit={this.setName} className="inline">
-          <TextField value={this.state.name} onChange={this.updateInputValue} onBlur={this.setName} inputRef={this.nameInput} autoFocus/>
-          <Button role="submit">Set Name</Button>
-        </form>);
-    } else {
-      return <span onClick={this.startModifying}>{this.state.name}</span>;
+          <TextField
+            value={this.state.name}
+            onChange={this.updateInputValue}
+            onBlur={this.setName}
+            inputRef={this.nameInput}
+            autoFocus
+          />
+          <Button role="button" type="submit">Set Name</Button>
+        </form>
+      );
     }
+    return <span onClick={this.startModifying} onKeyPress={this.startModifying} role="textbox" tabIndex={0}>{this.state.name}</span>;
   }
 }
 

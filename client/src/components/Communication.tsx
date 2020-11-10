@@ -25,8 +25,8 @@ class Communication extends React.Component<{}, MessageState> {
   static nameUpdate(name: string) {
     Communication.send({
       type: 'setName',
-      name: name
-    })
+      name,
+    });
   }
 
   static sendFeedback(message: string) {

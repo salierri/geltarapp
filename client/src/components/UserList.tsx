@@ -1,19 +1,18 @@
 import React from 'react';
-import Communication from './Communication';
-import { UserBroadcast } from '../api';
 import { Card, CardContent, Typography, Box } from '@material-ui/core';
+import { UserBroadcast } from '../api';
+import Communication from './Communication';
 
 interface UserListState {
   names: string[];
 }
 
 export default class UserList extends React.Component<{}, UserListState> {
-
   constructor(props: {}) {
     super(props);
     this.state = {
-      names: []
-    }
+      names: [],
+    };
   }
 
   componentDidMount = () => {
