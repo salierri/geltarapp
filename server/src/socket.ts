@@ -37,11 +37,11 @@ function feedbackToMaster(message: string, sender?: string) {
 }
 
 function broadcastNames() {
-  let names: string[] = [];
+  let users: { [key: string]: string; } = {};
   for(let client of sockets) {
-    names.push(client.name);
+    users[client.id] = client.name;
   }
-  broadcastMessage({ type: 'users', names });
+  broadcastMessage({ type: 'users',  users });
 }
 
 function setName(name: string, sender: NamedWebSocket) {
@@ -85,7 +85,7 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
       StateManager.updateState(parsedMessage);
       broadcastMessage(parsedMessage);
     } else if (parsedMessage.type === 'feedback') {
-      parsedMessage.sender = clientIp(req);
+      parsedMessage.sender = ws.id;
       broadcastMessage(parsedMessage);
     } else if (parsedMessage.type === 'stateRequest') {
       sendState(ws);

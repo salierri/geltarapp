@@ -4,28 +4,28 @@ import { UserBroadcast } from '../api';
 import Communication from './Communication';
 
 interface UserListState {
-  names: string[];
+  users: { [key: string]: string };
 }
 
 export default class UserList extends React.Component<{}, UserListState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      names: [],
+      users: {},
     };
   }
 
   componentDidMount = () => {
-    Communication.subscribe('users', (usersList) => this.setState({ names: (usersList as UserBroadcast).names }));
+    Communication.subscribe('users', (usersList) => this.setState({ users: (usersList as UserBroadcast).users }));
   };
 
   render() {
     return (
       <div className="bottom-left">
-        { this.state.names.map((name) => (
-          <Box m={1}>
+        { Object.values(this.state.users).map((name) => (
+          <Box m={1} width={180}>
             <Card variant="outlined">
-              <CardContent>
+              <CardContent className="flex-center">
                 <Typography variant="button">
                   {name}
                 </Typography>

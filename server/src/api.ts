@@ -35,7 +35,7 @@ export interface NameSetting {
 
 export interface UserBroadcast {
     type: 'users';
-    names: string[];
+    users: { [key: string]: string };
 }
 
 export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat

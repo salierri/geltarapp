@@ -27,7 +27,9 @@ export interface NameSetting {
 }
 export interface UserBroadcast {
     type: 'users';
-    names: string[];
+    users: {
+        [key: string]: string;
+    };
 }
 export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat | NameSetting | UserBroadcast;
 export interface VideoState {

@@ -1,22 +1,30 @@
 import React from 'react';
 import FloatingEmoji from './FloatingEmoji';
 import Communication from './Communication';
-import { Feedback } from '../api';
+import { Feedback, UserBroadcast } from '../api';
 
 class EmojiContainer extends React.Component {
   emojis: JSX.Element[];
+  users: { [key: string]: string } = {};
 
   constructor(props: {}) {
     super(props);
     this.emojis = [];
   }
 
-  newEmoji = (message: string) => {
+  newEmoji = (message: Feedback) => {
     const key = Math.random();
-    if (message === 'like') {
-      this.emojis.push(<FloatingEmoji removeCallback={this.removeEmoji} key={key} label="thumbs-up" emoji="👍" />);
-    } else if (message === 'boring') {
-      this.emojis.push(<FloatingEmoji removeCallback={this.removeEmoji} key={key} label="sleeping" emoji="😴" />);
+    let yPosition = 90;
+    for(let userId in this.users) {
+      if(userId == message.sender) {
+        break;
+      }
+      yPosition += 180;
+    }
+    if (message.message === 'like') {
+      this.emojis.push(<FloatingEmoji removeCallback={this.removeEmoji} key={key} yPosition={yPosition} label="thumbs-up" emoji="👍" />);
+    } else if (message.message === 'boring') {
+      this.emojis.push(<FloatingEmoji removeCallback={this.removeEmoji} key={key} yPosition={yPosition} label="sleeping" emoji="😴" />);
     }
     this.forceUpdate();
   };
@@ -27,7 +35,8 @@ class EmojiContainer extends React.Component {
   };
 
   componentDidMount = () => {
-    Communication.subscribe('feedback', (feedback) => this.newEmoji((feedback as Feedback).message));
+    Communication.subscribe('feedback', (feedback) => this.newEmoji((feedback as Feedback)));
+    Communication.subscribe('users', (userList) => { this.users = (userList as UserBroadcast).users; });
   };
 
   render() {

@@ -110,8 +110,8 @@ class App extends React.Component<{}, AppState> {
               </Switch>
             </BrowserRouter>
             <Communication />
-            <EmojiContainer />
             <UserList />
+            <EmojiContainer />
           </Box>
         </Container>
       </ThemeProvider>

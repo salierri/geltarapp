@@ -3,6 +3,7 @@ import React from 'react';
 type EmojiParams = {
   label: string;
   emoji: string;
+  yPosition: number;
   removeCallback: () => void;
 };
 
@@ -14,7 +15,7 @@ class FloatingEmoji extends React.Component<EmojiParams, {}> {
   constructor(props: EmojiParams) {
     super(props);
     this.emoji = React.createRef();
-    this.startingPosY = Math.random() * 400 + 200;
+    this.startingPosY = props.yPosition - 50 + (Math.random() * 100);
   }
 
   componentDidMount() {
