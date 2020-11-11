@@ -31,7 +31,12 @@ export interface UserBroadcast {
         [key: string]: string;
     };
 }
-export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat | NameSetting | UserBroadcast;
+export interface Suggestion {
+    type: 'suggestion';
+    video: string;
+    sender?: string;
+}
+export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat | NameSetting | UserBroadcast | Suggestion;
 export interface VideoState {
     url: string;
     playing: boolean;

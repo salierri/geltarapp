@@ -37,7 +37,7 @@ class Communication extends React.Component<{}, MessageState> {
     Communication.send({ type: 'heartbeat' });
   }
 
-  private static send(message: Message) {
+  static send(message: Message) {
     if (client.readyState === 1 /* Ready */) {
       client.send(JSON.stringify(message));
     }

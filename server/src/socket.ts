@@ -3,6 +3,7 @@ import { IncomingMessage } from 'http';
 import { Message } from './api';
 import * as StateManager from './stateManager';
 import { v4 as uuidv4 } from 'uuid';
+import { parse } from 'dotenv/types';
 
 interface NamedWebSocket extends WebSocket {
   id: string;
@@ -29,9 +30,13 @@ export const broadcastMessage = (message: Message) => {
 export default broadcastMessage;
 
 function feedbackToMaster(message: string, sender?: string) {
+  sendToMaster({ type: 'feedback', message, sender });
+}
+
+function sendToMaster(message: Message) {
   masters.forEach((master) => {
     if (master.readyState === WebSocket.OPEN) {
-      master.send(JSON.stringify({ type: 'feedback', message, sender }));
+      master.send(JSON.stringify(message));
     }
   });
 }
@@ -93,6 +98,9 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
       sendHeartbeat(ws);
     } else if (parsedMessage.type === 'setName') {
       setName(parsedMessage.name, ws);
+    } else if (parsedMessage.type === 'suggestion') {
+      parsedMessage.sender = ws.id;
+      sendToMaster(parsedMessage);
     }
   });
 

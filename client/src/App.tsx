@@ -12,6 +12,7 @@ import PresetWindow from './components/PresetWindow';
 import 'typeface-roboto';
 import UserList from './components/UserList';
 import Name from './components/Name';
+import ApproveSuggestion from './components/ApproveSuggestion';
 
 interface AppState {
   userGesture: boolean;
@@ -106,6 +107,7 @@ class App extends React.Component<{}, AppState> {
                 <Route path="/geltaradmin">
                   <PresetWindow />
                   <div id="dummy-player" className="hidden" />
+                  <ApproveSuggestion />
                 </Route>
               </Switch>
             </BrowserRouter>

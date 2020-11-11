@@ -16,7 +16,7 @@ class EmojiContainer extends React.Component {
     const key = Math.random();
     let yPosition = 90;
     for(let userId in this.users) {
-      if(userId == message.sender) {
+      if(userId === message.sender) {
         break;
       }
       yPosition += 180;

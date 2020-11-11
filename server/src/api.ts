@@ -38,8 +38,14 @@ export interface UserBroadcast {
     users: { [key: string]: string };
 }
 
+export interface Suggestion {
+    type: 'suggestion';
+    video: string;
+    sender?: string;
+}
+
 export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
-                    | NameSetting | UserBroadcast
+                    | NameSetting | UserBroadcast | Suggestion
 
 export interface VideoState {
     url: string;

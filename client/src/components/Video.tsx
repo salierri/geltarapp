@@ -7,6 +7,7 @@ import Communication from './Communication';
 import { VideoRole } from '../api';
 import Admin from './Admin';
 import { APIReady, setLocalVolume } from './videoPlayer';
+import VideoSugggestion from './VideoSuggestion';
 
 interface VideoProps {
   videoRole: VideoRole;
@@ -70,6 +71,8 @@ class Video extends React.Component<VideoProps, {}> {
           </Grid>
         </Box>
       );
+    } else {
+      feedbackButtons = <VideoSugggestion />
     }
     return (
       <Router>
