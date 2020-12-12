@@ -77,3 +77,10 @@ export interface Preset {
     length: number;
     category: Category;
 }
+
+export interface Room {
+    _id: string;
+    name: string;
+    password: string;
+    type: 'public' | 'password' | 'private';
+}

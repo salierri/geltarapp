@@ -95,25 +95,16 @@ class App extends React.Component<{}, AppState> {
         </div>
         <Container>
           <Box m={2}>
-            <Typography variant="h2" gutterBottom>
-              Geltarapp
-            </Typography>
-            <Divider variant="fullWidth" />
-            <Box m={2}>
-              <this.Content />
-            </Box>
             <BrowserRouter>
               <Switch>
-                <Route path="/geltaradmin">
-                  <PresetWindow />
-                  <div id="dummy-player" className="hidden" />
-                  <ApproveSuggestion />
+                <Route path="/">
+                  <Homepage />
+                </Route>
+                <Route path="/room/:roomId">
+                  <Roompage />
                 </Route>
               </Switch>
             </BrowserRouter>
-            <Communication />
-            <UserList />
-            <EmojiContainer />
           </Box>
         </Container>
       </ThemeProvider>

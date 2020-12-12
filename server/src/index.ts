@@ -8,6 +8,7 @@ import './socket';
 import mp3upload from './routes/mp3upload';
 import preset from './routes/preset';
 import category from './routes/category';
+import room from './routes/room';
 
 const app = Express();
 
@@ -28,6 +29,7 @@ app.use(Express.static('./uploads'));
 app.use('/mp3', mp3upload);
 app.use('/presets', preset);
 app.use('/categories', category);
+app.use('/rooms', room);
 
 const port = process.env.HTTP_PORT;
 

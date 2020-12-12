@@ -29,11 +29,7 @@ export const broadcastMessage = (message: Message) => {
 };
 export default broadcastMessage;
 
-function feedbackToMaster(message: string, sender?: string) {
-  sendToMaster({ type: 'feedback', message, sender });
-}
-
-function sendToMaster(message: Message) {
+function sendToMasters(message: Message) {
   masters.forEach((master) => {
     if (master.readyState === WebSocket.OPEN) {
       master.send(JSON.stringify(message));
@@ -76,7 +72,6 @@ function clientIp(req: IncomingMessage) {
 
 WSServer.on('connection', (ws: NamedWebSocket, req) => {
   if (req.url?.includes('geltaradmin')) {
-    feedbackToMaster('NEW MASTER CLIENT', clientIp(req));
     masters.push(ws);
   }
 
@@ -100,15 +95,13 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
       setName(parsedMessage.name, ws);
     } else if (parsedMessage.type === 'suggestion') {
       parsedMessage.sender = ws.id;
-      sendToMaster(parsedMessage);
+      sendToMasters(parsedMessage);
     }
   });
 
   ws.on('close', () => {
     removeFromSockets(ws);
-    feedbackToMaster('Disconnected', clientIp(req));
   });
 
   sendState(ws);
-  feedbackToMaster('Connected', clientIp(req));
 });
