@@ -33,16 +33,18 @@ export default class ApproveSuggestion extends React.Component<{}, ApproveSugges
     Communication.subscribe('suggestion', (suggestion) => {
       const videoUrl = (suggestion as Suggestion).video;
       DummyVideoPlayer.getProperties(videoUrl)
-      .then((properties) => {
-        this.setState({ open: true, videoUrl: (suggestion as Suggestion).video, videoTitle: properties.title })
-      });
+        .then((properties) => {
+          this.setState({ open: true, videoUrl: (suggestion as Suggestion).video, videoTitle: properties.title });
+        });
     });
   }
 
   render() {
-    const action = <Button color="primary" size="small" onClick={this.approveVideo}>
-                      Play video
-                    </Button>
+    const action = (
+      <Button color="primary" size="small" onClick={this.approveVideo}>
+        Play video
+      </Button>
+    );
     return (
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}

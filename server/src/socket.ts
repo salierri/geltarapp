@@ -1,9 +1,8 @@
 import WebSocket from 'ws';
 import { IncomingMessage } from 'http';
+import { v4 as uuidv4 } from 'uuid';
 import { Message } from './api';
 import * as StateManager from './stateManager';
-import { v4 as uuidv4 } from 'uuid';
-import { parse } from 'dotenv/types';
 
 interface NamedWebSocket extends WebSocket {
   id: string;
@@ -38,11 +37,11 @@ function sendToMasters(message: Message) {
 }
 
 function broadcastNames() {
-  let users: { [key: string]: string; } = {};
-  for(let client of sockets) {
+  const users: { [key: string]: string } = {};
+  for (const client of sockets) {
     users[client.id] = client.name;
   }
-  broadcastMessage({ type: 'users',  users });
+  broadcastMessage({ type: 'users', users });
 }
 
 function setName(name: string, sender: NamedWebSocket) {
@@ -60,7 +59,7 @@ function sendHeartbeat(sender: WebSocket) {
 
 function removeFromSockets(socket: NamedWebSocket) {
   const index = sockets.indexOf(socket);
-  if(index > -1) {
+  if (index > -1) {
     sockets.splice(index, 1);
   }
   broadcastNames();

@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-if(fs.existsSync('../client/src/')) {
+if (fs.existsSync('../client/src/')) {
   fs.copyFile('lib/api.d.ts', '../client/src/api.ts', (err) => {
     if (err) {
       throw err;
