@@ -17,29 +17,25 @@ import ApproveSuggestion from './components/ApproveSuggestion';
 export default class Roompage extends React.Component<> {
   render() {
     return (
-      <Container>
-        <Box m={2}>
-          <Typography variant="h2" gutterBottom>
-            Geltarapp
-          </Typography>
-          <Divider variant="fullWidth" />
-          <Box m={2}>
-            <this.Content />
-          </Box>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/geltaradmin">
-                <PresetWindow />
-                <div id="dummy-player" className="hidden" />
-                <ApproveSuggestion />
-              </Route>
-            </Switch>
-          </BrowserRouter>
-          <Communication />
-          <UserList />
-          <EmojiContainer />
-        </Box>
-      </Container>
+      <Typography variant="h2" gutterBottom>
+        Geltarapp
+      </Typography>
+      <Divider variant="fullWidth" />
+      <Box m={2}>
+        <this.Content />
+      </Box>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/geltaradmin">
+            <PresetWindow />
+            <div id="dummy-player" className="hidden" />
+            <ApproveSuggestion />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+      <Communication />
+      <UserList />
+      <EmojiContainer />
     );
   }
 }

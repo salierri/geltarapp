@@ -13,6 +13,8 @@ import 'typeface-roboto';
 import UserList from './components/UserList';
 import Name from './components/Name';
 import ApproveSuggestion from './components/ApproveSuggestion';
+import Homepage from './routes/Homepage';
+import Roompage from './routes/Roompage';
 
 interface AppState {
   userGesture: boolean;
