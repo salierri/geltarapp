@@ -5,7 +5,7 @@ export type RoomDocument = mongoose.Document & RoomInterface;
 
 const roomSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  type: { type: String, required: true },
+  visibility: { type: String, required: true },
   password: { type: String, required: false },
 }, { timestamps: true });
 

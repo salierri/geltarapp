@@ -31,10 +31,7 @@ router.put('/:roomId', (req, res) => {
 
 router.delete('/:roomId', (req, res) => {
   const { roomId } = req.params;
-  Promise.all([
-    Room.deleteOne({ _id: roomId }),
-    Preset.deleteMany({ room: roomId }),
-  ])
+  Room.deleteOne({ _id: roomId })
     .catch((err) => {
       res.status(400).send(err.message);
     })

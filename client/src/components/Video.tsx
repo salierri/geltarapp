@@ -105,7 +105,7 @@ class Video extends React.Component<VideoProps, {}> {
         </Card>
         <div id="video uk-align-center">
           <Switch>
-            <Route path="/geltaradmin">
+            <Route path="/:params*/geltaradmin">
               <Admin role={this.role} />
             </Route>
             <Route path="/">

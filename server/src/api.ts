@@ -78,9 +78,11 @@ export interface Preset {
     category: Category;
 }
 
+export type VisibilityType = 'public' | 'password' | 'private';
+
 export interface Room {
     _id: string;
     name: string;
     password: string;
-    type: 'public' | 'password' | 'private';
+    visibility: VisibilityType;
 }

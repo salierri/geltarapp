@@ -64,3 +64,10 @@ export interface Preset {
     length: number;
     category: Category;
 }
+export declare type VisibilityType = 'public' | 'password' | 'private';
+export interface Room {
+    _id: string;
+    name: string;
+    password: string;
+    visibility: VisibilityType;
+}

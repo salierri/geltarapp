@@ -16,13 +16,9 @@ import ApproveSuggestion from './components/ApproveSuggestion';
 import Homepage from './routes/Homepage';
 import Roompage from './routes/Roompage';
 
-interface AppState {
-  userGesture: boolean;
-}
-
 declare type ColorMode = 'dark' | 'light';
 
-class App extends React.Component<{}, AppState> {
+class App extends React.Component{
   protected currentMode: ColorMode = 'dark';
 
   constructor(props: {}) {
@@ -30,48 +26,12 @@ class App extends React.Component<{}, AppState> {
     this.state = {
       userGesture: false,
     };
-    this.Content = this.Content.bind(this);
   }
-
-  receivedUserGesture = () => {
-    document.getElementById('start-button-container')?.classList.add('hidden');
-    setTimeout(() => {
-      this.setState({ userGesture: true });
-    }, 500);
-  };
 
   switchMode = () => {
     this.currentMode = this.currentMode === 'light' ? 'dark' : 'light';
     this.forceUpdate();
   };
-
-  Content() {
-    if (this.state.userGesture) {
-      return (
-        <Grid container spacing={10} justify="center">
-          <Grid item xs={6}>
-            <Video videoRole="music" />
-          </Grid>
-          <Grid item xs={6}>
-            <Video videoRole="ambience" />
-            <Mp3Player />
-          </Grid>
-        </Grid>
-      );
-    }
-    return (
-      <Grid container justify="center">
-        <Button
-          variant="contained"
-          color="primary"
-          className={clsx('start-button')}
-          onClick={this.receivedUserGesture}
-        >
-          Csatlakozás
-        </Button>
-      </Grid>
-    );
-  }
 
   render() {
     document.documentElement.setAttribute('data-theme', this.currentMode);
@@ -99,11 +59,11 @@ class App extends React.Component<{}, AppState> {
           <Box m={2}>
             <BrowserRouter>
               <Switch>
-                <Route path="/">
-                  <Homepage />
-                </Route>
                 <Route path="/room/:roomId">
                   <Roompage />
+                </Route>
+                <Route path="/">
+                  <Homepage />
                 </Route>
               </Switch>
             </BrowserRouter>
