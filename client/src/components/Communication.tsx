@@ -38,7 +38,7 @@ class Communication extends React.Component<{}, MessageState> {
   }
 
   static send(message: Message) {
-    if (client.readyState === 1 /* Ready */) {
+    if (client && client.readyState === 1 /* Ready */) {
       client.send(JSON.stringify(message));
     }
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, RouteComponentProps } from 'react-router-dom';
 import clsx from 'clsx';
 import { createMuiTheme, ThemeProvider, Container, IconButton, Typography, CssBaseline, Divider, Button, Grid, Box, List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, makeStyles } from '@material-ui/core';
 import { Public, LockOpen, Lock } from '@material-ui/icons';
@@ -9,7 +9,7 @@ import CreateRoom from '../components/CreateRoom';
 import { Room, VisibilityType } from '../api';
 import RoomList from '../components/RoomList';
 
-export default class Homepage extends React.Component {
+export default class Homepage extends React.Component<RouteComponentProps, {}> {
 
   render() {
     return (
@@ -23,7 +23,7 @@ export default class Homepage extends React.Component {
             <Grid item xs={6}>
               <Typography variant="h4">Rooms</Typography>
               <div className="room-list-parent">
-                <RoomList/>
+                <RoomList history={this.props.history}/>
               </div>
             </Grid>
             <Grid item xs={2}>

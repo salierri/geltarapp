@@ -112,3 +112,9 @@
     max-width: 360px;
     background-color: #424242;
 }
+
+.clickable-name {
+    min-width: 50px;
+    min-height: 15px;
+    display: inline-block;
+}

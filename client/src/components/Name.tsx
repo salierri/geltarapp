@@ -65,7 +65,7 @@ class Name extends React.Component<{}, NameState> {
         </form>
       );
     }
-    return <span onClick={this.startModifying} onKeyPress={this.startModifying} role="textbox" tabIndex={0}>{this.state.name}</span>;
+    return <span onClick={this.startModifying} onKeyPress={this.startModifying} role="textbox" tabIndex={0} className="clickable-name">{this.state.name}</span>;
   }
 }
 

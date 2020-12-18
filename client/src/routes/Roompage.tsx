@@ -23,7 +23,7 @@ export default class Roompage extends React.Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      userGesture: false,
+      userGesture: true,
     };
   }
   

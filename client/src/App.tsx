@@ -59,12 +59,8 @@ class App extends React.Component{
           <Box m={2}>
             <BrowserRouter>
               <Switch>
-                <Route path="/room/:roomId">
-                  <Roompage />
-                </Route>
-                <Route path="/">
-                  <Homepage />
-                </Route>
+                <Route path="/room/:roomId" component={Roompage} />
+                <Route path="/" component={Homepage} />
               </Switch>
             </BrowserRouter>
           </Box>
