@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, useParams } from 'react-router-dom';
 import clsx from 'clsx';
 import { createMuiTheme, ThemeProvider, Container, IconButton, Typography, CssBaseline, Divider, Button, Grid, Box } from '@material-ui/core';
 import { BrightnessHigh, Brightness4 } from '@material-ui/icons';
@@ -13,15 +13,20 @@ import 'typeface-roboto';
 import UserList from '../components/UserList';
 import Name from '../components/Name';
 import ApproveSuggestion from '../components/ApproveSuggestion';
+import { RouteComponentProps } from 'react-router';
 
 interface AppState {
   userGesture: boolean;
 }
+interface RoomProps {
+  roomId: string;
+}
 
-export default class Roompage extends React.Component<{}, AppState> {
+export default class Roompage extends React.Component<RouteComponentProps<RoomProps>, AppState> {
 
-  constructor(props: {}) {
+  constructor(props: RouteComponentProps<RoomProps>) {
     super(props);
+
     this.state = {
       userGesture: true,
     };
@@ -81,7 +86,7 @@ export default class Roompage extends React.Component<{}, AppState> {
             </Route>
           </Switch>
         </BrowserRouter>
-        <Communication />
+        <Communication room={this.props.match.params.roomId} />
         <UserList />
         <EmojiContainer />
       </>

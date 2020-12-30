@@ -12,7 +12,8 @@ router.post('/upload', (req, res) => {
     (req.files.effect as UploadedFile).mv(`./uploads/${fileName}.mp3`)
       .then(() => {
         console.log(`Mp3 upload, original filename: ${originalFilename}, new filename: ${fileName}`);
-        broadcastMessage({ type: 'command', command: 'LoadMp3', role: 'ambience', param: `${fileName}.mp3` });
+        // TODO Update for rooms
+        // broadcastMessage({ type: 'command', command: 'LoadMp3', role: 'ambience', param: `${fileName}.mp3` });
         res.sendStatus(200);
       })
       .catch((reason) => {

@@ -7,18 +7,18 @@ import * as StateManager from './stateManager';
 interface NamedWebSocket extends WebSocket {
   id: string;
   name: string;
+  master: boolean;
 }
 
 const WSServer = new WebSocket.Server({
   port: +(process.env.WS_PORT ?? 4000),
 });
 
-const masters: WebSocket[] = [];
-const sockets: NamedWebSocket[] = [];
+const rooms: { [ key: string ]: NamedWebSocket[]} = {};
 
-export const broadcastMessage = (message: Message) => {
+export const broadcastMessage = (room: string, message: Message) => {
   let countSent = 0;
-  WSServer.clients.forEach((client) => {
+  rooms[room].forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       countSent += 1;
       client.send(JSON.stringify(message));
@@ -28,25 +28,28 @@ export const broadcastMessage = (message: Message) => {
 };
 export default broadcastMessage;
 
-function sendToMasters(message: Message) {
-  masters.forEach((master) => {
-    if (master.readyState === WebSocket.OPEN) {
-      master.send(JSON.stringify(message));
+function sendToMasters(room: string, message: Message) {
+  rooms[room].forEach((socket) => {
+    if (!socket.master) {
+      return;
+    }
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(message));
     }
   });
 }
 
-function broadcastNames() {
+function broadcastNames(room: string) {
   const users: { [key: string]: string } = {};
-  for (const client of sockets) {
+  for (const client of rooms[room]) {
     users[client.id] = client.name;
   }
-  broadcastMessage({ type: 'users', users });
+  broadcastMessage(room, { type: 'users', users });
 }
 
-function setName(name: string, sender: NamedWebSocket) {
+function setName(room: string, name: string, sender: NamedWebSocket) {
   sender.name = name;
-  broadcastNames();
+  broadcastNames(room);
 }
 
 function sendState(sender: WebSocket) {
@@ -57,49 +60,54 @@ function sendHeartbeat(sender: WebSocket) {
   sender.send(JSON.stringify({ type: 'heartbeat' }));
 }
 
-function removeFromSockets(socket: NamedWebSocket) {
-  const index = sockets.indexOf(socket);
+function removeFromSockets(room: string, socket: NamedWebSocket) {
+  const index = rooms[room].indexOf(socket);
   if (index > -1) {
-    sockets.splice(index, 1);
+    rooms[room].splice(index, 1);
   }
-  broadcastNames();
+  broadcastNames(room);
 }
 
 function clientIp(req: IncomingMessage) {
   return (req.headers['x-real-ip'] as string) || req.connection.remoteAddress;
 }
 
-WSServer.on('connection', (ws: NamedWebSocket, req) => {
-  if (req.url?.includes('geltaradmin')) {
-    masters.push(ws);
+function addToSockets(room: string, socket: NamedWebSocket) {
+  if (!(room in rooms)) {
+    rooms[room] = [];
   }
+  rooms[room].push(socket);
+}
 
+WSServer.on('connection', (ws: NamedWebSocket, req) => {
   ws.id = uuidv4();
-  sockets.push(ws);
+  const roomId: string = req.url?.replace('/', '').replace('/geltaradmin', '') ?? '';
+  ws.master = req.url?.includes('geltaradmin') ?? false;
+  addToSockets(roomId, ws);
 
   ws.on('message', (message) => {
     console.log(`${clientIp(req)}: ${message}`);
     const parsedMessage: Message = JSON.parse(message.toString());
     if (parsedMessage.type === 'command') {
       StateManager.updateState(parsedMessage);
-      broadcastMessage(parsedMessage);
+      broadcastMessage(roomId, parsedMessage);
     } else if (parsedMessage.type === 'feedback') {
       parsedMessage.sender = ws.id;
-      broadcastMessage(parsedMessage);
+      broadcastMessage(roomId, parsedMessage);
     } else if (parsedMessage.type === 'stateRequest') {
       sendState(ws);
     } else if (parsedMessage.type === 'heartbeat') {
       sendHeartbeat(ws);
     } else if (parsedMessage.type === 'setName') {
-      setName(parsedMessage.name, ws);
+      setName(roomId, parsedMessage.name, ws);
     } else if (parsedMessage.type === 'suggestion') {
       parsedMessage.sender = ws.id;
-      sendToMasters(parsedMessage);
+      sendToMasters(roomId, parsedMessage);
     }
   });
 
   ws.on('close', () => {
-    removeFromSockets(ws);
+    removeFromSockets(roomId, ws);
   });
 
   sendState(ws);

@@ -1,18 +1,18 @@
 import { w3cwebsocket as WebSocket } from 'websocket';
 import React from 'react';
-import { Message, CommandType, VideoRole } from '../api';
+import { Message, CommandType, VideoRole, Room } from '../api';
 import * as Helpers from '../helpers/Helpers';
+import Axios from 'axios';
 
-const address = Helpers.isAdmin() ? `${process.env.REACT_APP_WS_URL}/geltaradmin` : process.env.REACT_APP_WS_URL ?? '';
 let client: WebSocket;
 
-interface MessageState {
-  messages: Array<string>;
+interface CommunicationParams {
+  room: string;
 }
 
 let subscriptions: { [key in Message['type']]?: ((message: Message) => void)[] };
 
-class Communication extends React.Component<{}, MessageState> {
+class Communication extends React.Component<CommunicationParams, {}> {
   static sendCommand(command: CommandType, role: VideoRole, param: string) {
     Communication.send({
       type: 'command',
@@ -53,31 +53,22 @@ class Communication extends React.Component<{}, MessageState> {
     subscriptions[type]?.push(callback);
   }
 
-
-  lastLogEvent: React.RefObject<HTMLDivElement>;
-
-  constructor(props: {}) {
-    super(props);
-
-    this.state = {
-      messages: [],
-    };
-    this.lastLogEvent = React.createRef();
-  }
-
-  componentDidMount() {
-    this.connect();
+  async componentDidMount() {
+    const roomId = this.props.room;
+    const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/${roomId}`);
+    const room: Room = await response.json();
+    if (room.visibility == 'public') {
+      this.connect(room._id, Helpers.isAdmin());
+    }
+    
     setInterval(Communication.heartbeat, 3000);
   }
 
-  componentDidUpdate() {
-    this.lastLogEvent.current?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  connect() {
+  connect(room: string, admin: boolean) {
+    const address = `${process.env.REACT_APP_WS_URL}/${room}${admin ? '/geltaradmin' : ''}`;
     client = new WebSocket(address);
     client.onopen = () => {
-      this.log('Connected to Socket');
+      console.log('Connected to Socket');
     };
     client.onmessage = (message) => {
       console.log(message);
@@ -87,9 +78,6 @@ class Communication extends React.Component<{}, MessageState> {
           callback(parsedMessage);
         });
       }
-      if (parsedMessage.type === 'feedback') {
-        this.log(`${parsedMessage.sender} - ${parsedMessage.message}`);
-      }
     };
     client.onerror = (error) => {
       console.log(`error: ${error}`);
@@ -97,26 +85,13 @@ class Communication extends React.Component<{}, MessageState> {
     };
     client.onclose = () => {
       setTimeout(() => {
-        this.connect();
+        this.connect(room, admin);
       }, 1000);
     };
   }
 
-  log(message: string) {
-    this.state.messages.push(`${(new Date()).toLocaleTimeString()} - ${message}`);
-    this.forceUpdate();
-  }
-
   render() {
-    if (!Helpers.isAdmin()) {
-      return null;
-    }
-    return (
-      <div id="log-area">
-        {this.state.messages.map((message) => <p className="log-message">{ message }</p>)}
-        <div ref={this.lastLogEvent} />
-      </div>
-    );
+    return null;
   }
 }
 

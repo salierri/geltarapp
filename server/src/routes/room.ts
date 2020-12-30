@@ -4,8 +4,13 @@ import { Room } from '../models/Room';
 const router = Express.Router();
 
 router.get('/', async (_, res) => {
-  const rooms = await Room.find({});
+  const rooms = await Room.find({}, 'name visibility');
   res.send(rooms);
+});
+
+router.get('/:roomId', async (req, res) => {
+  const room = await Room.findOne({ _id: req.params.roomId }, 'name visibility');
+  res.send(room);
 });
 
 router.post('/', async (req, res) => {
