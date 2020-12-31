@@ -52,8 +52,8 @@ function setName(room: string, name: string, sender: NamedWebSocket) {
   broadcastNames(room);
 }
 
-function sendState(sender: WebSocket) {
-  sender.send(JSON.stringify({ type: 'state', state: StateManager.getState() }));
+function sendState(room: string, sender: WebSocket) {
+  sender.send(JSON.stringify({ type: 'state', state: StateManager.getState(room) }));
 }
 
 function sendHeartbeat(sender: WebSocket) {
@@ -86,16 +86,18 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
   addToSockets(roomId, ws);
 
   ws.on('message', (message) => {
-    console.log(`${clientIp(req)}: ${message}`);
     const parsedMessage: Message = JSON.parse(message.toString());
+    if (parsedMessage.type !== 'heartbeat') {
+      console.log(`${clientIp(req)}: ${message}`);
+    }
     if (parsedMessage.type === 'command') {
-      StateManager.updateState(parsedMessage);
+      StateManager.updateState(roomId, parsedMessage);
       broadcastMessage(roomId, parsedMessage);
     } else if (parsedMessage.type === 'feedback') {
       parsedMessage.sender = ws.id;
       broadcastMessage(roomId, parsedMessage);
     } else if (parsedMessage.type === 'stateRequest') {
-      sendState(ws);
+      sendState(roomId, ws);
     } else if (parsedMessage.type === 'heartbeat') {
       sendHeartbeat(ws);
     } else if (parsedMessage.type === 'setName') {
@@ -110,5 +112,5 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
     removeFromSockets(roomId, ws);
   });
 
-  sendState(ws);
+  sendState(roomId, ws);
 });

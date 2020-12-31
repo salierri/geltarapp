@@ -12,23 +12,20 @@ function defaultVideoSetting(url: string) {
   };
 }
 
-const state: State = {
-  music: defaultVideoSetting('m_8QMAChwtg'),
-  ambience: defaultVideoSetting('sGkh1W5cbH4'),
-};
+const state: { [key: string]: State } = { };
 
-export const updateState = (message: Command) => {
+export const updateState = (room: string, message: Command) => {
   if (message.command === 'LoadVideo') {
-    state[message.role].url = message.param;
-    state[message.role].playing = true;
+    state[room][message.role].url = message.param;
+    state[room][message.role].playing = true;
   } else if (message.command === 'Volume') {
-    state[message.role].masterVolume = +message.param;
+    state[room][message.role].masterVolume = +message.param;
   } else if (message.command === 'Pause') {
-    state[message.role].playing = false;
+    state[room][message.role].playing = false;
   } else if (message.command === 'Resume') {
-    state[message.role].playing = true;
+    state[room][message.role].playing = true;
   } else if (message.command === 'SeekTo') {
-    state[message.role].time = {
+    state[room][message.role].time = {
       start: +message.param,
       setAt: new Date(),
     };
@@ -39,12 +36,22 @@ function getElapsedSecondsFrom(time: Date) {
   return (new Date().getTime() - time.getTime()) / 1000;
 }
 
-function calculateElapsedTime(role: VideoRole) {
-  state[role].time.elapsed = state[role].time.start + getElapsedSecondsFrom(state[role].time.setAt);
+function calculateElapsedTime(room: string, role: VideoRole) {
+  state[room][role].time.elapsed = state[room][role].time.start + getElapsedSecondsFrom(state[room][role].time.setAt);
 }
 
-export const getState = () => {
-  calculateElapsedTime('music');
-  calculateElapsedTime('ambience');
-  return state;
+function setDefault(room: string) {
+  state[room] = {
+    music: defaultVideoSetting('m_8QMAChwtg'),
+    ambience: defaultVideoSetting('sGkh1W5cbH4'),
+  };
+}
+
+export const getState = (room: string) => {
+  if(!(room in state)) {
+    setDefault(room);
+  }
+  calculateElapsedTime(room, 'music');
+  calculateElapsedTime(room, 'ambience');
+  return state[room];
 };

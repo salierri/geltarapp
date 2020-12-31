@@ -2,7 +2,6 @@ import { w3cwebsocket as WebSocket } from 'websocket';
 import React from 'react';
 import { Message, CommandType, VideoRole, Room } from '../api';
 import * as Helpers from '../helpers/Helpers';
-import Axios from 'axios';
 
 let client: WebSocket;
 
@@ -71,8 +70,10 @@ class Communication extends React.Component<CommunicationParams, {}> {
       console.log('Connected to Socket');
     };
     client.onmessage = (message) => {
-      console.log(message);
       const parsedMessage: Message = JSON.parse(message.data.toString());
+      if (parsedMessage.type !== 'heartbeat') {
+        console.log(message);
+      }
       if (subscriptions[parsedMessage.type]) {
         subscriptions[parsedMessage.type]?.forEach((callback) => {
           callback(parsedMessage);
