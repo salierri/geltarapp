@@ -1,13 +1,10 @@
+import { Box, Divider, Grid, Typography } from '@material-ui/core';
 import React from 'react';
-import { BrowserRouter, Switch, Route, RouteComponentProps } from 'react-router-dom';
-import clsx from 'clsx';
-import { createMuiTheme, ThemeProvider, Container, IconButton, Typography, CssBaseline, Divider, Button, Grid, Box, List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, makeStyles } from '@material-ui/core';
-import { Public, LockOpen, Lock } from '@material-ui/icons';
-import '../style/App.css';
+import { RouteComponentProps } from 'react-router-dom';
 import 'typeface-roboto';
 import CreateRoom from '../components/CreateRoom';
-import { Room, VisibilityType } from '../api';
 import RoomList from '../components/RoomList';
+import '../style/App.css';
 
 export default class Homepage extends React.Component<RouteComponentProps, {}> {
 

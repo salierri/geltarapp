@@ -1,6 +1,6 @@
-import { w3cwebsocket as WebSocket } from 'websocket';
 import React from 'react';
-import { Message, CommandType, VideoRole, Room } from '../api';
+import { w3cwebsocket as WebSocket } from 'websocket';
+import { CommandType, Message, VideoRole } from '../api';
 import * as Helpers from '../helpers/Helpers';
 
 let client: WebSocket;
@@ -54,16 +54,15 @@ class Communication extends React.Component<CommunicationParams, {}> {
 
   async componentDidMount() {
     const roomId = this.props.room;
-    const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/${roomId}`);
-    const room: Room = await response.json();
-    if (room.visibility == 'public') {
-      this.connect(room._id, Helpers.isAdmin());
-    }
+    this.connect(roomId, Helpers.isAdmin());
     
     setInterval(Communication.heartbeat, 3000);
   }
 
   connect(room: string, admin: boolean) {
+    if (localStorage.getItem("session") !== null) {
+      document.cookie = 'X-Auth-Token=' + localStorage.getItem("session") + '; path=/';
+    }
     const address = `${process.env.REACT_APP_WS_URL}/${room}${admin ? '/geltaradmin' : ''}`;
     client = new WebSocket(address);
     client.onopen = () => {

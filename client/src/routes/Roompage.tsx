@@ -1,22 +1,25 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route, useParams } from 'react-router-dom';
+import { Box, Button, Divider, Grid, Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import { createMuiTheme, ThemeProvider, Container, IconButton, Typography, CssBaseline, Divider, Button, Grid, Box } from '@material-ui/core';
-import { BrightnessHigh, Brightness4 } from '@material-ui/icons';
-import '../style/App.css';
+import React from 'react';
+import { RouteComponentProps } from 'react-router';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import 'typeface-roboto';
+import { Room } from '../api';
+import ApproveSuggestion from '../components/ApproveSuggestion';
 import Communication from '../components/Communication';
-import Video from '../components/Video';
 import EmojiContainer from '../components/EmojiContainer';
 import Mp3Player from '../components/Mp3Player';
+import PasswordPrompt from '../components/PasswordPrompt';
 import PresetWindow from '../components/PresetWindow';
-import 'typeface-roboto';
 import UserList from '../components/UserList';
-import Name from '../components/Name';
-import ApproveSuggestion from '../components/ApproveSuggestion';
-import { RouteComponentProps } from 'react-router';
+import Video from '../components/Video';
+import '../style/App.css';
 
 interface AppState {
   userGesture: boolean;
+  passwordPrompt: boolean;
+  authorized: boolean;
+  room?: Room;
 }
 interface RoomProps {
   roomId: string;
@@ -29,6 +32,8 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
 
     this.state = {
       userGesture: true,
+      authorized: false,
+      passwordPrompt: false,
     };
   }
   
@@ -38,6 +43,36 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       this.setState({ userGesture: true });
     }, 500);
   };
+
+  async componentDidMount() {
+    const roomId = this.props.match.params.roomId;
+    const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/${roomId}`);
+    const room: Room = await response.json();
+    this.setState({ room });
+    if (room.visibility === 'public') {
+      this.setState({ authorized: true });
+    } else if(room.visibility === 'password') {
+      this.setState({ passwordPrompt: true });
+    }
+  }
+
+  passwordEntered = async (password: string) => {
+    const formData = new FormData();
+    formData.append('password', password);
+    const requestOptions = {
+      method: 'POST',
+      body: formData,
+    };
+    const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/auth/${this.props.match.params.roomId}`, requestOptions);
+    if (!response.ok) {
+      this.props.history.push('');
+    } else {
+      const json = await response.json();
+      const session: string = json.session;
+      localStorage.setItem('session', session);
+      this.setState({ passwordPrompt: false, authorized: true });
+    }
+  }
 
   Content = () => {
     if (this.state.userGesture) {
@@ -71,7 +106,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
     return (
       <>
         <Typography variant="h2" gutterBottom>
-          Geltarapp
+          {this.state.room?.name}
         </Typography>
         <Divider variant="fullWidth" />
         <Box m={2}>
@@ -86,7 +121,8 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
             </Route>
           </Switch>
         </BrowserRouter>
-        <Communication room={this.props.match.params.roomId} />
+        { this.state.authorized && <Communication room={this.props.match.params.roomId} /> }
+        { this.state.passwordPrompt && <PasswordPrompt callback={this.passwordEntered} roomName={this.state.room?.name ?? ''}/> }
         <UserList />
         <EmojiContainer />
       </>

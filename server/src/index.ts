@@ -9,6 +9,7 @@ import mp3upload from './routes/mp3upload';
 import preset from './routes/preset';
 import category from './routes/category';
 import room from './routes/room';
+import auth from './routes/auth';
 
 const app = Express();
 
@@ -30,6 +31,7 @@ app.use('/mp3', mp3upload);
 app.use('/presets', preset);
 app.use('/categories', category);
 app.use('/rooms', room);
+app.use('/auth', auth);
 
 const port = process.env.HTTP_PORT;
 

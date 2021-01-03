@@ -15,3 +15,5 @@ router.post('/:roomId', async (req, res) => {
     res.sendStatus(401);
   }
 });
+
+export default router;

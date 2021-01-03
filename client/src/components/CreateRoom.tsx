@@ -1,7 +1,6 @@
-import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Select, MenuItem, FormGroup, InputLabel } from '@material-ui/core';
-import PresetManager from '../models/PresetManager';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormGroup, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import clsx from 'clsx';
+import React from 'react';
 
 interface CreateRoomState {
   open: boolean;
