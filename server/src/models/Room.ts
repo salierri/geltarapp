@@ -7,6 +7,7 @@ const roomSchema = new mongoose.Schema({
   name: { type: String, required: true },
   visibility: { type: String, required: true },
   password: { type: String, required: false },
+  masterPassword: { type: String, required: false },
 }, { timestamps: true });
 
 export const Room = mongoose.model<RoomDocument>('Room', roomSchema);

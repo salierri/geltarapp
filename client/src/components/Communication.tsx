@@ -54,16 +54,16 @@ class Communication extends React.Component<CommunicationParams, {}> {
 
   async componentDidMount() {
     const roomId = this.props.room;
-    this.connect(roomId, Helpers.isAdmin());
+    this.connect(roomId);
     
     setInterval(Communication.heartbeat, 3000);
   }
 
-  connect(room: string, admin: boolean) {
-    if (localStorage.getItem("session") !== null) {
-      document.cookie = 'X-Auth-Token=' + localStorage.getItem("session") + '; path=/';
+  connect(room: string) {
+    if (localStorage.getItem('session') !== null) {
+      document.cookie = 'X-Auth-Token=' + localStorage.getItem('session') + '; path=/';
     }
-    const address = `${process.env.REACT_APP_WS_URL}/${room}${admin ? '/geltaradmin' : ''}`;
+    const address = `${process.env.REACT_APP_WS_URL}/${room}`;
     client = new WebSocket(address);
     client.onopen = () => {
       console.log('Connected to Socket');
@@ -72,6 +72,11 @@ class Communication extends React.Component<CommunicationParams, {}> {
       const parsedMessage: Message = JSON.parse(message.data.toString());
       if (parsedMessage.type !== 'heartbeat') {
         console.log(message);
+      }
+      if (parsedMessage.type === 'error') {
+        localStorage.removeItem('session');
+        localStorage.removeItem('roomId');
+        window.location.href = '/';
       }
       if (subscriptions[parsedMessage.type]) {
         subscriptions[parsedMessage.type]?.forEach((callback) => {
@@ -85,7 +90,7 @@ class Communication extends React.Component<CommunicationParams, {}> {
     };
     client.onclose = () => {
       setTimeout(() => {
-        this.connect(room, admin);
+        this.connect(room);
       }, 1000);
     };
   }

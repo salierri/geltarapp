@@ -42,6 +42,7 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
 
   render() {
     const passwordField = this.state.passwordField ? (
+      <>
       <FormGroup>
         <TextField
           label="Password"
@@ -49,7 +50,16 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
           name="password"
           type="password"
         />
-      </FormGroup>) : null;
+      </FormGroup>
+      <FormGroup>
+      <TextField
+        label="GM Password (Use this for access to the controls)"
+        variant="outlined"
+        name="masterPassword"
+        type="password"
+      />
+    </FormGroup>
+    </>) : null;
 
     return (
       <>

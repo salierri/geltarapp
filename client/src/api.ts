@@ -36,7 +36,11 @@ export interface Suggestion {
     video: string;
     sender?: string;
 }
-export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat | NameSetting | UserBroadcast | Suggestion;
+export interface SocketError {
+    type: 'error';
+    error: string;
+}
+export declare type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat | NameSetting | UserBroadcast | Suggestion | SocketError;
 export interface VideoState {
     url: string;
     playing: boolean;
@@ -69,5 +73,6 @@ export interface Room {
     _id: string;
     name: string;
     password: string;
+    masterPassword: string;
     visibility: VisibilityType;
 }

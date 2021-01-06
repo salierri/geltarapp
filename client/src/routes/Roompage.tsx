@@ -19,6 +19,7 @@ interface AppState {
   userGesture: boolean;
   passwordPrompt: boolean;
   authorized: boolean;
+  master: boolean;
   room?: Room;
 }
 interface RoomProps {
@@ -34,6 +35,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       userGesture: true,
       authorized: false,
       passwordPrompt: false,
+      master: false,
     };
   }
   
@@ -70,35 +72,48 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       const json = await response.json();
       const session: string = json.session;
       localStorage.setItem('session', session);
-      this.setState({ passwordPrompt: false, authorized: true });
+      localStorage.setItem('roomId', json.room);
+      this.setState({ passwordPrompt: false, authorized: true, master: json.master });
     }
   }
 
   Content = () => {
-    if (this.state.userGesture) {
+    if (!this.state.authorized) { return null; }
+    if (!this.state.userGesture) {
       return (
-        <Grid container spacing={10} justify="center">
-          <Grid item xs={6}>
-            <Video videoRole="music" />
-          </Grid>
-          <Grid item xs={6}>
-            <Video videoRole="ambience" />
-            <Mp3Player />
-          </Grid>
+        <Grid container justify="center">
+          <Button
+            variant="contained"
+            color="primary"
+            className={clsx('start-button')}
+            onClick={this.receivedUserGesture}
+          >
+            Csatlakozás
+          </Button>
         </Grid>
       );
     }
     return (
-      <Grid container justify="center">
-        <Button
-          variant="contained"
-          color="primary"
-          className={clsx('start-button')}
-          onClick={this.receivedUserGesture}
-        >
-          Csatlakozás
-        </Button>
+      <Grid container spacing={10} justify="center">
+        <Grid item xs={6}>
+          <Video videoRole="music" master={this.state.master} />
+        </Grid>
+        <Grid item xs={6}>
+          <Video videoRole="ambience" master={this.state.master}/>
+          <Mp3Player master={this.state.master} />
+        </Grid>
       </Grid>
+    );
+  }
+
+  Admin = () => {
+    if (!this.state.master) { return null; }
+    return (
+      <>
+        <PresetWindow />
+        <div id="dummy-player" className="hidden" />
+        <ApproveSuggestion />
+      </>
     );
   }
 
@@ -112,15 +127,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
         <Box m={2}>
           <this.Content />
         </Box>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/:params*/geltaradmin">
-              <PresetWindow />
-              <div id="dummy-player" className="hidden" />
-              <ApproveSuggestion />
-            </Route>
-          </Switch>
-        </BrowserRouter>
+        <this.Admin />
         { this.state.authorized && <Communication room={this.props.match.params.roomId} /> }
         { this.state.passwordPrompt && <PasswordPrompt callback={this.passwordEntered} roomName={this.state.room?.name ?? ''}/> }
         <UserList />

@@ -2,6 +2,7 @@ import 'dotenv/config';
 import Express from 'express';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import './socket';
@@ -24,6 +25,7 @@ app.use(fileUpload({
 }));
 
 app.use(cors());
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(Express.static('./uploads'));

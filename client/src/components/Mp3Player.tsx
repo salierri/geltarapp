@@ -5,15 +5,19 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import Communication from './Communication';
 import { Command } from '../api';
 
+interface Mp3Props {
+  master: boolean;
+}
+
 interface Mp3State {
   clip: string;
 }
 
-class Mp3Player extends React.Component<{}, Mp3State> {
+class Mp3Player extends React.Component<Mp3Props, Mp3State> {
   audioTag: React.RefObject<HTMLAudioElement>;
   fileInput: React.RefObject<HTMLInputElement>;
 
-  constructor(props: {}) {
+  constructor(props: Mp3Props) {
     super(props);
     this.audioTag = React.createRef();
     this.fileInput = React.createRef();
@@ -48,6 +52,18 @@ class Mp3Player extends React.Component<{}, Mp3State> {
     }
   }
 
+  AdminControls = () => {
+    if (!this.props.master) { return null; }
+    return (
+      <div className="uk-align-center upload-button-parent">
+      <div className="upload-button-wrapper">
+        <button type="button" className="uk-button upload-button">Select Mp3 file</button>
+        <input type="file" name="effect" accept=".mp3" ref={this.fileInput} />
+      </div>
+      <button type="button" className="uk-button upload-button" onClick={this.uploadMp3}>Play selected</button>
+    </div>
+    );
+  }
 
   render() {
     return (
@@ -59,19 +75,7 @@ class Mp3Player extends React.Component<{}, Mp3State> {
           </audio>
         </div>
         )}
-        <BrowserRouter>
-          <Switch>
-            <Route path="/geltaradmin">
-              <div className="uk-align-center upload-button-parent">
-                <div className="upload-button-wrapper">
-                  <button type="button" className="uk-button upload-button">Select Mp3 file</button>
-                  <input type="file" name="effect" accept=".mp3" ref={this.fileInput} />
-                </div>
-                <button type="button" className="uk-button upload-button" onClick={this.uploadMp3}>Play selected</button>
-              </div>
-            </Route>
-          </Switch>
-        </BrowserRouter>
+        <this.AdminControls />
       </div>
     );
   }

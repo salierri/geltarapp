@@ -3,6 +3,10 @@ import { IncomingMessage } from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import { Message } from './api';
 import * as StateManager from './stateManager';
+import { Room } from './models/Room';
+import { Session } from './models/Session';
+import { Request} from 'express';
+import mongoose from 'mongoose';
 
 interface NamedWebSocket extends WebSocket {
   id: string;
@@ -60,6 +64,11 @@ function sendHeartbeat(sender: WebSocket) {
   sender.send(JSON.stringify({ type: 'heartbeat' }));
 }
 
+function terminateWithError(socket: WebSocket, error: string) {
+  socket.send(JSON.stringify({ type: 'error', error }));
+  socket.terminate();
+}
+
 function removeFromSockets(room: string, socket: NamedWebSocket) {
   const index = rooms[room].indexOf(socket);
   if (index > -1) {
@@ -80,37 +89,50 @@ function addToSockets(room: string, socket: NamedWebSocket) {
 }
 
 WSServer.on('connection', (ws: NamedWebSocket, req) => {
-  ws.id = uuidv4();
-  const roomId: string = req.url?.replace('/', '').replace('/geltaradmin', '') ?? '';
-  ws.master = req.url?.includes('geltaradmin') ?? false;
-  addToSockets(roomId, ws);
-
-  ws.on('message', (message) => {
-    const parsedMessage: Message = JSON.parse(message.toString());
-    if (parsedMessage.type !== 'heartbeat') {
-      console.log(`${clientIp(req)}: ${message}`);
+  const roomId: string = req.url?.replace('/', '') ?? '';
+  const cookie: string = req.headers.cookie ?? '';
+  const sessionId = cookie.replace('X-Auth-Token=', '');
+  if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+    terminateWithError(ws, 'invalid session');
+    return;
+  }
+  Session.findOne({ _id: sessionId })
+  .then((session) => {
+    if (session === null) {
+      terminateWithError(ws, 'unauthorized');
+      return;
     }
-    if (parsedMessage.type === 'command') {
-      StateManager.updateState(roomId, parsedMessage);
-      broadcastMessage(roomId, parsedMessage);
-    } else if (parsedMessage.type === 'feedback') {
-      parsedMessage.sender = ws.id;
-      broadcastMessage(roomId, parsedMessage);
-    } else if (parsedMessage.type === 'stateRequest') {
-      sendState(roomId, ws);
-    } else if (parsedMessage.type === 'heartbeat') {
-      sendHeartbeat(ws);
-    } else if (parsedMessage.type === 'setName') {
-      setName(roomId, parsedMessage.name, ws);
-    } else if (parsedMessage.type === 'suggestion') {
-      parsedMessage.sender = ws.id;
-      sendToMasters(roomId, parsedMessage);
-    }
+    ws.master = session.master;
+    ws.id = uuidv4();
+    addToSockets(roomId, ws);
+  
+    ws.on('message', (message) => {
+      const parsedMessage: Message = JSON.parse(message.toString());
+      if (parsedMessage.type !== 'heartbeat') {
+        console.log(`${clientIp(req)}: ${message}`);
+      }
+      if (parsedMessage.type === 'command') {
+        StateManager.updateState(roomId, parsedMessage);
+        broadcastMessage(roomId, parsedMessage);
+      } else if (parsedMessage.type === 'feedback') {
+        parsedMessage.sender = ws.id;
+        broadcastMessage(roomId, parsedMessage);
+      } else if (parsedMessage.type === 'stateRequest') {
+        sendState(roomId, ws);
+      } else if (parsedMessage.type === 'heartbeat') {
+        sendHeartbeat(ws);
+      } else if (parsedMessage.type === 'setName') {
+        setName(roomId, parsedMessage.name, ws);
+      } else if (parsedMessage.type === 'suggestion') {
+        parsedMessage.sender = ws.id;
+        sendToMasters(roomId, parsedMessage);
+      }
+    });
+  
+    ws.on('close', () => {
+      removeFromSockets(roomId, ws);
+    });
+  
+    sendState(roomId, ws);
   });
-
-  ws.on('close', () => {
-    removeFromSockets(roomId, ws);
-  });
-
-  sendState(roomId, ws);
 });

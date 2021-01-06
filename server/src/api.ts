@@ -44,8 +44,13 @@ export interface Suggestion {
     sender?: string;
 }
 
+export interface SocketError {
+    type: 'error';
+    error: string;
+}
+
 export type Message = Command | Feedback | StateRequest | StateMessage | Heartbeat
-                    | NameSetting | UserBroadcast | Suggestion
+                    | NameSetting | UserBroadcast | Suggestion | SocketError
 
 export interface VideoState {
     url: string;
@@ -84,5 +89,6 @@ export interface Room {
     _id: string;
     name: string;
     password: string;
+    masterPassword: string;
     visibility: VisibilityType;
 }

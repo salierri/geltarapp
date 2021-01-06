@@ -11,6 +11,7 @@ import VideoSugggestion from './VideoSuggestion';
 
 interface VideoProps {
   videoRole: VideoRole;
+  master: boolean;
 }
 
 declare global {
@@ -75,7 +76,7 @@ class Video extends React.Component<VideoProps, {}> {
       feedbackButtons = <VideoSugggestion />
     }
     return (
-      <Router>
+      <>
         <Card>
           <CardContent>
             <Grid container justify="center">
@@ -104,16 +105,9 @@ class Video extends React.Component<VideoProps, {}> {
           </CardContent>
         </Card>
         <div id="video uk-align-center">
-          <Switch>
-            <Route path="/:params*/geltaradmin">
-              <Admin role={this.role} />
-            </Route>
-            <Route path="/">
-              { feedbackButtons }
-            </Route>
-          </Switch>
+          {this.props.master ? <Admin role={this.role} /> : feedbackButtons }
         </div>
-      </Router>
+      </>
     );
   }
 }
