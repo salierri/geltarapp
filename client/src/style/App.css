@@ -85,10 +85,16 @@
     margin: 13px;
 }
 
-.temporary-top-right {
+.top-right {
     position: fixed;
     top: 8px;
     right: 8px;
+}
+
+.top-not-that-right {
+    position: fixed;
+    top: 15px;
+    right: 60px;
 }
 
 .inline {

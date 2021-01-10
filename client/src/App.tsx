@@ -41,8 +41,7 @@ class App extends React.Component{
     return (
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <div className="temporary-top-right">
-          <Name />
+        <div className="top-right">
           <IconButton onClick={this.switchMode}>
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>

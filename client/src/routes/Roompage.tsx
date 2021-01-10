@@ -14,6 +14,8 @@ import PresetWindow from '../components/PresetWindow';
 import UserList from '../components/UserList';
 import Video from '../components/Video';
 import '../style/App.css';
+import * as Persistence from '../helpers/Persistence';
+import Name from '../components/Name';
 
 interface AppState {
   userGesture: boolean;
@@ -51,9 +53,9 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
     const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/${roomId}`);
     const room: Room = await response.json();
     this.setState({ room });
-    if (room.visibility === 'public') {
-      this.setState({ authorized: true });
-    } else if(room.visibility === 'password') {
+    if (Persistence.savedSessionExists() && Persistence.getSession().room === roomId) {
+      this.setState({ authorized: true, master: Persistence.getSession().master })
+    } else {
       this.setState({ passwordPrompt: true });
     }
   }
@@ -71,10 +73,14 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
     } else {
       const json = await response.json();
       const session: string = json.session;
-      localStorage.setItem('session', session);
-      localStorage.setItem('roomId', json.room);
+      Persistence.saveSession({ sessionId: session, room: json.room, master: json.master });
       this.setState({ passwordPrompt: false, authorized: true, master: json.master });
     }
+  }
+
+  exitRoom = () => {
+    Persistence.forgetSession();
+    this.props.history.push('');
   }
 
   Content = () => {
@@ -106,7 +112,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
     );
   }
 
-  Admin = () => {
+  Master = () => {
     if (!this.state.master) { return null; }
     return (
       <>
@@ -120,6 +126,10 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
   render() {
     return (
       <>
+        <div className="top-not-that-right">
+          <Name />
+          <Button variant="outlined" onClick={this.exitRoom}>Exit room</Button>
+        </div>
         <Typography variant="h2" gutterBottom>
           {this.state.room?.name}
         </Typography>
@@ -127,9 +137,9 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
         <Box m={2}>
           <this.Content />
         </Box>
-        <this.Admin />
+        <this.Master />
         { this.state.authorized && <Communication room={this.props.match.params.roomId} /> }
-        { this.state.passwordPrompt && <PasswordPrompt callback={this.passwordEntered} roomName={this.state.room?.name ?? ''}/> }
+        { this.state.passwordPrompt && <PasswordPrompt callback={this.passwordEntered} roomName={this.state.room?.name ?? ''} /> }
         <UserList />
         <EmojiContainer />
       </>

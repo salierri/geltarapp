@@ -1,7 +1,7 @@
 import React from 'react';
 import { w3cwebsocket as WebSocket } from 'websocket';
 import { CommandType, Message, VideoRole } from '../api';
-import * as Helpers from '../helpers/Helpers';
+import * as Persistence from '../helpers/Persistence';
 
 let client: WebSocket;
 
@@ -74,6 +74,7 @@ class Communication extends React.Component<CommunicationParams, {}> {
         console.log(message);
       }
       if (parsedMessage.type === 'error') {
+        Persistence.forgetSession();
         localStorage.removeItem('session');
         localStorage.removeItem('roomId');
         window.location.href = '/';
