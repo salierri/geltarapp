@@ -6,7 +6,21 @@ import CreateRoom from '../components/CreateRoom';
 import RoomList from '../components/RoomList';
 import '../style/App.css';
 
-export default class Homepage extends React.Component<RouteComponentProps, {}> {
+interface HomepageState {
+  refreshRoomList: boolean;
+}
+
+export default class Homepage extends React.Component<RouteComponentProps, HomepageState> {
+  constructor(props: RouteComponentProps) {
+    super(props);
+    this.state = {
+      refreshRoomList: false,
+    }
+  }
+
+  newRoomCreated = () => {
+    this.setState({ refreshRoomList: !this.state.refreshRoomList });
+  }
 
   render() {
     return (
@@ -25,7 +39,7 @@ export default class Homepage extends React.Component<RouteComponentProps, {}> {
             </Grid>
             <Grid item xs={2}>
               <Box mt={4}>
-                <CreateRoom/>
+                <CreateRoom successCallback={this.newRoomCreated} />
               </Box>
             </Grid>
           </Grid>

@@ -13,12 +13,12 @@ interface HomepageState {
   passwordPromptOpen: boolean;
 }
 
-interface HomepageProps {
+interface RoomPageProps {
   history: History;
 }
 
-export default class RoomList extends React.Component<HomepageProps, HomepageState> {
-  constructor(props: HomepageProps) {
+export default class RoomList extends React.Component<RoomPageProps, HomepageState> {
+  constructor(props: RoomPageProps) {
     super(props);
     this.state = {
       rooms: [],
@@ -31,7 +31,7 @@ export default class RoomList extends React.Component<HomepageProps, HomepageSta
     this.props.history.push(`room/${roomId}`);
   };
 
-  componentDidMount = () => {
+  fetchRooms = () => {
     fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`).then(
       (response) => response.json()
       ).then((rooms) => {
@@ -43,7 +43,11 @@ export default class RoomList extends React.Component<HomepageProps, HomepageSta
         error,
       });
     });
-  };
+  }
+
+  componentDidMount = () => this.fetchRooms();
+
+  componentWillReceiveProps = (props: RoomPageProps) => this.fetchRooms();
 
   typeIcon = (visibility: VisibilityType) => {
     if (visibility === 'public') {

@@ -2,20 +2,24 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormGroup, I
 import clsx from 'clsx';
 import React from 'react';
 
+interface CreateRoomProps {
+  successCallback: () => void;
+}
+
 interface CreateRoomState {
   open: boolean;
   passwordField: boolean;
 }
 
-export default class CreateRoom extends React.Component<{}, CreateRoomState> {
+export default class CreateRoom extends React.Component<CreateRoomProps, CreateRoomState> {
   form: React.RefObject<HTMLFormElement>;
 
-  constructor(props: {}) {
+  constructor(props: CreateRoomProps) {
     super(props);
     this.form = React.createRef();
     this.state = {
       open: false,
-      passwordField: false,
+      passwordField: true,
     }
   }
 
@@ -29,6 +33,7 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
       body: new FormData(this.form.current),
     };
     fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`, requestOptions);
+    this.props.successCallback();
     this.closeWindow();
   };
 
@@ -95,7 +100,8 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
                 <Select
                   labelId="role-select-label"
                   name="visibility"
-                  defaultValue="public"
+                  defaultValue="password"
+                  disabled
                   onChange={this.visibilityChange}
                 >
                   <MenuItem value="public">Public</MenuItem>

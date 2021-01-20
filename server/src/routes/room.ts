@@ -4,7 +4,7 @@ import { Room } from '../models/Room';
 const router = Express.Router();
 
 router.get('/', async (_, res) => {
-  const rooms = await Room.find({}, 'name visibility');
+  const rooms = await Room.find({}, 'name visibility').sort({ createdAt: -1 });
   res.send(rooms);
 });
 
