@@ -1,5 +1,6 @@
 import Express from 'express';
 import { Room } from '../models/Room';
+import bcrypt from 'bcrypt';
 
 const router = Express.Router();
 
@@ -15,6 +16,8 @@ router.get('/:roomId', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const newRoom = new Room(req.body);
+  newRoom.password = await bcrypt.hash(req.body.password, 4);
+  newRoom.masterPassword = await bcrypt.hash(req.body.masterPassword, 4);
   newRoom.save()
     .catch((err) => {
       res.status(400).send(err.message);
