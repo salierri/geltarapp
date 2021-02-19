@@ -1,3 +1,4 @@
+import { start } from 'repl';
 import { State, VideoRole, Command, StateMessage } from '../api';
 import Communication from './Communication';
 
@@ -103,23 +104,25 @@ function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
   });
 }
 
-function checkStart() {
-  if (ready.API && ready.state && players.music === undefined) {
-    players.music = createPlayer('music', state.music.url, state.music.playing);
-    players.ambience = createPlayer('ambience', state.ambience.url, state.ambience.playing);
-  }
+function instantiatePlayers() {
+  players.music = createPlayer('music', state.music.url, state.music.playing);
+  players.ambience = createPlayer('ambience', state.ambience.url, state.ambience.playing);
 }
 
 export function APIReady() {
   ready.API = true;
-  checkStart();
+  if (ready.state && players.music === undefined) {
+    instantiatePlayers();
+  }
 }
 
 function receivedState(newState: State) {
   state = newState;
 
   ready.state = true;
-  checkStart();
+  if (ready.API) {
+    instantiatePlayers();
+  }
 }
 
 export const subscribeVideoLoaded = (role: VideoRole, callback: (time: number) => void) => {
