@@ -74,6 +74,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       const json = await response.json();
       const session: string = json.session;
       Persistence.saveSession({ sessionId: session, room: json.room, master: json.master });
+      document.cookie = `X-Auth-Token=${session}; path=/`;
       this.setState({ passwordPrompt: false, authorized: true, master: json.master });
     }
   }
