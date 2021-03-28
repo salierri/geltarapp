@@ -4,9 +4,10 @@ import { History } from 'history';
 import React from 'react';
 import 'typeface-roboto';
 import { Room, VisibilityType } from '../api';
+import { roomListupdateChecker } from '../models/RoomListUpdateChecker';
 import '../style/App.css';
 
-interface HomepageState {
+interface RoomPageState {
   rooms: Room[];
   loaded: boolean;
   error?: Error;
@@ -17,7 +18,7 @@ interface RoomPageProps {
   history: History;
 }
 
-export default class RoomList extends React.Component<RoomPageProps, HomepageState> {
+export default class RoomList extends React.Component<RoomPageProps, RoomPageState> {
   constructor(props: RoomPageProps) {
     super(props);
     this.state = {
@@ -45,9 +46,10 @@ export default class RoomList extends React.Component<RoomPageProps, HomepageSta
     });
   }
 
-  componentDidMount = () => this.fetchRooms();
-
-  componentWillReceiveProps = (props: RoomPageProps) => this.fetchRooms();
+  componentDidMount = () => {
+    this.fetchRooms();
+    roomListupdateChecker.subscribe(this.fetchRooms);
+  }
 
   typeIcon = (visibility: VisibilityType) => {
     if (visibility === 'public') {

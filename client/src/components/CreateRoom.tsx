@@ -1,20 +1,17 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormGroup, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
-
-interface CreateRoomProps {
-  successCallback: () => void;
-}
+import { roomListupdateChecker } from '../models/RoomListUpdateChecker';
 
 interface CreateRoomState {
   open: boolean;
   passwordField: boolean;
 }
 
-export default class CreateRoom extends React.Component<CreateRoomProps, CreateRoomState> {
+export default class CreateRoom extends React.Component<{}, CreateRoomState> {
   form: React.RefObject<HTMLFormElement>;
 
-  constructor(props: CreateRoomProps) {
+  constructor(props: {}) {
     super(props);
     this.form = React.createRef();
     this.state = {
@@ -23,7 +20,7 @@ export default class CreateRoom extends React.Component<CreateRoomProps, CreateR
     }
   }
 
-  submit = (event: React.FormEvent<HTMLFormElement>) => {
+  submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!this.form.current) {
       return;
@@ -32,8 +29,8 @@ export default class CreateRoom extends React.Component<CreateRoomProps, CreateR
       method: 'POST',
       body: new FormData(this.form.current),
     };
-    fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`, requestOptions);
-    this.props.successCallback();
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`, requestOptions);
+    roomListupdateChecker.requestReload();
     this.closeWindow();
   };
 
