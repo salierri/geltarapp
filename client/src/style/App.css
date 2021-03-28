@@ -1,3 +1,11 @@
+html[data-theme='dark'] {
+    --list-bg-color: #424242;
+}
+
+html[data-theme='light'] {
+    --list-bg-color: #f0f0f0;
+}
+
 .video-card {
     background-color: #303a42 !important;
 }
@@ -116,7 +124,7 @@
 .room-list-parent {
     width: 100%;
     max-width: 360px;
-    background-color: #424242;
+    background-color: var(--list-bg-color);
 }
 
 .clickable-name {

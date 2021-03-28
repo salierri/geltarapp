@@ -21,7 +21,7 @@ export default class Homepage extends React.Component<RouteComponentProps, {}> {
         <Box mt={4}>
           <Grid container spacing={10} justify="center">
             <Grid item xs={6}>
-              <Typography variant="h4">Rooms</Typography>
+              <Typography variant="h4">Recently created rooms</Typography>
               <div className="room-list-parent">
                 <RoomList history={this.props.history} />
               </div>
