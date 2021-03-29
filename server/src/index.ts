@@ -24,7 +24,12 @@ app.use(fileUpload({
   createParentPath: true,
 }));
 
-app.use(cors());
+var corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

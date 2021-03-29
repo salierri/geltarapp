@@ -1,16 +1,24 @@
 import Express from 'express';
+import mongoose from 'mongoose';
+import roomCheck from '../middlewares/roomCheck';
 import { Category } from '../models/Category';
 import { Preset } from '../models/Preset';
 
 const router = Express.Router();
 
-router.get('/', async (_, res) => {
-  const categories = await Category.find({});
+router.use(roomCheck);
+
+router.get('/', async (req, res) => {
+  const roomId : any = req.roomId;
+  const categories = await Category.find({ room: roomId });
   res.send(categories);
 });
 
 router.post('/', async (req, res) => {
-  const newCategory = new Category(req.body);
+  const categoryDoc = req.body;
+  categoryDoc.room = req.roomId;
+  categoryDoc.template = false;
+  const newCategory = new Category(categoryDoc);
   newCategory.save()
     .catch((err) => {
       res.status(400).send(err.message);

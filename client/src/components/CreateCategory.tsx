@@ -20,9 +20,10 @@ export default class CreateCategory extends React.Component<CreateCategoryProps,
     if (!this.form.current) {
       return;
     }
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'POST',
       body: new FormData(this.form.current),
+      credentials: 'include',
     };
     fetch(`${process.env.REACT_APP_HTTP_URL}/categories`, requestOptions);
     PresetManager.forceUpdate();

@@ -21,8 +21,8 @@ export default class PresetManager {
     delete PresetManager.presets;
     delete PresetManager.categories;
     return Promise.all([
-      fetch(`${process.env.REACT_APP_HTTP_URL}/presets`),
-      fetch(`${process.env.REACT_APP_HTTP_URL}/categories`),
+      fetch(`${process.env.REACT_APP_HTTP_URL}/presets`, { credentials: 'include' }),
+      fetch(`${process.env.REACT_APP_HTTP_URL}/categories`, { credentials: 'include' }),
     ])
       .then(([presets, categories]) => Promise.all([presets.json(), categories.json()]))
       .then(([presets, categories]) => {

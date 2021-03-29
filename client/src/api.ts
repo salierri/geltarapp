@@ -59,6 +59,8 @@ export interface Category {
     _id: string;
     name: string;
     role: VideoRole;
+    room: Room;
+    template: boolean;
 }
 export interface Preset {
     _id: string;
