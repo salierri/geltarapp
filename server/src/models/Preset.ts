@@ -12,6 +12,7 @@ const presetSchema = new mongoose.Schema({
   title: { type: String, required: true },
   length: { type: Number, required: true },
   category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+  room: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
 }, { timestamps: true });
 
 export const Preset = mongoose.model<PresetDocument>('Preset', presetSchema);

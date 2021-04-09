@@ -86,7 +86,7 @@ class Communication extends React.Component<CommunicationParams, {}> {
         window.location.href = '/';
       }
       if (subscriptions[parsedMessage.type]) {
-        subscriptions[parsedMessage.type]?.forEach((callback) => {
+          subscriptions[parsedMessage.type]?.forEach((callback) => {
           callback(parsedMessage);
         });
       }

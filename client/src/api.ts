@@ -59,7 +59,7 @@ export interface Category {
     _id: string;
     name: string;
     role: VideoRole;
-    room: Room;
+    room: string;
     template: boolean;
 }
 export interface Preset {
@@ -69,6 +69,7 @@ export interface Preset {
     title: string;
     length: number;
     category: Category;
+    room: string;
 }
 export declare type VisibilityType = 'public' | 'password' | 'private';
 export interface Room {

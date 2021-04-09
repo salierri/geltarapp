@@ -50,9 +50,10 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
     if (!this.form.current) {
       return;
     }
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'POST',
       body: new FormData(this.form.current),
+      credentials: 'include',
     };
     fetch(`${process.env.REACT_APP_HTTP_URL}/presets`, requestOptions);
     PresetManager.forceUpdate();

@@ -72,12 +72,12 @@ export default class PresetList extends React.Component<ListProps, PresetListSta
   };
 
   deletePreset = async (preset: Preset) => {
-    await fetch(`${process.env.REACT_APP_HTTP_URL}/presets/${preset._id}`, { method: 'DELETE' });
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/presets/${preset._id}`, { method: 'DELETE', credentials: 'include' });
     this.forceDateRequest();
   };
 
   deleteCategory = async (category: Category) => {
-    await fetch(`${process.env.REACT_APP_HTTP_URL}/categories/${category._id}`, { method: 'DELETE' });
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/categories/${category._id}`, { method: 'DELETE', credentials: 'include' });
     this.forceDateRequest();
   };
 

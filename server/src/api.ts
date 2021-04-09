@@ -72,7 +72,7 @@ export interface Category {
     _id: string;
     name: string;
     role: VideoRole;
-    room: Room;
+    room: string;
     template: boolean;
 }
 
@@ -83,6 +83,7 @@ export interface Preset {
     title: string;
     length: number;
     category: Category;
+    room: string;   // Redundancy for db-call optimization
 }
 
 export type VisibilityType = 'public' | 'password' | 'private';
