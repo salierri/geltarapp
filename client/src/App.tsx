@@ -3,21 +3,18 @@ import { Brightness4, BrightnessHigh } from '@material-ui/icons';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'typeface-roboto';
-import Name from './components/Name';
+import Flash from './components/Flash';
 import Homepage from './routes/Homepage';
 import Roompage from './routes/Roompage';
 import './style/App.css';
 
 declare type ColorMode = 'dark' | 'light';
 
-class App extends React.Component{
+class App extends React.Component {
   protected currentMode: ColorMode = 'dark';
 
   constructor(props: {}) {
     super(props);
-    this.state = {
-      userGesture: false,
-    };
   }
 
   switchMode = () => {
@@ -53,6 +50,7 @@ class App extends React.Component{
                 <Route path="/room/:roomId" component={Roompage} />
                 <Route path="/" component={Homepage} />
               </Switch>
+              <Route component={Flash} />
             </BrowserRouter>
           </Box>
         </Container>

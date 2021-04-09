@@ -69,7 +69,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
     };
     const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/auth/${this.props.match.params.roomId}`, requestOptions);
     if (!response.ok) {
-      this.props.history.push('');
+      this.props.history.push('/?message=incorrectpass');
     } else {
       const json = await response.json();
       const session: string = json.session;
