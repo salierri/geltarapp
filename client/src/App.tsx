@@ -13,10 +13,6 @@ declare type ColorMode = 'dark' | 'light';
 class App extends React.Component {
   protected currentMode: ColorMode = 'dark';
 
-  constructor(props: {}) {
-    super(props);
-  }
-
   switchMode = () => {
     this.currentMode = this.currentMode === 'light' ? 'dark' : 'light';
     this.forceUpdate();

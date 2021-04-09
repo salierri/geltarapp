@@ -1,9 +1,8 @@
-import React from 'react';
-import '../style/Mp3Player.css';
 import * as Axios from 'axios';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import Communication from './Communication';
+import React from 'react';
 import { Command } from '../api';
+import '../style/Mp3Player.css';
+import Communication from './Communication';
 
 interface Mp3Props {
   master: boolean;

@@ -2,20 +2,19 @@ import { Box, Button, Divider, Grid, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'typeface-roboto';
 import { Room } from '../api';
 import ApproveSuggestion from '../components/ApproveSuggestion';
 import Communication from '../components/Communication';
 import EmojiContainer from '../components/EmojiContainer';
 import Mp3Player from '../components/Mp3Player';
+import Name from '../components/Name';
 import PasswordPrompt from '../components/PasswordPrompt';
 import PresetWindow from '../components/PresetWindow';
 import UserList from '../components/UserList';
 import Video from '../components/Video';
-import '../style/App.css';
 import * as Persistence from '../helpers/Persistence';
-import Name from '../components/Name';
+import '../style/App.css';
 
 interface AppState {
   userGesture: boolean;

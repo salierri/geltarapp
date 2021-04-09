@@ -7,9 +7,6 @@ import RoomList from '../components/RoomList';
 import '../style/App.css';
 
 export default class Homepage extends React.Component<RouteComponentProps, {}> {
-  constructor(props: RouteComponentProps) {
-    super(props);
-  }
 
   render() {
     return (

@@ -1,5 +1,4 @@
-import { start } from 'repl';
-import { State, VideoRole, Command, StateMessage } from '../api';
+import { Command, State, StateMessage, VideoRole } from '../api';
 import Communication from './Communication';
 
 type Players = {

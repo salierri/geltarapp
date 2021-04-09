@@ -1,11 +1,10 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Card, CardContent, Slider, Grid, Button, Box } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, Slider } from '@material-ui/core';
 import { VolumeDown, VolumeUp } from '@material-ui/icons';
 import clsx from 'clsx';
-import Communication from './Communication';
+import React from 'react';
 import { VideoRole } from '../api';
 import Admin from './Admin';
+import Communication from './Communication';
 import { APIReady, setLocalVolume } from './videoPlayer';
 import VideoSugggestion from './VideoSuggestion';
 
@@ -55,7 +54,7 @@ class Video extends React.Component<VideoProps, {}> {
                 onClick={() => Communication.sendFeedback('like')}
                 startIcon={<span role="img" aria-label="thumbs-up">👍</span>}
               >
-                Jó kis zene
+                Nice music
               </Button>
             </Box>
             <Box m={1}>
@@ -66,7 +65,7 @@ class Video extends React.Component<VideoProps, {}> {
                 onClick={() => Communication.sendFeedback('boring')}
                 startIcon={<span role="img" aria-label="sleeping">😴</span>}
               >
-                Már unalmas viszonylag
+                Getting kinda boring
               </Button>
             </Box>
           </Grid>
