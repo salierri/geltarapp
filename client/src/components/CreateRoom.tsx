@@ -51,6 +51,7 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
           variant="outlined"
           name="password"
           type="password"
+          required
         />
       </FormGroup>
       <FormGroup>
@@ -59,6 +60,7 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
         variant="outlined"
         name="masterPassword"
         type="password"
+        required
       />
     </FormGroup>
     </>) : null;
