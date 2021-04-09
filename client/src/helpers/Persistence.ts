@@ -29,3 +29,24 @@ export const getSession = () : SavedSession => {
     room: localStorage.getItem('roomId') ?? '',
     master: JSON.parse(localStorage.getItem('master') ?? '') };
 }
+
+export const addFavoriteRoom = (roomId: string) => {
+  let roomList = getFavoriteRooms();
+  if (roomList.includes(roomId)) {
+    roomList = roomList.filter(id => id !== roomId);
+  }
+  roomList.unshift(roomId);
+  if (roomList.length > 10) {
+    roomList.pop();
+  }
+  localStorage.setItem('favoriteRooms', JSON.stringify(roomList));
+}
+
+export const getFavoriteRooms = () : string[] => {
+  const stored = localStorage.getItem('favoriteRooms');
+  let roomList: string[] = [];
+  if (stored != null) {
+    roomList = JSON.parse(stored);
+  }
+  return roomList;
+}

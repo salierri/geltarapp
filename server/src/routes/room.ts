@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 const router = Express.Router();
 
 router.get('/', async (_, res) => {
-  const rooms = await Room.find({}, 'name visibility').sort({ createdAt: -1 });
+  const rooms = await Room.find({}, 'name visibility').sort({ createdAt: -1 }).limit(15);
   res.send(rooms);
 });
 
@@ -25,9 +25,20 @@ router.post('/', async (req, res) => {
     .catch((err) => {
       res.status(400).send(err.message);
     })
-    .then(() => {
-      res.sendStatus(200);
+    .then((doc) => {
+      if (doc) {
+        res.send(JSON.stringify({ _id: doc._id }));
+      } else {
+        res.status(400).send("Unspecified error");
+      }
     });
+});
+
+router.post('/details', async (req, res) => {
+  const ids: string[] = req.body.rooms;
+  const rooms = await Room.find().where('_id').in(ids).select('name visibility').exec();
+  rooms.sort((a, b) => ids.indexOf(a._id.toString()) - ids.indexOf(b._id.toString()));
+  res.send(rooms);
 });
 
 export default router;

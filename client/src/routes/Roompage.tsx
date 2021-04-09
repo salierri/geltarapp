@@ -49,11 +49,12 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
 
   async componentDidMount() {
     const roomId = this.props.match.params.roomId;
+    Persistence.addFavoriteRoom(roomId);
     const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/${roomId}`);
     const room: Room = await response.json();
     this.setState({ room });
     if (Persistence.savedSessionExists() && Persistence.getSession().room === roomId) {
-      this.setState({ authorized: true, master: Persistence.getSession().master })
+      this.setState({ authorized: true, master: Persistence.getSession().master });
     } else {
       this.setState({ passwordPrompt: true });
     }

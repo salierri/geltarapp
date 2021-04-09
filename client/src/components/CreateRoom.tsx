@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormGroup, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
+import * as Persistence from '../helpers/Persistence';
 import { roomListupdateChecker } from '../models/RoomListUpdateChecker';
 
 interface CreateRoomState {
@@ -29,7 +30,9 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
       method: 'POST',
       body: new FormData(this.form.current),
     };
-    await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`, requestOptions);
+    const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`, requestOptions);
+    const newRoom = await response.json();
+    Persistence.addFavoriteRoom(newRoom._id);
     roomListupdateChecker.requestReload();
     this.closeWindow();
   };
