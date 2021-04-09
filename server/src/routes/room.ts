@@ -18,6 +18,9 @@ router.post('/', async (req, res) => {
   const newRoom = new Room(req.body);
   newRoom.password = await bcrypt.hash(req.body.password, 4);
   newRoom.masterPassword = await bcrypt.hash(req.body.masterPassword, 4);
+  if (newRoom.name.length > 64) {
+    newRoom.name = newRoom.name.substring(0, 64);
+  }
   newRoom.save()
     .catch((err) => {
       res.status(400).send(err.message);
