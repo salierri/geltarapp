@@ -25,6 +25,8 @@ export default class Flash extends React.Component<RouteComponentProps, FlashSta
     switch (message) {
       case "incorrectpass":
         return "Incorrect password!"
+      case "disablepopupblocker":
+        return "Something is blocking video loading. Please disable your Popup Blocker or similar extensions."
       default:
         return "Something bad happened!";
     }

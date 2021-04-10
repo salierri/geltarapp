@@ -20,14 +20,22 @@ const durations = {
 };
 const loadedCallbacks: LoadedCallbacks = {};
 
+function checkPopupBlocker() {
+  if (typeof(players.music?.getDuration) !== "function" && !window.location.search.includes("disablepopupblocker")) {
+    window.location.search = window.location.search + "?message=disablepopupblocker"
+  }
+}
+
 function loadVideo(role: VideoRole, video: string) {
   state[role].playing = true;
+  checkPopupBlocker();
   players[role]?.loadVideoById(video);
 }
 
 function updateVolume(role: VideoRole) {
   const localVolume: number = +(localStorage.getItem(`localvolume_${role.toString()}`) ?? 100);
   const globalVolume: number = state[role].masterVolume;
+  checkPopupBlocker();
   players[role]?.setVolume(localVolume * (globalVolume / 100));
 }
 
@@ -38,15 +46,18 @@ function setMasterVolume(role: VideoRole, volume: string) {
 
 function pause(role: VideoRole) {
   state[role].playing = false;
+  checkPopupBlocker();
   players[role]?.pauseVideo();
 }
 
 function resume(role: VideoRole) {
   state[role].playing = true;
+  checkPopupBlocker();
   players[role]?.playVideo();
 }
 
 function seekTo(role: VideoRole, seconds: string) {
+  checkPopupBlocker();
   players[role]?.seekTo(+seconds, true);
 }
 
