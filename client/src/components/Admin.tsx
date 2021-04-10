@@ -13,13 +13,17 @@ class Admin extends React.Component<AdminProps, {}> {
   role: VideoRole;
   videoUrl = '';
   seekSlider: React.RefObject<HTMLInputElement>;
+  seekNumber: React.RefObject<HTMLParagraphElement>;
   volumeSlider: React.RefObject<HTMLInputElement>;
+  volumeNumber: React.RefObject<HTMLParagraphElement>;
 
   constructor(props: AdminProps) {
     super(props);
     this.role = props.role;
     this.seekSlider = React.createRef();
     this.volumeSlider = React.createRef();
+    this.seekNumber = React.createRef();
+    this.volumeNumber = React.createRef();
   }
 
   componentDidMount() {
@@ -72,14 +76,16 @@ class Admin extends React.Component<AdminProps, {}> {
   };
 
   setVolumeValue = (percent: string) => {
-    if (this.volumeSlider.current) {
+    if (this.volumeSlider.current && this.volumeNumber.current) {
       this.volumeSlider.current.value = percent;
+      this.volumeNumber.current.innerText = percent + "%";
     }
   };
 
   setSeekValue = (time: number) => {
-    if (this.seekSlider.current) {
+    if (this.seekSlider.current && this.seekNumber.current) {
       this.seekSlider.current.value = ((time / VideoPlayer.getDuration(this.role)) * 100).toString();
+      this.seekNumber.current.innerText = Helpers.toHHMMSS(time);
     }
   };
 
@@ -106,26 +112,31 @@ class Admin extends React.Component<AdminProps, {}> {
     ];
     return (
       <>
-        <div className="master-slider">
+        {/* We have to use traditional input fields, because Material UI is crazy slow with the continous rerenders */}
+        <div className="master-slider-container">
           <FormLabel>Master volume</FormLabel>
-          <Slider
-            min={0}
-            max={300}
+          <input
+            type="range"
+            className="uk-range master-slider uk-align-center"
+            min="0"
+            max="300"
             defaultValue={VideoPlayer.getMasterVolume(this.role)}
-            valueLabelDisplay="auto"
-            marks={marks}
-            onChange={(e: React.ChangeEvent<{}>, value) => this.volumeCommand(value as number)}
+            onInput={(e: React.ChangeEvent<HTMLInputElement>) => this.volumeCommand(+e.target.value)}
             ref={this.volumeSlider}
           />
+          <p className="inline left-margin" ref={this.volumeNumber}>100</p>
         </div>
-        <div className="master-slider">
+        <div className="master-slider-container">
           <FormLabel>Seek ahead</FormLabel>
-          <Slider
-            min={0}
-            max={100}
-            onChangeCommitted={(e: React.ChangeEvent<{}>, value) => this.seekCommand(value as number)}
+          <input
+            type="range"
+            className="uk-range master-slider uk-align-center"
+            min="0"
+            max="100"
+            onMouseUp={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value)}
             ref={this.seekSlider}
           />
+          <p className="inline left-margin" ref={this.seekNumber}>0</p>
         </div>
         <FormControl fullWidth>
           <TextField

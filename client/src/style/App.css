@@ -50,6 +50,11 @@ html[data-theme='light'] {
     display: inline-block;
 }
 
+.master-slider-container {
+    width: 380px;
+    display: inline-block;
+}
+
 #log-area {
     background-color: black;
     border-radius: 0.5em;
@@ -131,4 +136,8 @@ html[data-theme='light'] {
     min-width: 50px;
     min-height: 15px;
     display: inline-block;
+}
+
+.left-margin {
+    margin-left: 7px;
 }

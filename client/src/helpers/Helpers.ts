@@ -16,3 +16,14 @@ export const numberToTimeString = (time: number): string => {
   const substStart = time > 3600 ? 11 : 14;
   return date.toISOString().substr(substStart, 19 - substStart);
 };
+
+export const toHHMMSS = (seconds: number): string => {
+  const hours   = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds - (hours * 3600)) / 60);
+  seconds = Math.floor(seconds - (hours * 3600) - (minutes * 60));
+
+  const hoursString = hours == 0 ? "" : (hours < 10 ? "0" + hours + ":" : hours + ":");
+  const minutesString = minutes < 10 ? "0" + minutes + ":" : minutes + ":";
+  const secondsString = seconds < 10 ? "0" + seconds : seconds;
+  return hoursString + minutesString + secondsString;
+}
