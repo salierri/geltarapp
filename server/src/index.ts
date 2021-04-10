@@ -11,6 +11,7 @@ import preset from './routes/preset';
 import category from './routes/category';
 import room from './routes/room';
 import auth from './routes/auth';
+import admin from './routes/admin';
 
 const app = Express();
 
@@ -39,6 +40,7 @@ app.use('/presets', preset);
 app.use('/categories', category);
 app.use('/rooms', room);
 app.use('/auth', auth);
+app.use('/admin', admin);
 
 const port = process.env.HTTP_PORT;
 

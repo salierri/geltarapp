@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'typeface-roboto';
 import Flash from './components/Flash';
+import Adminpage from './routes/Adminpage';
 import Homepage from './routes/Homepage';
 import Roompage from './routes/Roompage';
 import './style/App.css';
@@ -44,6 +45,7 @@ class App extends React.Component {
             <BrowserRouter>
               <Switch>
                 <Route path="/room/:roomId" component={Roompage} />
+                <Route path="/admin" component={Adminpage} />
                 <Route path="/" component={Homepage} />
               </Switch>
               <Route component={Flash} />

@@ -18,7 +18,7 @@ const WSServer = new WebSocket.Server({
   port: +(process.env.WS_PORT ?? 4000),
 });
 
-const rooms: { [ key: string ]: NamedWebSocket[]} = {};
+const rooms: { [ key: string ]: NamedWebSocket[] } = {};
 
 export const broadcastMessage = (room: string, message: Message) => {
   let countSent = 0;
@@ -31,6 +31,9 @@ export const broadcastMessage = (room: string, message: Message) => {
   console.log(`Broadcast count: ${countSent}`);
 };
 export default broadcastMessage;
+
+export const getConnectionCount = () => Object.values(rooms).reduce<number>((t, room) => t + room.length, 0);
+export const getActiveRooms = () => Object.values(rooms).reduce<number>((t, room) => t + room.length > 0 ? 1 : 0, 0);
 
 function sendToMasters(room: string, message: Message) {
   rooms[room].forEach((socket) => {
