@@ -1,9 +1,9 @@
+import { Button, ButtonGroup, FormControl, FormLabel, Grid, TextField } from '@material-ui/core';
 import React from 'react';
-import { Button, ButtonGroup, Grid, Slider, FormLabel, TextField, FormControl } from '@material-ui/core';
-import Communication from './Communication';
-import { VideoRole, Command, State, StateMessage } from '../api';
-import * as VideoPlayer from './videoPlayer';
+import { Command, State, StateMessage, VideoRole } from '../api';
 import * as Helpers from '../helpers/Helpers';
+import Communication from './Communication';
+import * as VideoPlayer from './videoPlayer';
 
 interface AdminProps {
   role: VideoRole;
@@ -100,16 +100,6 @@ class Admin extends React.Component<AdminProps, {}> {
     );
 
   render() {
-    const marks = [
-      {
-        value: 100,
-        label: '100%',
-      },
-      {
-        value: 300,
-        label: '300%',
-      },
-    ];
     return (
       <>
         {/* We have to use traditional input fields, because Material UI is crazy slow with the continous rerenders */}

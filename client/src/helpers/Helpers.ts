@@ -22,7 +22,7 @@ export const toHHMMSS = (seconds: number): string => {
   const minutes = Math.floor((seconds - (hours * 3600)) / 60);
   seconds = Math.floor(seconds - (hours * 3600) - (minutes * 60));
 
-  const hoursString = hours == 0 ? "" : (hours < 10 ? "0" + hours + ":" : hours + ":");
+  const hoursString = hours === 0 ? "" : (hours < 10 ? "0" + hours + ":" : hours + ":");
   const minutesString = minutes < 10 ? "0" + minutes + ":" : minutes + ":";
   const secondsString = seconds < 10 ? "0" + seconds : seconds;
   return hoursString + minutesString + secondsString;
