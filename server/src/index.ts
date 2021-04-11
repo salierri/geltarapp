@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import Express from 'express';
 import fileUpload from 'express-fileupload';
+import schedule from 'node-schedule';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -12,6 +13,7 @@ import category from './routes/category';
 import room from './routes/room';
 import auth from './routes/auth';
 import admin from './routes/admin';
+import traficLogger from './tasks/trafficlogger';
 
 const app = Express();
 
@@ -47,3 +49,5 @@ const port = process.env.HTTP_PORT;
 app.listen(port, () => {
   console.log(`App is listening on port ${port}.`);
 });
+
+schedule.scheduleJob('* * * * *', traficLogger);
