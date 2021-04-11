@@ -28,14 +28,12 @@ function checkPopupBlocker() {
 
 function loadVideo(role: VideoRole, video: string) {
   state[role].playing = true;
-  checkPopupBlocker();
   players[role]?.loadVideoById(video);
 }
 
 function updateVolume(role: VideoRole) {
   const localVolume: number = +(localStorage.getItem(`localvolume_${role.toString()}`) ?? 100);
   const globalVolume: number = state[role].masterVolume;
-  checkPopupBlocker();
   players[role]?.setVolume(localVolume * (globalVolume / 100));
 }
 
@@ -46,18 +44,15 @@ function setMasterVolume(role: VideoRole, volume: string) {
 
 function pause(role: VideoRole) {
   state[role].playing = false;
-  checkPopupBlocker();
   players[role]?.pauseVideo();
 }
 
 function resume(role: VideoRole) {
   state[role].playing = true;
-  checkPopupBlocker();
   players[role]?.playVideo();
 }
 
 function seekTo(role: VideoRole, seconds: string) {
-  checkPopupBlocker();
   players[role]?.seekTo(+seconds, true);
 }
 
@@ -117,6 +112,7 @@ function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
 function instantiatePlayers() {
   players.music = createPlayer('music', state.music.url, state.music.playing);
   players.ambience = createPlayer('ambience', state.ambience.url, state.ambience.playing);
+  setTimeout(checkPopupBlocker, 5000);
 }
 
 export function APIReady() {

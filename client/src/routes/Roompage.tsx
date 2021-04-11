@@ -107,7 +107,9 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
         </Grid>
         <Grid item xs={6}>
           <Video videoRole="ambience" master={this.state.master}/>
-          <Mp3Player master={this.state.master} />
+          <Grid container justify="center">
+            <Mp3Player master={this.state.master} />
+          </Grid>
         </Grid>
       </Grid>
     );

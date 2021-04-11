@@ -1,3 +1,4 @@
+import { Box, Button } from '@material-ui/core';
 import * as Axios from 'axios';
 import React from 'react';
 import { Command } from '../api';
@@ -56,10 +57,17 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
     return (
       <div className="uk-align-center upload-button-parent">
       <div className="upload-button-wrapper">
-        <button type="button" className="uk-button upload-button">Select Mp3 file</button>
+        <button type="button" className="uk-button upload-button MuiButton-containedPrimary">Select Mp3 file</button>
         <input type="file" name="effect" accept=".mp3" ref={this.fileInput} />
       </div>
-      <button type="button" className="uk-button upload-button" onClick={this.uploadMp3}>Play selected</button>
+      <Button
+        className="master-button upload-button"
+        onClick={this.uploadMp3}
+        color="primary"
+        variant="contained"
+      >
+        Play selected
+      </Button>
     </div>
     );
   }
@@ -74,7 +82,9 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
           </audio>
         </div>
         )}
-        <this.AdminControls />
+        <Box mt={2}>
+          <this.AdminControls />
+        </Box>
       </div>
     );
   }

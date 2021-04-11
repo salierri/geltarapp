@@ -16,24 +16,30 @@ export default class Homepage extends React.Component<RouteComponentProps, {}> {
           Geltarapp
         </Typography>
         <Divider variant="fullWidth" />
-        <Grid item xs={2}>
-          <Box mt={4}>
-            <CreateRoom />
-          </Box>
+        <Grid container justify="center">
+          <Grid item>
+            <Box mt={4}>
+              <CreateRoom />
+            </Box>
+          </Grid>
         </Grid>
         <Box mt={4}>
           <Grid container spacing={10} justify="center">
             <Grid item xs={6}>
-              <Typography variant="h4">Recently created rooms</Typography>
-              <div className="room-list-parent">
-                <RoomList history={this.props.history} />
-              </div>
+              <Grid container justify="center" >
+                <Typography variant="h4">Recently created rooms</Typography>
+                <div className="room-list-parent">
+                  <RoomList history={this.props.history} />
+                </div>
+              </Grid>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h4">Your past rooms</Typography>
-              <div className="room-list-parent">
-                <FavoriteRoomList history={this.props.history} />
-              </div>
+              <Grid container justify="center">
+                <Typography variant="h4">Your past rooms</Typography>
+                <div className="room-list-parent">
+                  <FavoriteRoomList history={this.props.history} />
+                </div>
+              </Grid>
             </Grid>
           </Grid>
         </Box>

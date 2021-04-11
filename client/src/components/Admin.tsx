@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, FormControl, FormLabel, Grid, TextField } from '@material-ui/core';
+import { Box, Button, ButtonGroup, FormControl, FormLabel, Grid, TextField } from '@material-ui/core';
 import React from 'react';
 import { Command, State, StateMessage, VideoRole } from '../api';
 import * as Helpers from '../helpers/Helpers';
@@ -135,13 +135,15 @@ class Admin extends React.Component<AdminProps, {}> {
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => { this.videoUrl = e.target.value; }}
           />
         </FormControl>
-        <Grid container justify="center" spacing={0}>
-          <ButtonGroup variant="contained" color="primary">
-            {this.blueButton('Load', this.loadCommand)}
-            {this.blueButton('Pause', this.pauseCommand)}
-            {this.blueButton('Unpause', this.resumeCommand)}
-          </ButtonGroup>
-        </Grid>
+        <Box mt={1}>
+          <Grid container justify="center" spacing={0}>
+            <ButtonGroup variant="contained" color="primary">
+              {this.blueButton('Load', this.loadCommand)}
+              {this.blueButton('Pause', this.pauseCommand)}
+              {this.blueButton('Unpause', this.resumeCommand)}
+            </ButtonGroup>
+          </Grid>
+        </Box>
       </>
     );
   }

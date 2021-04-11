@@ -28,3 +28,7 @@
 .filter-70 {
     filter: invert(70%);
 }
+
+#upload-button {
+    width: 250px;
+}
