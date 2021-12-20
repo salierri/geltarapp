@@ -1,6 +1,8 @@
 import Express from 'express';
 import { Room } from '../models/Room';
 import bcrypt from 'bcrypt';
+import { Category, CategoryDocument } from '../models/Category';
+import { Preset, PresetDocument } from '../models/Preset';
 
 const router = Express.Router();
 
@@ -16,8 +18,10 @@ router.get('/:roomId', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const newRoom = new Room(req.body);
+  newRoom.visibility = 'password';
   newRoom.password = await bcrypt.hash(req.body.password, 4);
   newRoom.masterPassword = await bcrypt.hash(req.body.masterPassword, 4);
+  const includePresets = req.body.includePresets === 'include';
   if (newRoom.name.length > 64) {
     newRoom.name = newRoom.name.substring(0, 64);
   }
@@ -25,9 +29,26 @@ router.post('/', async (req, res) => {
     .catch((err) => {
       res.status(400).send(err.message);
     })
-    .then((doc) => {
+    .then(async (doc) => {
       if (doc) {
-        res.send(JSON.stringify({ _id: doc._id }));
+        if (includePresets) {
+          let categories = await Category.find({ template: true });
+          let presets = await Preset.find().where('_id').in(categories.map(cat => cat._id)).exec();
+          categories = categories.map<CategoryDocument>((categoryDoc) => {
+            delete categoryDoc._id;
+            categoryDoc.template = false;
+            categoryDoc.wasTemplate = true;
+            return categoryDoc;
+          });
+          await Category.create(categories);
+          presets = presets.map<PresetDocument>((presetDoc) => {
+            delete presetDoc._id;
+            return presetDoc;
+          });
+          await Preset.create(presets);
+        } else {
+          res.send(JSON.stringify({ _id: doc._id }));
+        }
       } else {
         res.status(400).send("Unspecified error");
       }

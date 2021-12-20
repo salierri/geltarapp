@@ -131,7 +131,7 @@ class Admin extends React.Component<AdminProps, {}> {
         <FormControl fullWidth>
           <TextField
             id={`${this.role}videoUrl`}
-            placeholder="https://www.youtube.com/watch?v=TbOWuXD2QFo"
+            placeholder="https://www.youtube.com/watch?v=w7K61jgTT9A"
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => { this.videoUrl = e.target.value; }}
           />
         </FormControl>

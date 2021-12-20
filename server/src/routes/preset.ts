@@ -7,7 +7,7 @@ const router = Express.Router();
 router.use(roomCheck);
 
 router.get('/', async (req, res) => {
-  const presets = await Preset.find({ room: req.roomId }).populate('category');
+  const presets = await Preset.find().populate('category');
   res.send(presets);
 });
 

@@ -41,10 +41,6 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
     this.setState({ open: false });
   };
 
-  visibilityChange = (event: React.ChangeEvent<{value: unknown}>, child: React.ReactNode) => {
-    this.setState({ passwordField: event.target.value === 'password' });
-  }
-
   render() {
     const passwordField = this.state.passwordField ? (
       <>
@@ -97,21 +93,18 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
                   name="name"
                 />
               </FormGroup>
-              <InputLabel id="role-select-label">Visibility</InputLabel>
+              { passwordField }
+              <InputLabel id="role-select-label">Video Presets</InputLabel>
               <FormGroup>
                 <Select
                   labelId="role-select-label"
-                  name="visibility"
-                  defaultValue="password"
-                  disabled
-                  onChange={this.visibilityChange}
+                  name="includePresets"
+                  defaultValue="include"
                 >
-                  <MenuItem value="public">Public</MenuItem>
-                  <MenuItem value="password">Password protected</MenuItem>
-                  <MenuItem value="private">Private</MenuItem>
+                  <MenuItem value="include">Include default presets</MenuItem>
+                  <MenuItem value="empty">I want to start with an empty set</MenuItem>
                 </Select>
               </FormGroup>
-              { passwordField }
               <FormGroup>
                 <Button type="submit" color="primary" variant="contained">
                   Create

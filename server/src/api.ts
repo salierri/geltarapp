@@ -74,6 +74,7 @@ export interface Category {
     role: VideoRole;
     room: string;
     template: boolean;
+    wasTemplate: boolean;
 }
 
 export interface Preset {
