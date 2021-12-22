@@ -7,6 +7,7 @@ import { Room } from './models/Room';
 import { Session } from './models/Session';
 import { Request} from 'express';
 import mongoose from 'mongoose';
+import cookie from 'cookie';
 
 interface NamedWebSocket extends WebSocket {
   id: string;
@@ -93,8 +94,7 @@ function addToSockets(room: string, socket: NamedWebSocket) {
 
 WSServer.on('connection', (ws: NamedWebSocket, req) => {
   const roomId: string = req.url?.replace('/', '') ?? '';
-  const cookie: string = req.headers.cookie ?? '';
-  const sessionId = cookie.replace('X-Auth-Token=', '');
+  const sessionId = cookie.parse(req.headers.cookie ?? '')['X-Auth-Token'];
   if (!mongoose.Types.ObjectId.isValid(sessionId)) {
     terminateWithError(ws, 'invalid session');
     return;
