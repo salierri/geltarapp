@@ -70,6 +70,7 @@ export interface Preset {
     title: string;
     length: number;
     category: Category;
+    wasTemplate: boolean;
     room: string;
 }
 export declare type VisibilityType = 'public' | 'password' | 'private';

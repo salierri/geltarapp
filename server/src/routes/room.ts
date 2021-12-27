@@ -3,6 +3,7 @@ import { Room } from '../models/Room';
 import bcrypt from 'bcrypt';
 import { Category, CategoryDocument } from '../models/Category';
 import { Preset, PresetDocument } from '../models/Preset';
+import Mongoose from 'mongoose';
 
 const router = Express.Router();
 
@@ -32,20 +33,29 @@ router.post('/', async (req, res) => {
     .then(async (doc) => {
       if (doc) {
         if (includePresets) {
-          let categories = await Category.find({ template: true });
-          let presets = await Preset.find().where('_id').in(categories.map(cat => cat._id)).exec();
-          categories = categories.map<CategoryDocument>((categoryDoc) => {
-            delete categoryDoc._id;
+          const categories = await Category.find({ template: true });
+          let presets = await Preset.find().where('category').in(categories.map(cat => cat._id)).exec();
+          const catMap : { [ oldId: string ] : Mongoose.Types.ObjectId } = {}; // Just some optimalization to avoid nested iteration
+          const copyCategories = categories.map<CategoryDocument>((categoryDoc) => {
+            catMap[categoryDoc._id.toString()] = Mongoose.Types.ObjectId();
+            categoryDoc._id = catMap[categoryDoc._id.toString()];
+            categoryDoc.room = newRoom._id;
+            categoryDoc.isNew = true;
             categoryDoc.template = false;
             categoryDoc.wasTemplate = true;
             return categoryDoc;
           });
-          await Category.create(categories);
+          await Category.create(copyCategories);
           presets = presets.map<PresetDocument>((presetDoc) => {
-            delete presetDoc._id;
+            presetDoc._id = Mongoose.Types.ObjectId();
+            presetDoc.category = catMap[presetDoc.category.toString()];
+            presetDoc.room = newRoom._id;
+            presetDoc.wasTemplate = true;
+            presetDoc.isNew = true;
             return presetDoc;
           });
           await Preset.create(presets);
+          res.send(JSON.stringify({ _id: doc._id }));
         } else {
           res.send(JSON.stringify({ _id: doc._id }));
         }

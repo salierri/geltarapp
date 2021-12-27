@@ -84,6 +84,7 @@ export interface Preset {
     title: string;
     length: number;
     category: Category;
+    wasTemplate: boolean;
     room: string;   // Redundancy for db-call optimization
 }
 

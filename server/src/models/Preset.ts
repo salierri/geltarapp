@@ -11,6 +11,7 @@ const presetSchema = new mongoose.Schema({
   url: { type: String, required: true },
   title: { type: String, required: true },
   length: { type: Number, required: true },
+  wasTemplate: { type: Boolean, required: false },
   category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
   room: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
 }, { timestamps: true });
