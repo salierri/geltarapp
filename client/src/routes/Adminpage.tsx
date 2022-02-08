@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import 'typeface-roboto';
 import '../style/App.css';
@@ -52,6 +52,14 @@ export default class Adminpage extends React.Component<{}, AdminState> {
     }});
   }
 
+  setPassword = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    document.cookie = `X-Admin-Pass=${evt.target.value}; path=/`;
+  }
+
+  reload = () => {
+    window.location.reload();
+  }
+
   componentDidMount() {
     this.getBasicStats();
     this.getPastLogs();
@@ -68,10 +76,21 @@ export default class Adminpage extends React.Component<{}, AdminState> {
         <Typography variant="h5" gutterBottom>Lifetime sessions: {this.state.lifetimeSessions}</Typography>
       </>
       );
+    } else {
+      basicStats =
+      <>
+        <Typography variant="h5" gutterBottom>Pass:</Typography>
+        <TextField
+          onChange={this.setPassword}
+        />
+        <Button onClick={this.reload}>Check</Button>
+      </>;
     }
     return (
       <>
-        <Typography variant="h3" gutterBottom>Hello Mr. Admin</Typography>
+        <Typography variant="h3" gutterBottom>
+          {this.state?.connections === undefined ? 'You are not an admin 😡' : 'Hello Mr. Admin'}
+        </Typography>
         {basicStats}
         <Grid container spacing={10} justify="center">
           <Grid item xs={6}>
