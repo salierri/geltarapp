@@ -15,7 +15,7 @@ export default class CreateCategory extends React.Component<CreateCategoryProps,
     this.form = React.createRef();
   }
 
-  submit = (event: React.FormEvent<HTMLFormElement>) => {
+  submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!this.form.current) {
       return;
@@ -25,7 +25,7 @@ export default class CreateCategory extends React.Component<CreateCategoryProps,
       body: new FormData(this.form.current),
       credentials: 'include',
     };
-    fetch(`${process.env.REACT_APP_HTTP_URL}/categories`, requestOptions);
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/categories`, requestOptions);
     PresetManager.forceUpdate();
     this.props.closeCallback();
   };
