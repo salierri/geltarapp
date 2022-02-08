@@ -5,6 +5,7 @@ import { Preset } from '../models/Preset';
 import { Room } from '../models/Room';
 import { Session } from '../models/Session';
 import { getActiveRooms, getConnectionCount } from '../socket';
+import * as Logger from '../logger';
 
 const router = Express.Router();
 
@@ -20,6 +21,7 @@ router.get('/stats', async (req, res) => {
     lifetimeSessions: sessionCount,
   }
   res.send(basicStats);
+  Logger.info('Stats sent to admin.')
 });
 
 router.get('/history', async (req, res) => {

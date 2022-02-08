@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { Category, CategoryDocument } from '../models/Category';
 import { Preset, PresetDocument } from '../models/Preset';
 import Mongoose from 'mongoose';
+import * as Logger from '../logger';
 
 const router = Express.Router();
 
@@ -56,11 +57,14 @@ router.post('/', async (req, res) => {
           });
           await Preset.create(presets);
           res.send(JSON.stringify({ _id: doc._id }));
+          Logger.info(`Room creation. Presets: yes, name: ${newRoom.name}`);
         } else {
           res.send(JSON.stringify({ _id: doc._id }));
+          Logger.info(`Room creation. Presets: no, name: ${newRoom.name}`);
         }
       } else {
         res.status(400).send("Unspecified error");
+        Logger.error(`Error during room creation! ${newRoom.name}`);
       }
     });
 });

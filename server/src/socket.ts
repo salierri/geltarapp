@@ -8,6 +8,7 @@ import { Session } from './models/Session';
 import { Request} from 'express';
 import mongoose from 'mongoose';
 import cookie from 'cookie';
+import * as Logger from './logger';
 
 interface NamedWebSocket extends WebSocket {
   id: string;
@@ -29,7 +30,6 @@ export const broadcastMessage = (room: string, message: Message) => {
       client.send(JSON.stringify(message));
     }
   });
-  console.log(`Broadcast count: ${countSent}`);
 };
 export default broadcastMessage;
 
@@ -58,6 +58,7 @@ function broadcastNames(room: string) {
 function setName(room: string, name: string, sender: NamedWebSocket) {
   sender.name = name;
   broadcastNames(room);
+  Logger.info(`Name set: ${name}`);
 }
 
 function sendState(room: string, sender: WebSocket) {
@@ -71,6 +72,7 @@ function sendHeartbeat(sender: WebSocket) {
 function terminateWithError(socket: WebSocket, error: string) {
   socket.send(JSON.stringify({ type: 'error', error }));
   socket.terminate();
+  Logger.warn(`Ws terminated: ${error}`);
 }
 
 function removeFromSockets(room: string, socket: NamedWebSocket) {
@@ -108,12 +110,10 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
     ws.master = session.master;
     ws.id = uuidv4();
     addToSockets(roomId, ws);
+    Logger.info(`New ws connection, master: ${ws.master}`);
   
     ws.on('message', (message) => {
       const parsedMessage: Message = JSON.parse(message.toString());
-      if (parsedMessage.type !== 'heartbeat') {
-        console.log(`${clientIp(req)}: ${message}`);
-      }
       if (parsedMessage.type === 'command') {
         StateManager.updateState(roomId, parsedMessage);
         broadcastMessage(roomId, parsedMessage);

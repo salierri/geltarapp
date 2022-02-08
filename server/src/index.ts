@@ -14,11 +14,12 @@ import room from './routes/room';
 import auth from './routes/auth';
 import admin from './routes/admin';
 import traficLogger from './tasks/trafficlogger';
+import * as Logger from './logger';
 
 const app = Express();
 
 if (!process.env.MONGODB_URL) {
-  console.error('MongoDB URL not set!');
+  Logger.error('MongoDB URL not set!');
 } else {
   mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 }
@@ -47,7 +48,7 @@ app.use('/admin', admin);
 const port = process.env.HTTP_PORT;
 
 app.listen(port, () => {
-  console.log(`App is listening on port ${port}.`);
+  Logger.info(`App is listening on port ${port}.`);
 });
 
 schedule.scheduleJob('*/30 * * * *', traficLogger);
