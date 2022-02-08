@@ -78,6 +78,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
                 label="Video name"
                 variant="outlined"
                 name="name"
+                autoFocus
               />
             </FormGroup>
             <FormGroup>

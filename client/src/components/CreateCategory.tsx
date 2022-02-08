@@ -48,6 +48,7 @@ export default class CreateCategory extends React.Component<CreateCategoryProps,
                 label="Category name"
                 variant="outlined"
                 name="name"
+                autoFocus
               />
             </FormGroup>
             <InputLabel id="role-select-label">Role</InputLabel>

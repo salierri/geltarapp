@@ -91,6 +91,7 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
                   label="Room name"
                   variant="outlined"
                   name="name"
+                  autoFocus
                 />
               </FormGroup>
               { passwordField }
