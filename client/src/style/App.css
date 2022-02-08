@@ -137,6 +137,7 @@ html[data-theme='light'] {
     min-width: 50px;
     min-height: 15px;
     display: inline-block;
+    margin-right: 7px;
 }
 
 .left-margin {
