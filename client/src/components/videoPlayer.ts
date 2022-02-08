@@ -20,12 +20,6 @@ const durations = {
 };
 const loadedCallbacks: LoadedCallbacks = {};
 
-function checkPopupBlocker() {
-  if (typeof(players.music?.getDuration) !== "function" && !window.location.search.includes("disablepopupblocker")) {
-    window.location.search = window.location.search + "?message=disablepopupblocker"
-  }
-}
-
 function loadVideo(role: VideoRole, video: string) {
   state[role].playing = true;
   players[role]?.loadVideoById(video);
@@ -112,7 +106,6 @@ function createPlayer(role: VideoRole, video: string, autoplay: boolean) {
 function instantiatePlayers() {
   players.music = createPlayer('music', state.music.url, state.music.playing);
   players.ambience = createPlayer('ambience', state.ambience.url, state.ambience.playing);
-  setTimeout(checkPopupBlocker, 5000);
 }
 
 export function APIReady() {
