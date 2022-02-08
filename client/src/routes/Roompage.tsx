@@ -14,6 +14,7 @@ import PresetWindow from '../components/PresetWindow';
 import UserList from '../components/UserList';
 import Video from '../components/Video';
 import * as Persistence from '../helpers/Persistence';
+import PresetManager from '../models/PresetManager';
 import '../style/App.css';
 
 interface AppState {
@@ -81,6 +82,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
 
   exitRoom = () => {
     Persistence.forgetSession();
+    PresetManager.clear();
     this.props.history.push('');
   }
 

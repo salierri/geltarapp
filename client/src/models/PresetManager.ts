@@ -33,4 +33,9 @@ export default class PresetManager {
   };
 
   static getCachedCategories = (): Category[] => PresetManager.categories ?? [];
+
+  static clear = () => {
+    delete PresetManager.presets;
+    delete PresetManager.categories;
+  }
 }
