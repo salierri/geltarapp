@@ -86,6 +86,19 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
     this.props.history.push('');
   }
 
+  Master = () => {
+    if (!this.state.master) { return null; }
+    return (
+      <Grid container justify="center">
+        <Box mt={2}>
+          <PresetWindow />
+        </Box>
+        <div id="dummy-player" className="hidden" />
+        <ApproveSuggestion />
+      </Grid>
+    );
+  }
+
   Content = () => {
     if (!this.state.authorized) { return null; }
     if (!this.state.userGesture) {
@@ -106,6 +119,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       <Grid container spacing={10} justify="center">
         <Grid item xs={6}>
           <Video videoRole="music" master={this.state.master} />
+          <this.Master />
         </Grid>
         <Grid item xs={6}>
           <Video videoRole="ambience" master={this.state.master}/>
@@ -114,17 +128,6 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
           </Grid>
         </Grid>
       </Grid>
-    );
-  }
-
-  Master = () => {
-    if (!this.state.master) { return null; }
-    return (
-      <>
-        <PresetWindow />
-        <div id="dummy-player" className="hidden" />
-        <ApproveSuggestion />
-      </>
     );
   }
 
@@ -142,7 +145,6 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
         <Box m={2}>
           <this.Content />
         </Box>
-        <this.Master />
         { this.state.authorized && <Communication room={this.props.match.params.roomId} /> }
         { this.state.passwordPrompt && <PasswordPrompt callback={this.passwordEntered} roomName={this.state.room?.name ?? ''} /> }
         <UserList />
