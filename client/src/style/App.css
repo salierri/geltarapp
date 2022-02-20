@@ -143,3 +143,14 @@ html[data-theme='light'] {
 .left-margin {
     margin-left: 7px;
 }
+
+.room-icon {
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-image: url(/logo_white.png);
+}
+
+[data-theme='light'] .room-icon {
+    background-image: url(/logo_black.png);
+}

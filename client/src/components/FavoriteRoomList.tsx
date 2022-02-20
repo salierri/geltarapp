@@ -88,7 +88,7 @@ export default class FavoriteRoomList extends React.Component<RoomPageProps, Roo
         {rooms?.map((room) => (
         <ListItem key={room._id} role={undefined} button onClick={() => this.enterRoom(room._id)}>
           <ListItemIcon>
-            {this.typeIcon(room.visibility)}
+            <span className='room-icon' />
           </ListItemIcon>
           <ListItemText primary={room.name} />
         </ListItem>
