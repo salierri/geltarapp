@@ -55,20 +55,20 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
   AdminControls = () => {
     if (!this.props.master) { return null; }
     return (
-      <div className="uk-align-center upload-button-parent">
-      <div className="upload-button-wrapper">
-        <button type="button" className="uk-button upload-button MuiButton-containedPrimary">Select Mp3 file</button>
-        <input type="file" name="effect" accept=".mp3" ref={this.fileInput} />
+      <div className="upload-button-parent">
+        <div className="upload-button-wrapper">
+          <button type="button" className="upload-button MuiButton-containedPrimary">Select Mp3 file</button>
+          <input type="file" name="effect" accept=".mp3" ref={this.fileInput} />
+        </div>
+        <Button
+          className="master-button upload-button"
+          onClick={this.uploadMp3}
+          color="primary"
+          variant="contained"
+        >
+          Play selected
+        </Button>
       </div>
-      <Button
-        className="master-button upload-button"
-        onClick={this.uploadMp3}
-        color="primary"
-        variant="contained"
-      >
-        Play selected
-      </Button>
-    </div>
     );
   }
 
@@ -77,7 +77,7 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
       <div>
         {this.state?.clip && (
         <div>
-          <audio controls className="uk-align-center filter-70" ref={this.audioTag}>
+          <audio controls className="filter-70" ref={this.audioTag}>
             <source src={`${process.env.REACT_APP_HTTP_URL}/${this.state.clip}`} type="audio/mpeg" />
           </audio>
         </div>

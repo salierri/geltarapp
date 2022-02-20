@@ -107,7 +107,7 @@ class Admin extends React.Component<AdminProps, {}> {
           <FormLabel>Master volume</FormLabel>
           <input
             type="range"
-            className="uk-range master-slider uk-align-center"
+            className="master-slider"
             min="0"
             max="300"
             defaultValue={VideoPlayer.getMasterVolume(this.role)}
@@ -120,7 +120,7 @@ class Admin extends React.Component<AdminProps, {}> {
           <FormLabel>Seek ahead</FormLabel>
           <input
             type="range"
-            className="uk-range master-slider uk-align-center"
+            className="master-slider"
             min="0"
             max="100"
             onMouseUp={(e) => this.seekCommand(+(e.target as (EventTarget & HTMLInputElement)).value)}

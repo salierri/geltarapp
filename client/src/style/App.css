@@ -52,7 +52,7 @@ html[data-theme='light'] {
 
 .master-slider-container {
     width: 380px;
-    display: inline-block;
+    margin: 3px auto;
 }
 
 #log-area {

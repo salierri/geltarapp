@@ -109,7 +109,7 @@ class Video extends React.Component<VideoProps, {}> {
             </Box>
           </CardContent>
         </Card>
-        <div id="video uk-align-center">
+        <div id="video">
           {this.props.master ? <Admin role={this.role} /> : feedbackButtons }
         </div>
       </>
