@@ -1,5 +1,5 @@
 import config from 'config';
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 import * as Logger from '../logger';
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -11,4 +11,4 @@ export default (req: Request, res: Response, next: NextFunction) => {
     res.sendStatus(401);
     Logger.warn('Admin unauthorized.');
   }
-}
+};

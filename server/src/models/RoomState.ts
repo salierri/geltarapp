@@ -9,9 +9,9 @@ const roomStateSchema = new mongoose.Schema({
     playing: Boolean,
     masterVolume: Number,
     time: {
-        start: Number,
-        setAt: Date,
-        elapsed: Number,
+      start: Number,
+      setAt: Date,
+      elapsed: Number,
     },
   },
   ambience: {
@@ -19,9 +19,9 @@ const roomStateSchema = new mongoose.Schema({
     playing: Boolean,
     masterVolume: Number,
     time: {
-        start: Number,
-        setAt: Date,
-        elapsed: Number,
+      start: Number,
+      setAt: Date,
+      elapsed: Number,
     },
   },
 }, { timestamps: true });

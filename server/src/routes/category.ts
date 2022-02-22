@@ -1,5 +1,4 @@
 import Express from 'express';
-import mongoose from 'mongoose';
 import roomCheck from '../middlewares/roomCheck';
 import { Category } from '../models/Category';
 import { Preset } from '../models/Preset';

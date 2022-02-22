@@ -2,7 +2,6 @@ import config from 'config';
 import Express from 'express';
 import { UploadedFile } from 'express-fileupload';
 import * as crypto from 'crypto';
-import { broadcastMessage } from '../socket';
 import * as Logger from '../logger';
 
 const router = Express.Router();
@@ -20,7 +19,7 @@ router.post('/upload', (req, res) => {
       .then(() => {
         Logger.info(`Mp3 upload, original filename: ${originalFilename}, new filename: ${fileName}`);
         // TODO Update for rooms
-        // broadcastMessage({ type: 'command', command: 'LoadMp3', role: 'ambience', param: `${fileName}.mp3` });
+        // broadcastMessage({type:'command', command: 'LoadMp3', role: 'ambience', param: `${fileName}.mp3`});
         res.sendStatus(200);
       })
       .catch((reason) => {

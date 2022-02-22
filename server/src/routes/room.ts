@@ -1,9 +1,9 @@
 import Express from 'express';
-import { Room } from '../models/Room';
+import Mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import { Room } from '../models/Room';
 import { Category, CategoryDocument } from '../models/Category';
 import { Preset, PresetDocument } from '../models/Preset';
-import Mongoose from 'mongoose';
 import * as Logger from '../logger';
 
 const router = Express.Router();
@@ -35,8 +35,9 @@ router.post('/', async (req, res) => {
       if (doc) {
         if (includePresets) {
           const categories = await Category.find({ template: true });
-          let presets = await Preset.find().where('category').in(categories.map(cat => cat._id)).exec();
-          const catMap : { [ oldId: string ] : Mongoose.Types.ObjectId } = {}; // Just some optimalization to avoid nested iteration
+          let presets = await Preset.find().where('category').in(categories.map((cat) => cat._id)).exec();
+          // Just some optimalization to avoid nested iteration
+          const catMap: { [ oldId: string ]: Mongoose.Types.ObjectId } = {};
           const copyCategories = categories.map<CategoryDocument>((categoryDoc) => {
             catMap[categoryDoc._id.toString()] = Mongoose.Types.ObjectId();
             categoryDoc._id = catMap[categoryDoc._id.toString()];
@@ -63,7 +64,7 @@ router.post('/', async (req, res) => {
           Logger.info(`Room creation. Presets: no, name: ${newRoom.name}`);
         }
       } else {
-        res.status(400).send("Unspecified error");
+        res.status(400).send('Unspecified error');
         Logger.error(`Error during room creation! ${newRoom.name}`);
       }
     });
@@ -71,7 +72,11 @@ router.post('/', async (req, res) => {
 
 router.post('/details', async (req, res) => {
   const ids: string[] = req.body.rooms;
-  const rooms = await Room.find().where('_id').in(ids).select('name visibility').exec();
+  const rooms = await Room.find()
+    .where('_id')
+    .in(ids)
+    .select('name visibility')
+    .exec();
   rooms.sort((a, b) => ids.indexOf(a._id.toString()) - ids.indexOf(b._id.toString()));
   res.send(rooms);
 });

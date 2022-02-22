@@ -24,10 +24,10 @@ app.use(fileUpload({
   createParentPath: true,
 }));
 
-var corsOptions = {
+const corsOptions = {
   origin: config.get('frontend_url') as string,
   credentials: true,
-}
+};
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
@@ -41,7 +41,7 @@ app.use('/rooms', room);
 app.use('/auth', auth);
 app.use('/admin', admin);
 
-const port : number = config.get('http_port');
+const port: number = config.get('http_port');
 
 app.listen(port, () => {
   Logger.info(`App is listening on port ${port}.`);

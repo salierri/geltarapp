@@ -1,14 +1,11 @@
+import config from 'config';
 import WebSocket from 'ws';
-import { IncomingMessage } from 'http';
+import mongoose from 'mongoose';
+import cookie from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
 import { Message } from './api';
 import * as StateManager from './stateManager';
-import { Room } from './models/Room';
 import { Session } from './models/Session';
-import { Request} from 'express';
-import mongoose from 'mongoose';
-import cookie from 'cookie';
-import config from 'config';
 import * as Logger from './logger';
 
 interface NamedWebSocket extends WebSocket {
@@ -24,10 +21,8 @@ const WSServer = new WebSocket.Server({
 const rooms: { [ key: string ]: NamedWebSocket[] } = {};
 
 export const broadcastMessage = (room: string, message: Message) => {
-  let countSent = 0;
   rooms[room].forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      countSent += 1;
       client.send(JSON.stringify(message));
     }
   });
@@ -35,7 +30,8 @@ export const broadcastMessage = (room: string, message: Message) => {
 export default broadcastMessage;
 
 export const getConnectionCount = () => Object.values(rooms).reduce<number>((t, room) => t + room.length, 0);
-export const getActiveRooms = () => Object.values(rooms).reduce<number>((t, room) => t + room.length > 0 ? 1 : 0, 0);
+// eslint-disable-next-line
+export const getActiveRooms = () => Object.values(rooms).reduce<number>((t, room) => (t + room.length > 0 ? 1 : 0), 0);
 
 function sendToMasters(room: string, message: Message) {
   rooms[room].forEach((socket) => {
@@ -50,9 +46,9 @@ function sendToMasters(room: string, message: Message) {
 
 function broadcastNames(room: string) {
   const users: { [key: string]: string } = {};
-  for (const client of rooms[room]) {
+  rooms[room].forEach((client) => {
     users[client.id] = client.name;
-  }
+  });
   broadcastMessage(room, { type: 'users', users });
 }
 
@@ -84,10 +80,6 @@ function removeFromSockets(room: string, socket: NamedWebSocket) {
   broadcastNames(room);
 }
 
-function clientIp(req: IncomingMessage) {
-  return (req.headers['x-real-ip'] as string) || req.connection.remoteAddress;
-}
-
 function addToSockets(room: string, socket: NamedWebSocket) {
   if (!(room in rooms)) {
     rooms[room] = [];
@@ -102,8 +94,7 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
     terminateWithError(ws, 'invalid session');
     return;
   }
-  Session.findOne({ _id: sessionId })
-  .then((session) => {
+  Session.findOne({ _id: sessionId }).then((session) => {
     if (session === null) {
       terminateWithError(ws, 'unauthorized');
       return;
@@ -112,7 +103,7 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
     ws.id = uuidv4();
     addToSockets(roomId, ws);
     Logger.info(`New ws connection, master: ${ws.master}`);
-  
+
     ws.on('message', (message) => {
       const parsedMessage: Message = JSON.parse(message.toString());
       if (parsedMessage.type === 'command') {
@@ -132,11 +123,11 @@ WSServer.on('connection', (ws: NamedWebSocket, req) => {
         sendToMasters(roomId, parsedMessage);
       }
     });
-  
+
     ws.on('close', () => {
       removeFromSockets(roomId, ws);
     });
-  
+
     sendState(roomId, ws);
   });
 });

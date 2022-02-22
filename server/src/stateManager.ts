@@ -37,7 +37,8 @@ function getElapsedSecondsFrom(time: Date) {
 }
 
 function calculateElapsedTime(room: string, role: VideoRole) {
-  state[room][role].time.elapsed = state[room][role].time.start + getElapsedSecondsFrom(state[room][role].time.setAt);
+  state[room][role].time.elapsed = state[room][role].time.start
+    + getElapsedSecondsFrom(state[room][role].time.setAt);
 }
 
 function setDefault(room: string) {
@@ -48,7 +49,7 @@ function setDefault(room: string) {
 }
 
 export const getState = (room: string) => {
-  if(!(room in state)) {
+  if (!(room in state)) {
     setDefault(room);
   }
   calculateElapsedTime(room, 'music');

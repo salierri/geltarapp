@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { Session } from "../models/Session";
+import { NextFunction, Request, Response } from 'express';
+import { Session } from '../models/Session';
 import * as Logger from '../logger';
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -8,9 +8,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (session === null) {
       res.sendStatus(401);
       Logger.warn('Room enter denied.');
-  } else {
+    } else {
       req.roomId = session.room._id;
       next();
     }
   });
-}
+};
