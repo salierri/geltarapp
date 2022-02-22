@@ -1,4 +1,4 @@
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Tooltip } from '@material-ui/core';
 import * as Axios from 'axios';
 import React from 'react';
 import { Command } from '../api';
@@ -55,20 +55,29 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
   AdminControls = () => {
     if (!this.props.master) { return null; }
     return (
-      <div className="upload-button-parent">
-        <div className="upload-button-wrapper">
-          <button type="button" className="upload-button MuiButton-containedPrimary">Select Mp3 file</button>
-          <input type="file" name="effect" accept=".mp3" ref={this.fileInput} />
+      <Tooltip title="Temporarily unavailable to decrease server load">
+        <div className="upload-button-parent">
+          <div className="upload-button-wrapper">
+            <button
+              type="button"
+              className="upload-button MuiButton-contained MuiButton-containedPrimary Mui-disabled"
+              disabled
+            >
+              Select Mp3 file
+            </button>
+            <input disabled type="file" name="effect" accept=".mp3" ref={this.fileInput} />
+          </div>
+          <Button
+            className="master-button upload-button"
+            onClick={this.uploadMp3}
+            color="primary"
+            variant="contained"
+            disabled
+          >
+            Play selected
+          </Button>
         </div>
-        <Button
-          className="master-button upload-button"
-          onClick={this.uploadMp3}
-          color="primary"
-          variant="contained"
-        >
-          Play selected
-        </Button>
-      </div>
+      </Tooltip>
     );
   }
 

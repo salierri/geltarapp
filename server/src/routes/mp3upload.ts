@@ -1,3 +1,4 @@
+import config from 'config';
 import Express from 'express';
 import { UploadedFile } from 'express-fileupload';
 import * as crypto from 'crypto';
@@ -7,6 +8,11 @@ import * as Logger from '../logger';
 const router = Express.Router();
 
 router.post('/upload', (req, res) => {
+  if (!config.get('features_enabled.mp3_upload')) {
+    res.sendStatus(503);
+    Logger.warn('Mp3 upload denied by config.');
+    return;
+  }
   if (req.files && req.files.effect) {
     const originalFilename = (req.files.effect as UploadedFile).name;
     const fileName = crypto.randomBytes(20).toString('hex');
