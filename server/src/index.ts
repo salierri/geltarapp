@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import config from 'config';
 import Express from 'express';
 import fileUpload from 'express-fileupload';
 import schedule from 'node-schedule';
@@ -18,18 +18,14 @@ import * as Logger from './logger';
 
 const app = Express();
 
-if (!process.env.MONGODB_URL) {
-  Logger.error('MongoDB URL not set!');
-} else {
-  mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-}
+mongoose.connect(config.get('mongodb.url'), { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(fileUpload({
   createParentPath: true,
 }));
 
 var corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: config.get('frontend_url') as string,
   credentials: true,
 }
 
@@ -45,7 +41,7 @@ app.use('/rooms', room);
 app.use('/auth', auth);
 app.use('/admin', admin);
 
-const port = process.env.HTTP_PORT;
+const port : number = config.get('http_port');
 
 app.listen(port, () => {
   Logger.info(`App is listening on port ${port}.`);

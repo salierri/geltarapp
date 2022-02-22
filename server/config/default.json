@@ -1,0 +1,14 @@
+{
+  "http_port": 3001,
+  "ws_port": 4000,
+  "mongodb": {
+    "url": "mongodb://localhost:27017/geltarapp"
+  },
+  "frontend_url": "http://localhost:3000",
+
+  "admin_pass": "geltaradmin",
+
+  "features_enabled": {
+    "mp3_upload": false
+  }
+}

@@ -8,6 +8,7 @@ import { Session } from './models/Session';
 import { Request} from 'express';
 import mongoose from 'mongoose';
 import cookie from 'cookie';
+import config from 'config';
 import * as Logger from './logger';
 
 interface NamedWebSocket extends WebSocket {
@@ -17,7 +18,7 @@ interface NamedWebSocket extends WebSocket {
 }
 
 const WSServer = new WebSocket.Server({
-  port: +(process.env.WS_PORT ?? 4000),
+  port: +(config.get('ws_port') as number ?? 4000),
 });
 
 const rooms: { [ key: string ]: NamedWebSocket[] } = {};

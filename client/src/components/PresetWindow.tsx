@@ -109,7 +109,7 @@ export default class PresetWindow extends React.Component<{}, PresetWindowState>
                   checked={this.state.editMode}
                 />
               )}
-              label="Edit mode"
+              label="Delete mode"
             />
             <Button onClick={this.handleClose} color="default">
               Close
