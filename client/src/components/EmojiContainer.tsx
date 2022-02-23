@@ -15,12 +15,13 @@ class EmojiContainer extends React.Component {
   newEmoji = (message: Feedback) => {
     const key = Math.random();
     let yPosition = 90;
-    for(let userId in this.users) {
-      if(userId === message.sender) {
-        break;
+    Object.keys(this.users).some((userId) => {
+      if (userId === message.sender) {
+        return true;
       }
       yPosition += 180;
-    }
+      return false;
+    });
     if (message.message === 'like') {
       this.emojis.push(<FloatingEmoji removeCallback={this.removeEmoji} key={key} yPosition={yPosition} label="thumbs-up" emoji="👍" />);
     } else if (message.message === 'boring') {

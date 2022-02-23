@@ -4,14 +4,13 @@ import { History } from 'history';
 import React from 'react';
 import 'typeface-roboto';
 import { Room, VisibilityType } from '../api';
-import { roomListupdateChecker } from '../models/RoomListUpdateChecker';
+import roomListupdateChecker from '../models/RoomListUpdateChecker';
 import '../style/App.css';
 
 interface RoomPageState {
   rooms: Room[];
   loaded: boolean;
   error?: Error;
-  passwordPromptOpen: boolean;
 }
 
 interface RoomPageProps {
@@ -24,7 +23,6 @@ export default class RoomList extends React.Component<RoomPageProps, RoomPageSta
     this.state = {
       rooms: [],
       loaded: false,
-      passwordPromptOpen: false,
     };
   }
 
@@ -33,32 +31,33 @@ export default class RoomList extends React.Component<RoomPageProps, RoomPageSta
   };
 
   fetchRooms = () => {
-    fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`).then(
-      (response) => response.json()
-      ).then((rooms) => {
+    fetch(`${process.env.REACT_APP_HTTP_URL}/rooms`)
+      .then((response) => response.json())
+      .then((rooms) => {
         this.setState({ rooms, loaded: true });
       },
       (error: Error) => {
-      this.setState({
-        loaded: true,
-        error,
+        this.setState({
+          loaded: true,
+          error,
+        });
       });
-    });
-  }
+  };
 
   componentDidMount = () => {
     this.fetchRooms();
     roomListupdateChecker.subscribe(this.fetchRooms);
-  }
+  };
 
   typeIcon = (visibility: VisibilityType) => {
     if (visibility === 'public') {
-      return <Public/>;
-    } else if (visibility === 'password') {
-      return <LockOpen/>;
-    } else if (visibility === 'private') {
-      return <Lock/>;
+      return <Public />;
+    } if (visibility === 'password') {
+      return <LockOpen />;
+    } if (visibility === 'private') {
+      return <Lock />;
     }
+    return <Lock />;
   };
 
   render() {
@@ -76,17 +75,17 @@ export default class RoomList extends React.Component<RoomPageProps, RoomPageSta
     }
     return (
       <>
-      <List>
-        {rooms?.map((room) => (
-        <ListItem key={room._id} role={undefined} button onClick={() => this.enterRoom(room._id)}>
-          <ListItemIcon>
-            <span className='room-icon' />
-          </ListItemIcon>
-          <ListItemText primary={room.name} />
-        </ListItem>
-        ))}
-      </List>
-    </>
+        <List>
+          {rooms?.map((room) => (
+            <ListItem key={room._id} role={undefined} button onClick={() => this.enterRoom(room._id)}>
+              <ListItemIcon>
+                <span className="room-icon" />
+              </ListItemIcon>
+              <ListItemText primary={room.name} />
+            </ListItem>
+          ))}
+        </List>
+      </>
     );
   }
 }

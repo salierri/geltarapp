@@ -8,7 +8,7 @@ interface VideoSuggestionState {
 }
 
 export default class VideoSugggestion extends React.Component<{}, VideoSuggestionState> {
-  videoUrl: string = '';
+  videoUrl = '';
 
   constructor(props: {}) {
     super(props);
@@ -29,7 +29,7 @@ export default class VideoSugggestion extends React.Component<{}, VideoSuggestio
     event.preventDefault();
     Communication.send({ type: 'suggestion', video: Helpers.youtubeUrlToVideoId(this.videoUrl) ?? '' });
     this.handleClose();
-  }
+  };
 
   render() {
     return (

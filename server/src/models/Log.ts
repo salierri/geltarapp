@@ -1,13 +1,7 @@
 import mongoose from 'mongoose';
+import { LogEntry as LogEntryInterface } from '../api';
 
-export interface LogEntry {
-  _id: string;
-  name: string;
-  value: string;
-  time: Date;
-}
-
-export type LogDocument = mongoose.Document & LogEntry;
+export type LogDocument = mongoose.Document & LogEntryInterface;
 
 const logSchema = new mongoose.Schema({
   name: { type: String, required: true },

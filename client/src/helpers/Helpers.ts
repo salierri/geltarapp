@@ -18,12 +18,19 @@ export const numberToTimeString = (time: number): string => {
 };
 
 export const toHHMMSS = (seconds: number): string => {
-  const hours   = Math.floor(seconds / 3600);
+  const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds - (hours * 3600)) / 60);
   seconds = Math.floor(seconds - (hours * 3600) - (minutes * 60));
 
-  const hoursString = hours === 0 ? "" : (hours < 10 ? "0" + hours + ":" : hours + ":");
-  const minutesString = minutes < 10 ? "0" + minutes + ":" : minutes + ":";
-  const secondsString = seconds < 10 ? "0" + seconds : seconds;
+  let hoursString: string;
+  if (hours === 0) {
+    hoursString = '';
+  } else if (hours < 10) {
+    hoursString = `0${hours}:`;
+  } else {
+    hoursString = `${hours}:`;
+  }
+  const minutesString = minutes < 10 ? `0${minutes}:` : `${minutes}:`;
+  const secondsString = seconds < 10 ? `0${seconds}` : seconds;
   return hoursString + minutesString + secondsString;
-}
+};

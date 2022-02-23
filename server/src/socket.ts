@@ -30,8 +30,8 @@ export const broadcastMessage = (room: string, message: Message) => {
 export default broadcastMessage;
 
 export const getConnectionCount = () => Object.values(rooms).reduce<number>((t, room) => t + room.length, 0);
-// eslint-disable-next-line
-export const getActiveRooms = () => Object.values(rooms).reduce<number>((t, room) => (t + room.length > 0 ? 1 : 0), 0);
+export const getActiveRooms = () => Object.values(rooms)
+  .reduce<number>((t, room) => (t + room.length > 0 ? 1 : 0), 0);
 
 function sendToMasters(room: string, message: Message) {
   rooms[room].forEach((socket) => {

@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormGroup, I
 import clsx from 'clsx';
 import React from 'react';
 import * as Persistence from '../helpers/Persistence';
-import { roomListupdateChecker } from '../models/RoomListUpdateChecker';
+import roomListupdateChecker from '../models/RoomListUpdateChecker';
 
 interface CreateRoomState {
   open: boolean;
@@ -18,7 +18,7 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
     this.state = {
       open: false,
       passwordField: true,
-    }
+    };
   }
 
   submit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -44,25 +44,26 @@ export default class CreateRoom extends React.Component<{}, CreateRoomState> {
   render() {
     const passwordField = this.state.passwordField ? (
       <>
-      <FormGroup>
-        <TextField
-          label="Password"
-          variant="outlined"
-          name="password"
-          type="password"
-          required
-        />
-      </FormGroup>
-      <FormGroup>
-      <TextField
-        label="GM Password (Use this for access to the controls)"
-        variant="outlined"
-        name="masterPassword"
-        type="password"
-        required
-      />
-    </FormGroup>
-    </>) : null;
+        <FormGroup>
+          <TextField
+            label="Password"
+            variant="outlined"
+            name="password"
+            type="password"
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <TextField
+            label="GM Password (Use this for access to the controls)"
+            variant="outlined"
+            name="masterPassword"
+            type="password"
+            required
+          />
+        </FormGroup>
+      </>
+    ) : null;
 
     return (
       <>

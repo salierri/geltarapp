@@ -27,39 +27,39 @@ export default class PasswordPrompt extends React.Component<PasswordPromptProps,
       <Dialog
         fullWidth
         maxWidth="sm"
-        open={true}
+        open
         onClose={() => this.props.callback('')}
         aria-labelledby="form-dialog-title"
       >
-      <DialogTitle id="form-dialog-title">{this.props.roomName}</DialogTitle>
-      <DialogContent>
-        <form onSubmit={this.enterPassword}>
-          <FormGroup>
-            <TextField
-              required
-              label="Password"
-              variant="outlined"
-              name="name"
-              type="password"
-              inputRef={this.passField}
-              autoFocus
-            />
-          </FormGroup>
-          <Box m={1}>
-          <FormGroup>
-            <Button type="submit" color="primary" variant="contained">
-              Enter
-            </Button>
-          </FormGroup>
-          </Box>
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => this.props.callback('')} color="default">
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+        <DialogTitle id="form-dialog-title">{this.props.roomName}</DialogTitle>
+        <DialogContent>
+          <form onSubmit={this.enterPassword}>
+            <FormGroup>
+              <TextField
+                required
+                label="Password"
+                variant="outlined"
+                name="name"
+                type="password"
+                inputRef={this.passField}
+                autoFocus
+              />
+            </FormGroup>
+            <Box m={1}>
+              <FormGroup>
+                <Button type="submit" color="primary" variant="contained">
+                  Enter
+                </Button>
+              </FormGroup>
+            </Box>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => this.props.callback('')} color="default">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }

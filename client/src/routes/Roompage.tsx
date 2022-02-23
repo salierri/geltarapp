@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Grid, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import 'typeface-roboto';
 import { Room } from '../api';
 import ApproveSuggestion from '../components/ApproveSuggestion';
@@ -29,7 +29,6 @@ interface RoomProps {
 }
 
 export default class Roompage extends React.Component<RouteComponentProps<RoomProps>, AppState> {
-
   constructor(props: RouteComponentProps<RoomProps>) {
     super(props);
 
@@ -40,16 +39,9 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       master: false,
     };
   }
-  
-  receivedUserGesture = () => {
-    document.getElementById('start-button-container')?.classList.add('hidden');
-    setTimeout(() => {
-      this.setState({ userGesture: true });
-    }, 500);
-  };
 
   async componentDidMount() {
-    const roomId = this.props.match.params.roomId;
+    const { roomId } = this.props.match.params;
     Persistence.addFavoriteRoom(roomId);
     const response = await fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/${roomId}`);
     const room: Room = await response.json();
@@ -60,6 +52,13 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       this.setState({ passwordPrompt: true });
     }
   }
+
+  receivedUserGesture = () => {
+    document.getElementById('start-button-container')?.classList.add('hidden');
+    setTimeout(() => {
+      this.setState({ userGesture: true });
+    }, 500);
+  };
 
   passwordEntered = async (password: string) => {
     const formData = new FormData();
@@ -73,18 +72,18 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
       this.props.history.push('/?message=incorrectpass');
     } else {
       const json = await response.json();
-      const session: string = json.session;
+      const { session }: { session: string } = json;
       Persistence.saveSession({ sessionId: session, room: json.room, master: json.master });
       document.cookie = `X-Auth-Token=${session}; path=/`;
       this.setState({ passwordPrompt: false, authorized: true, master: json.master });
     }
-  }
+  };
 
   exitRoom = () => {
     Persistence.forgetSession();
     PresetManager.clear();
     this.props.history.push('');
-  }
+  };
 
   Master = () => {
     if (!this.state.master) { return null; }
@@ -97,7 +96,7 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
         <ApproveSuggestion />
       </Grid>
     );
-  }
+  };
 
   Content = () => {
     if (!this.state.authorized) { return null; }
@@ -122,14 +121,14 @@ export default class Roompage extends React.Component<RouteComponentProps<RoomPr
           <this.Master />
         </Grid>
         <Grid item xs={6}>
-          <Video videoRole="ambience" master={this.state.master}/>
+          <Video videoRole="ambience" master={this.state.master} />
           <Grid container justify="center">
             <Mp3Player master={this.state.master} />
           </Grid>
         </Grid>
       </Grid>
     );
-  }
+  };
 
   render() {
     return (

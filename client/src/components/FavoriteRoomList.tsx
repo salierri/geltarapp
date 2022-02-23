@@ -5,14 +5,13 @@ import React from 'react';
 import 'typeface-roboto';
 import { Room, VisibilityType } from '../api';
 import * as Persistence from '../helpers/Persistence';
-import { roomListupdateChecker } from '../models/RoomListUpdateChecker';
+import roomListupdateChecker from '../models/RoomListUpdateChecker';
 import '../style/App.css';
 
 interface RoomPageState {
   rooms: Room[];
   loaded: boolean;
   error?: Error;
-  passwordPromptOpen: boolean;
 }
 
 interface RoomPageProps {
@@ -25,7 +24,6 @@ export default class FavoriteRoomList extends React.Component<RoomPageProps, Roo
     this.state = {
       rooms: [],
       loaded: false,
-      passwordPromptOpen: false,
     };
   }
 
@@ -41,32 +39,33 @@ export default class FavoriteRoomList extends React.Component<RoomPageProps, Roo
         'Content-Type': 'application/json',
       },
     };
-    fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/details`, requestOptions).then(
-      (response) => response.json()
-      ).then((rooms) => {
+    fetch(`${process.env.REACT_APP_HTTP_URL}/rooms/details`, requestOptions)
+      .then((response) => response.json())
+      .then((rooms) => {
         this.setState({ rooms, loaded: true });
       },
       (error: Error) => {
-      this.setState({
-        loaded: true,
-        error,
+        this.setState({
+          loaded: true,
+          error,
+        });
       });
-    });
-  }
+  };
 
   componentDidMount = () => {
     this.fetchRooms();
     roomListupdateChecker.subscribe(this.fetchRooms);
-  }
+  };
 
   typeIcon = (visibility: VisibilityType) => {
     if (visibility === 'public') {
-      return <Public/>;
-    } else if (visibility === 'password') {
-      return <LockOpen/>;
-    } else if (visibility === 'private') {
-      return <Lock/>;
+      return <Public />;
+    } if (visibility === 'password') {
+      return <LockOpen />;
+    } if (visibility === 'private') {
+      return <Lock />;
     }
+    return <Lock />;
   };
 
   render() {
@@ -84,17 +83,17 @@ export default class FavoriteRoomList extends React.Component<RoomPageProps, Roo
     }
     return (
       <>
-      <List>
-        {rooms?.map((room) => (
-        <ListItem key={room._id} role={undefined} button onClick={() => this.enterRoom(room._id)}>
-          <ListItemIcon>
-            <span className='room-icon' />
-          </ListItemIcon>
-          <ListItemText primary={room.name} />
-        </ListItem>
-        ))}
-      </List>
-    </>
+        <List>
+          {rooms?.map((room) => (
+            <ListItem key={room._id} role={undefined} button onClick={() => this.enterRoom(room._id)}>
+              <ListItemIcon>
+                <span className="room-icon" />
+              </ListItemIcon>
+              <ListItemText primary={room.name} />
+            </ListItem>
+          ))}
+        </List>
+      </>
     );
   }
 }

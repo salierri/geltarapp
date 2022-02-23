@@ -12,7 +12,6 @@ interface CommunicationParams {
 let subscriptions: { [key in Message['type']]?: ((message: Message) => void)[] };
 
 class Communication extends React.Component<CommunicationParams, {}> {
-  exiting: boolean = false;   // To avoid accidental reconnects after desired exit
   static sendCommand(command: CommandType, role: VideoRole, param: string) {
     Communication.send({
       type: 'command',
@@ -53,10 +52,11 @@ class Communication extends React.Component<CommunicationParams, {}> {
     subscriptions[type]?.push(callback);
   }
 
+  exiting = false;   // To avoid accidental reconnects after desired exit
   async componentDidMount() {
     const roomId = this.props.room;
     this.connect(roomId);
-    
+
     setInterval(Communication.heartbeat, 3000);
   }
 
@@ -86,7 +86,7 @@ class Communication extends React.Component<CommunicationParams, {}> {
         window.location.href = '/';
       }
       if (subscriptions[parsedMessage.type]) {
-          subscriptions[parsedMessage.type]?.forEach((callback) => {
+        subscriptions[parsedMessage.type]?.forEach((callback) => {
           callback(parsedMessage);
         });
       }

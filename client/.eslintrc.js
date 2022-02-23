@@ -21,6 +21,7 @@ module.exports = {
           "ImportDeclaration": "never",
         }],
         "no-underscore-dangle": ["error", { allow: ['_id'] }],  // Mongodb uses _id, and it cannot be changed
+        "no-param-reassign": "off",
         "max-len": ["error",
           110,  // Up from 100
           2,
@@ -33,7 +34,8 @@ module.exports = {
           }
         ],
         "jsx-a11y/media-has-caption": "off",  // We have special media players
-    },
+        "no-multi-spaces": ["error", { "ignoreEOLComments": true } ],
+      },
     parserOptions: {
         project: './tsconfig.json'
     }

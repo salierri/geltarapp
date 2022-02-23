@@ -4,13 +4,14 @@ class RoomListUpdateChecker {
 
   subscribe = (callback: () => void) => {
     this.subscribers.push(callback);
-  }
+  };
 
   requestReload = () => {
     this.subscribers.forEach((subscriber) => {
       subscriber();
     });
-  }
+  };
 }
 
-export const roomListupdateChecker = new RoomListUpdateChecker();
+const roomListupdateChecker = new RoomListUpdateChecker();
+export default roomListupdateChecker;

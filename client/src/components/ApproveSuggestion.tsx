@@ -34,10 +34,14 @@ export default class ApproveSuggestion extends React.Component<{}, ApproveSugges
       const videoUrl = (suggestion as Suggestion).video;
       DummyVideoPlayer.getProperties(videoUrl)
         .then((properties) => {
-          this.setState({ open: true, videoUrl: (suggestion as Suggestion).video, videoTitle: properties.title });
+          this.setState({
+            open: true,
+            videoUrl: (suggestion as Suggestion).video,
+            videoTitle: properties.title,
+          });
         });
     });
-  }
+  };
 
   render() {
     const action = (

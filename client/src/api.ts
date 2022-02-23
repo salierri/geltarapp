@@ -81,3 +81,9 @@ export interface Room {
     masterPassword: string;
     visibility: VisibilityType;
 }
+export interface LogEntry {
+    _id: string;
+    name: string;
+    value: string;
+    time: Date;
+}

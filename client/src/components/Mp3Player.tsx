@@ -44,14 +44,6 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
       });
   };
 
-  loadNewMp3(command: Command) {
-    if (command.command === 'LoadMp3') {
-      this.setState({ clip: command.param });
-      this.audioTag.current?.load();
-      this.audioTag.current?.play();
-    }
-  }
-
   AdminControls = () => {
     if (!this.props.master) { return null; }
     return (
@@ -79,6 +71,14 @@ class Mp3Player extends React.Component<Mp3Props, Mp3State> {
         </div>
       </Tooltip>
     );
+  };
+
+  loadNewMp3(command: Command) {
+    if (command.command === 'LoadMp3') {
+      this.setState({ clip: command.param });
+      this.audioTag.current?.load();
+      this.audioTag.current?.play();
+    }
   }
 
   render() {

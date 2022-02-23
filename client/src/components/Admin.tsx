@@ -78,7 +78,7 @@ class Admin extends React.Component<AdminProps, {}> {
   setVolumeValue = (percent: string) => {
     if (this.volumeSlider.current && this.volumeNumber.current) {
       this.volumeSlider.current.value = percent;
-      this.volumeNumber.current.innerText = percent + "%";
+      this.volumeNumber.current.innerText = `${percent}%`;
     }
   };
 
@@ -102,7 +102,8 @@ class Admin extends React.Component<AdminProps, {}> {
   render() {
     return (
       <>
-        {/* We have to use traditional input fields, because Material UI is crazy slow with the continous rerenders */}
+        {/* We have to use traditional input fields, because Material UI is crazy slow
+        with the continous rerenders */}
         <div className="master-slider-container">
           <FormLabel>Master volume</FormLabel>
           <input

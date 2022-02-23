@@ -37,5 +37,5 @@ export default class PresetManager {
   static clear = () => {
     delete PresetManager.presets;
     delete PresetManager.categories;
-  }
+  };
 }
