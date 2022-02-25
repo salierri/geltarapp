@@ -36,7 +36,7 @@ Add [node](https://github.com/asdf-vm/asdf-nodejs) plugin to asdf, or install 12
 
 Install [MongoDb](https://docs.mongodb.com/manual/installation/), with a version of at least v2.6.10.
 
-Configure the MongoDB URL for the server in `server/.env`, or in a MONGODB_URL env variable when running the server.
+Configure the MongoDB URL for the server in `server/config/default.json`, or in an env variable as described [here](https://github.com/node-config/node-config/wiki/Environment-Variables).
 
 ###### The server
 
@@ -50,7 +50,7 @@ npm start
 
 The HTTP server is listening on :3001, and the websocket server on :4000 to incoming connections by default.
 
-This can be configured in the HTTP_PORT and WS_PORT env variable (or in `server/.env`) respectively.
+This can be configured in `server/config/`.
 
 The server addresses must be set in the REACT_APP_WS_URL and REACT_APP_HTTP_URL env variables or in `client/.env`
 
@@ -72,10 +72,6 @@ serve -s build
 ```
 
 The serve process is listening on :5000 by default
-
-###### Proxying
-
-If you are running the app behind a proxy (Nginx for example), you need to set the `x-real-ip` header in order to see client IP addresses.
 
 ## Development
 
