@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
           // Just some optimalization to avoid nested iteration
           const catMap: { [ oldId: string ]: Mongoose.Types.ObjectId } = {};
           const copyCategories = categories.map<CategoryDocument>((categoryDoc) => {
-            catMap[categoryDoc._id.toString()] = Mongoose.Types.ObjectId();
+            catMap[categoryDoc._id.toString()] = new Mongoose.Types.ObjectId();
             categoryDoc._id = catMap[categoryDoc._id.toString()];
             categoryDoc.room = newRoom._id;
             categoryDoc.isNew = true;
@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
           });
           await Category.create(copyCategories);
           presets = presets.map<PresetDocument>((presetDoc) => {
-            presetDoc._id = Mongoose.Types.ObjectId();
+            presetDoc._id = new Mongoose.Types.ObjectId();
             presetDoc.category = catMap[presetDoc.category.toString()];
             presetDoc.room = newRoom._id;
             presetDoc.wasTemplate = true;

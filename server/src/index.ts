@@ -18,7 +18,7 @@ import * as Logger from './logger';
 
 const app = Express();
 
-mongoose.connect(config.get('mongodb.url'), { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(config.get('mongodb.url'));
 
 app.use(fileUpload({
   createParentPath: true,
