@@ -53,9 +53,9 @@ function broadcastNames(room: string) {
 }
 
 function setName(room: string, name: string, sender: NamedWebSocket) {
-  sender.name = name;
+  sender.name = name.substring(0, 14);
   broadcastNames(room);
-  Logger.info(`Name set: ${name}`);
+  Logger.info(`Name set: ${sender.name}`);
 }
 
 function sendState(room: string, sender: WebSocket) {

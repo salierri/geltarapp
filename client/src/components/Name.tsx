@@ -59,6 +59,7 @@ class Name extends React.Component<{}, NameState> {
             onChange={this.updateInputValue}
             onBlur={this.setName}
             inputRef={this.nameInput}
+            inputProps={{ maxLength: 14 }}
             autoFocus
           />
           <Button role="button" type="submit">Set Name</Button>
