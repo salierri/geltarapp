@@ -45,7 +45,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
       });
   };
 
-  submit = (event: React.FormEvent<HTMLFormElement>) => {
+  submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!this.form.current) {
       return;
@@ -55,7 +55,7 @@ export default class CreatePreset extends React.Component<CreatePresetProps, {}>
       body: new FormData(this.form.current),
       credentials: 'include',
     };
-    fetch(`${process.env.REACT_APP_HTTP_URL}/presets`, requestOptions);
+    await fetch(`${process.env.REACT_APP_HTTP_URL}/presets`, requestOptions);
     PresetManager.forceUpdate();
     this.props.closeCallback();
   };
