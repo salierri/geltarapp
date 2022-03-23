@@ -6,6 +6,14 @@ html[data-theme='light'] {
     --list-bg-color: #f0f0f0;
 }
 
+html, body {
+    height: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
 .video-card {
     background-color: #303a42 !important;
 }
@@ -153,4 +161,9 @@ html[data-theme='light'] {
 
 [data-theme='light'] .room-icon {
     background-image: url(/logo_black.png);
+}
+
+.bottom-0 {
+    position: fixed;
+    bottom: 0px;
 }

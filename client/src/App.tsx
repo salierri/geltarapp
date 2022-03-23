@@ -1,6 +1,7 @@
-import { Box, Container, createMuiTheme, CssBaseline, IconButton, ThemeProvider } from '@material-ui/core';
+import { AppBar, Box, Container, createMuiTheme, CssBaseline, Grid, IconButton, Link, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
 import { Brightness4, BrightnessHigh } from '@material-ui/icons';
 import React from 'react';
+import GitHubButton from 'react-github-btn';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'typeface-roboto';
 import Flash from './components/Flash';
@@ -40,7 +41,7 @@ class App extends React.Component {
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>
         </div>
-        <Container>
+        <Container className="full-height">
           <Box m={2}>
             <BrowserRouter>
               <Switch>
@@ -52,6 +53,41 @@ class App extends React.Component {
             </BrowserRouter>
           </Box>
         </Container>
+        <AppBar position="sticky" className="bottom-0" color="inherit">
+          <Container maxWidth="md">
+            <Toolbar>
+              <Grid
+                justify="space-between"
+                alignItems="center"
+                container
+              >
+                <Grid item>
+                  <Typography variant="body2" color="inherit">
+                    Created by
+                    {' '}
+                    <Link href="https://github.com/salierri" color="inherit">@Salierri</Link>
+                  </Typography>
+                </Grid>
+                <Grid item className="no-padding">
+                  <Typography variant="body2" color="inherit" className="no-padding">
+                    <Link href="https://github.com/salierri/geltarapp/issues" color="inherit">Report a bug</Link>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <GitHubButton
+                    href="https://github.com/salierri/geltarapp"
+                    data-color-scheme="no-preference: dark; light: light; dark: dark;"
+                    data-icon="octicon-star"
+                    data-size="large"
+                    aria-label="Star salierri/geltarapp on GitHub"
+                  >
+                    Star me on GitHub
+                  </GitHubButton>
+                </Grid>
+              </Grid>
+            </Toolbar>
+          </Container>
+        </AppBar>
       </ThemeProvider>
     );
   }
