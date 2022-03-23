@@ -4,18 +4,18 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'typeface-roboto';
 import Flash from './components/Flash';
+import { ColorMode, getColorMode, setColorMode } from './helpers/Persistence';
 import Adminpage from './routes/Adminpage';
 import Homepage from './routes/Homepage';
 import Roompage from './routes/Roompage';
 import './style/App.css';
 
-declare type ColorMode = 'dark' | 'light';
-
 class App extends React.Component {
-  protected currentMode: ColorMode = 'dark';
+  protected currentMode: ColorMode = getColorMode();
 
   switchMode = () => {
     this.currentMode = this.currentMode === 'light' ? 'dark' : 'light';
+    setColorMode(this.currentMode);
     this.forceUpdate();
   };
 

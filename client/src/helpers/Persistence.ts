@@ -4,6 +4,8 @@ export interface SavedSession {
   master: boolean;
 }
 
+export type ColorMode = 'dark' | 'light';
+
 export const saveSession = (session: SavedSession) => {
   localStorage.setItem('sessionId', session.sessionId);
   localStorage.setItem('roomId', session.room);
@@ -46,4 +48,16 @@ export const addFavoriteRoom = (roomId: string) => {
     roomList.pop();
   }
   localStorage.setItem('favoriteRooms', JSON.stringify(roomList));
+};
+
+export const getColorMode = (): ColorMode => {
+  const savedColorMode = localStorage.getItem('colorMode');
+  if (savedColorMode === null) {
+    return 'dark';
+  }
+  return savedColorMode as ColorMode;
+};
+
+export const setColorMode = (colorMode: ColorMode) => {
+  localStorage.setItem('colorMode', colorMode);
 };
