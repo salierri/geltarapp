@@ -1,10 +1,10 @@
-import { AppBar, Box, Container, createMuiTheme, CssBaseline, Grid, IconButton, Link, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
+import { Box, Container, createMuiTheme, CssBaseline, IconButton, ThemeProvider } from '@material-ui/core';
 import { Brightness4, BrightnessHigh } from '@material-ui/icons';
 import React from 'react';
-import GitHubButton from 'react-github-btn';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'typeface-roboto';
 import Flash from './components/Flash';
+import Footer from './components/Footer';
 import { ColorMode, getColorMode, setColorMode } from './helpers/Persistence';
 import Adminpage from './routes/Adminpage';
 import Homepage from './routes/Homepage';
@@ -41,53 +41,19 @@ class App extends React.Component {
             {this.currentMode === 'dark' ? <BrightnessHigh /> : <Brightness4 />}
           </IconButton>
         </div>
-        <Container className="full-height">
-          <Box m={2}>
-            <BrowserRouter>
+        <BrowserRouter>
+          <Container className="full-height">
+            <Box m={2}>
               <Switch>
                 <Route path="/room/:roomId" component={Roompage} />
                 <Route path="/admin" component={Adminpage} />
                 <Route path="/" component={Homepage} />
               </Switch>
               <Route component={Flash} />
-            </BrowserRouter>
-          </Box>
-        </Container>
-        <AppBar position="sticky" className="bottom-0" color="inherit">
-          <Container maxWidth="md">
-            <Toolbar>
-              <Grid
-                justify="space-between"
-                alignItems="center"
-                container
-              >
-                <Grid item>
-                  <Typography variant="body2" color="inherit">
-                    Created by
-                    {' '}
-                    <Link href="https://github.com/salierri" color="inherit">@Salierri</Link>
-                  </Typography>
-                </Grid>
-                <Grid item className="no-padding">
-                  <Typography variant="body2" color="inherit" className="no-padding">
-                    <Link href="https://github.com/salierri/geltarapp/issues" color="inherit">Report a bug</Link>
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <GitHubButton
-                    href="https://github.com/salierri/geltarapp"
-                    data-color-scheme="no-preference: dark; light: light; dark: dark;"
-                    data-icon="octicon-star"
-                    data-size="large"
-                    aria-label="Star salierri/geltarapp on GitHub"
-                  >
-                    Star me on GitHub
-                  </GitHubButton>
-                </Grid>
-              </Grid>
-            </Toolbar>
+            </Box>
           </Container>
-        </AppBar>
+          <Route exact path="/" component={Footer} />
+        </BrowserRouter>
       </ThemeProvider>
     );
   }
