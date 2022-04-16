@@ -8,7 +8,8 @@
     "build:js": "webpack --mode=development",
     "build": "rm -rf dist && npm run build:types && npm run build:js && node copy-api.js",
     "start": "node ./dist/server.js",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./",
+    "db:init": "node ./src/dbinit.js"
   },
   "author": "",
   "license": "ISC",

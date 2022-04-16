@@ -13,7 +13,7 @@ export const youtubeUrlToTiming = (url: string): number => {
 export const numberToTimeString = (time: number): string => {
   const date = new Date(0);
   date.setSeconds(time);
-  const substStart = time > 3600 ? 11 : 14;
+  const substStart = time >= 3600 ? 11 : 14;
   return date.toISOString().substr(substStart, 19 - substStart);
 };
 

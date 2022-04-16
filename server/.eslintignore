@@ -3,3 +3,4 @@ lib/*
 node_modules/*
 webpack.config.js
 copy-api.js
+src/dbinit.js
