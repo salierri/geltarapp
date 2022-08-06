@@ -1,8 +1,10 @@
 import config from 'config';
-import WebSocket from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 import mongoose from 'mongoose';
 import cookie from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
+import { readFileSync } from 'fs';
+import { createServer } from 'https';
 import { Message } from './api';
 import * as StateManager from './stateManager';
 import { Session } from './models/Session';
@@ -14,9 +16,19 @@ interface NamedWebSocket extends WebSocket {
   master: boolean;
 }
 
-const WSServer = new WebSocket.Server({
-  port: +(config.get('ws_port') as number ?? 4000),
-});
+let WSServer : WebSocket.Server<WebSocket.WebSocket>;
+const port = +(config.get('ws_port') as number ?? 4000);
+
+if (config.get('secure_websocket')) {
+  const server = createServer({
+    cert: readFileSync(config.get('certs.public')),
+    key: readFileSync(config.get('certs.key'))
+  });
+  WSServer = new WebSocketServer({ server });
+  server.listen(port);
+} else {
+  WSServer = new WebSocket.Server({ port });
+}
 
 const rooms: { [ key: string ]: NamedWebSocket[] } = {};
 

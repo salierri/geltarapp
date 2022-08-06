@@ -10,5 +10,11 @@
 
   "features_enabled": {
     "mp3_upload": false
+  },
+
+  "secure_websocket": false,
+  "certs": {
+    "public": "../cert/cert1.pem",
+    "key": "../cert/key1.pem"
   }
 }
